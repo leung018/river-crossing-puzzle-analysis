@@ -2,13 +2,14 @@ const val BOAT_SIZE = 2
 
 typealias CrosserIndices = Set<Int>
 
-class GamingState(val crossers: List<RiverCrosser>) {
-    var totalCost = 0
-    fun getCurrentValidMoves(): Pair<CrosserIndices, Move> {
+data class GamingState(val crossers: List<RiverCrosser>, val totalCost: Int = 0) {
+    fun newStateAppliedMoves(crosserIndicesAndMove: Pair<CrosserIndices, Move>): GamingState {
         TODO()
     }
+}
 
-    fun newStateAppliedMoves(movesList: Pair<CrosserIndices, Move>): GamingState {
+class GameSituationTeller(private val crossers: List<RiverCrosser>) {
+    fun getCurrentValidMoves(): Pair<CrosserIndices, Move> {
         TODO()
     }
 
@@ -17,7 +18,7 @@ class GamingState(val crossers: List<RiverCrosser>) {
     }
 
     fun isGameOver(): Boolean {
-        return canGameContinue(crossers.toSet())
+        return GameRules.canGameContinue(crossers.toSet())
     }
 }
 
