@@ -18,7 +18,7 @@ class GameSituationTeller(private val crossers: List<RiverCrosser>) {
     }
 
     fun isGameOver(): Boolean {
-        return GameRules.canGameContinue(crossers.toSet())
+        TODO()
     }
 }
 
