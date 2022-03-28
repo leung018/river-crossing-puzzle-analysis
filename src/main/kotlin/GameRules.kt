@@ -1,8 +1,12 @@
-import RiverCrosserType.*
+data class RiverCrosserType(val id: String)
+// Use data class instead of enum because for future feature if crosser type is defined by external config
 
-enum class RiverCrosserType {
-    DOG, FATHER, MOTHER, SON, DAUGHTER, MASTER
-}
+val DOG = RiverCrosserType("DOG")
+val FATHER = RiverCrosserType("FATHER")
+val MOTHER = RiverCrosserType("MOTHER")
+val SON = RiverCrosserType("SON")
+val DAUGHTER = RiverCrosserType("DAUGHTER")
+val MASTER = RiverCrosserType("MASTER")
 
 object GameRules {
     val CAN_DRIVE_BOAT = setOf(FATHER, MOTHER)
