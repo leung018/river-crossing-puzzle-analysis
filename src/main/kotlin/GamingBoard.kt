@@ -27,7 +27,7 @@ class GameSituationTeller(private val crossers: List<RiverCrosser>, rules: GameR
 }
 
 class GamingBoard(crossers: List<RiverCrosser>, rules: GameRules) {
-    private var transitedCrossersSet: Set<List<RiverCrosser>> = setOf()
+    private var transitedCrossersSet: Set<List<RiverCrosser>> = mutableSetOf()
 
     private val activeGamingStatesList =
         MutableList(1) { GamingState(crossers, emptyList()) }
