@@ -12,7 +12,7 @@ data class GamingState(
     }
 }
 
-class GameSituationTeller(private val crossers: List<RiverCrosser>) {
+class GameSituationTeller(private val crossers: List<RiverCrosser>, rules: GameRules) {
     fun getCurrentValidMoves(): Pair<CrosserIndices, Move> {
         TODO()
     }
@@ -26,7 +26,7 @@ class GameSituationTeller(private val crossers: List<RiverCrosser>) {
     }
 }
 
-class GamingBoard(crossers: List<RiverCrosser>) {
+class GamingBoard(crossers: List<RiverCrosser>, rules: GameRules) {
     private var transitedCrossersSet: Set<List<RiverCrosser>> = setOf()
 
     private val activeGamingStatesList =
