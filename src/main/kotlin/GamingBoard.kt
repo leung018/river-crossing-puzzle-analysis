@@ -26,7 +26,17 @@ class GameSituationTeller(private val crossers: List<RiverCrosser>, rules: GameR
     }
 }
 
-class GamingBoard(crossers: List<RiverCrosser>, rules: GameRules) {
+class GamingBoard private constructor(crossers: List<RiverCrosser>, private val rules: GameRules) {
+    companion object {
+        fun getLowestCostGameSolvingPossibleMovesList(
+            crossers: List<RiverCrosser>,
+            rules: GameRules
+        ): List<Pair<CrosserIndices, Move>> {
+            return GamingBoard(crossers, rules).getLowestCostGameSolvingPossibleMovesList()
+        }
+
+    }
+
     private var transitedCrossersSet: Set<List<RiverCrosser>> = mutableSetOf()
 
     private val activeGamingStatesList =
@@ -34,7 +44,7 @@ class GamingBoard(crossers: List<RiverCrosser>, rules: GameRules) {
     private val winGamingStatesWithLowestTotalCostList =
         mutableListOf<GamingState>() //all totalCost are same in this list
 
-    fun getLowestCostGameSolvingPossibleMovesList(): List<Pair<CrosserIndices, Move>> {
+    private fun getLowestCostGameSolvingPossibleMovesList(): List<Pair<CrosserIndices, Move>> {
         TODO()
         /* For each state () in activeGamingStatesList:
                 obtain each valid moves (GameSituationTeller.getCurrentValidMoves)
