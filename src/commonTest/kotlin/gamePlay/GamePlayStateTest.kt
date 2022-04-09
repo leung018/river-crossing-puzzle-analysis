@@ -1,3 +1,11 @@
+package gamePlay
+
+import ClassicGameRules
+import FATHER
+import MOTHER
+import Move
+import MoveType
+import RiverCrosser
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith

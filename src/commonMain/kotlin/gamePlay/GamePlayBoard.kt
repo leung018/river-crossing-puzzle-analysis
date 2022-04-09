@@ -1,54 +1,18 @@
+package gamePlay
+
+import GameRules
+import Move
+import RiverCrosser
+
 typealias CrosserIndices = Set<Int>
-
-data class GamePlayState(
-    val crossers: List<RiverCrosser>,
-    val pastMoves: List<Pair<CrosserIndices, Move>>,
-    val totalCost: Int = 0,
-) {
-    fun newStateAppliedMoves(
-        crosserIndicesAndMove: Pair<CrosserIndices, Move>,
-        moveTypeCostRules: MoveTypeCostRules
-    ): GamePlayState {
-        val newCrossers = crossers.toMutableList()
-        val (indices, move) = crosserIndicesAndMove
-
-        for (i in indices) {
-            try {
-                newCrossers[i] = newCrossers[i].copy(position = move.targetPosition)
-            } catch (e: IndexOutOfBoundsException) {
-                throw IllegalArgumentException("target indices for the move not exist in the original list")
-            }
-        }
-
-        return this.copy(
-            crossers = newCrossers,
-            pastMoves = pastMoves + listOf(crosserIndicesAndMove),
-            totalCost = totalCost + moveTypeCostRules.getMoveCost(move.moveType)
-        )
-    }
-}
-
-class GameSituationTeller(val crossers: List<RiverCrosser>, val rules: GameSituationRules) {
-    fun getCurrentValidMoves(): Pair<CrosserIndices, Move> {
-        TODO()
-    }
-
-    fun isWin(): Boolean {
-        TODO()
-    }
-
-    fun isGameOver(): Boolean {
-        TODO()
-    }
-}
 
 class GamePlayBoard private constructor(crossers: List<RiverCrosser>, private val rules: GameRules) {
     companion object {
         fun getLowestCostGameSolvingPossibleMovesList(
-            crossers: List<RiverCrosser>,
+            initialCrossers: List<RiverCrosser>,
             rules: GameRules
         ): List<Pair<CrosserIndices, Move>> {
-            return GamePlayBoard(crossers, rules).getLowestCostGameSolvingPossibleMovesList()
+            return GamePlayBoard(initialCrossers, rules).getLowestCostGameSolvingPossibleMovesList()
         }
 
     }
