@@ -7,6 +7,7 @@ data class RiverCrosserType(val id: String, val occupiedBoatSpace: Int = 1)
 interface GameRules : GameSituationRules, MoveTypeCostRules
 
 interface GameSituationRules {
+    val validRiverCrosserTypes: Set<RiverCrosserType>
     val canDriveBoatCrosserTypes: Set<RiverCrosserType>
     fun canGameContinue(crosserTypesInSamePlace: Set<RiverCrosserType>): Boolean
 
