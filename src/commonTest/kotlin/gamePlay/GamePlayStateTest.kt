@@ -24,7 +24,7 @@ internal class GamePlayStateTest {
     }
 
     @Test
-    fun `newStateAppliedMoves when input move is valid`() {
+    fun `newStateAppliedMoves when CrosserIndices is valid`() {
         val originalState =
             GamePlayState(listOf(RiverCrosser(FATHER), RiverCrosser(MOTHER, BOAT_ON_ORIGINAL_RIVER_SIZE)), listOf(), 0)
         val newState =
