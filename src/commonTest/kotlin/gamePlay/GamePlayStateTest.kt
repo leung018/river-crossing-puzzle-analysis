@@ -1,8 +1,8 @@
 package gamePlay
 
-import ClassicGameRules
-import FATHER
-import MOTHER
+import rules.classic.ClassicGameRules
+import rules.classic.FATHER
+import rules.classic.MOTHER
 import Move
 import MoveType
 import RiverCrosser

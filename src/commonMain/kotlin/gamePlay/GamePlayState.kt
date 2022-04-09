@@ -1,7 +1,7 @@
 package gamePlay
 
 import Move
-import MoveTypeCostRules
+import rules.MoveTypeCostRules
 import RiverCrosser
 
 data class GamePlayState(

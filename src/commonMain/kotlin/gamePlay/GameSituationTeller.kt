@@ -1,6 +1,6 @@
 package gamePlay
 
-import GameSituationRules
+import rules.GameSituationRules
 import Move
 import RiverCrosser
 
