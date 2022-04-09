@@ -46,26 +46,26 @@ class GamePlayBoard private constructor(crossers: List<RiverCrosser>, private va
 
     private fun getLowestCostGameSolvingPossibleMovesList(): List<Pair<CrosserIndices, Move>> {
         TODO()
-        /* For each state () in activeGamingStatesList:
+        /* For each state () in activeGamePlayStatesList:
                 obtain each valid moves (GameSituationTeller.getCurrentValidMoves)
                 futureStates = []
                 For each move:
-                    get new state after applied move (GamingSate.newStateAppliedMoves)
+                    get new state after applied move (GamePlayState.newStateAppliedMoves)
                     if the new state's crossers not in transitedCrossersSet
                         add to transitedCrossersSet
                         if this new state is win (GameSituationTeller.isWin):
-                            if totalCost is equal to those in winGamingStatesWithLowestTotalCostList
+                            if totalCost is equal to those in winGamePlayStatesWithLowestTotalCostList
                                 add to list
                                 skip this loop;
                             if totalCost is less than those
                                 drop the winGameStatesList and let the list contain this new state only
                             skip this loop;
-                        if totalCost is equal to those in winGamingStatesWithLowestTotalCostList
+                        if totalCost is equal to those in winGamePlayStatesWithLowestTotalCostList
                             skip this loop;
                         if this new state is not game over (GameSituationTeller.isGameOver)
                             add to futureStates
-                replace old state by futureStates in activeGamingStatesList
-           Repeat above until activeGamingStatesList is Empty
+                replace old state by futureStates in activeGamePlayStatesList
+           Repeat above until activeGamePlayStatesList is Empty
         */
     }
 }
