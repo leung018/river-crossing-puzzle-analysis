@@ -2,12 +2,12 @@ const val BOAT_SIZE = 2
 
 typealias CrosserIndices = Set<Int>
 
-data class GamingState(
+data class GamePlayState(
     val crossers: List<RiverCrosser>,
     val pastMoves: List<Pair<CrosserIndices, Move>>,
     val totalCost: Int = 0,
 ) {
-    fun newStateAppliedMoves(crosserIndicesAndMove: Pair<CrosserIndices, Move>): GamingState {
+    fun newStateAppliedMoves(crosserIndicesAndMove: Pair<CrosserIndices, Move>): GamePlayState {
         TODO()
     }
 }
@@ -26,23 +26,23 @@ class GameSituationTeller(private val crossers: List<RiverCrosser>, rules: GameR
     }
 }
 
-class GamingBoard private constructor(crossers: List<RiverCrosser>, private val rules: GameRules) {
+class GamePlayBoard private constructor(crossers: List<RiverCrosser>, private val rules: GameRules) {
     companion object {
         fun getLowestCostGameSolvingPossibleMovesList(
             crossers: List<RiverCrosser>,
             rules: GameRules
         ): List<Pair<CrosserIndices, Move>> {
-            return GamingBoard(crossers, rules).getLowestCostGameSolvingPossibleMovesList()
+            return GamePlayBoard(crossers, rules).getLowestCostGameSolvingPossibleMovesList()
         }
 
     }
 
     private var transitedCrossersSet: Set<List<RiverCrosser>> = mutableSetOf()
 
-    private val activeGamingStatesList =
-        MutableList(1) { GamingState(crossers, emptyList()) }
-    private val winGamingStatesWithLowestTotalCostList =
-        mutableListOf<GamingState>() //all totalCost are same in this list
+    private val activeGamePlayStatesList =
+        MutableList(1) { GamePlayState(crossers, emptyList()) }
+    private val winGamePlayStatesWithLowestTotalCostList =
+        mutableListOf<GamePlayState>() //all totalCost are same in this list
 
     private fun getLowestCostGameSolvingPossibleMovesList(): List<Pair<CrosserIndices, Move>> {
         TODO()
