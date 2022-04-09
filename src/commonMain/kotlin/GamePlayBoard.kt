@@ -8,7 +8,22 @@ data class GamePlayState(
     val totalCost: Int = 0,
 ) {
     fun newStateAppliedMoves(crosserIndicesAndMove: Pair<CrosserIndices, Move>): GamePlayState {
-        TODO()
+        val newCrossers = crossers.toMutableList()
+
+        val (indices, move) = crosserIndicesAndMove
+        for (i in indices) {
+            try {
+                newCrossers[i] = newCrossers[i].copy(position = move.targetPosition)
+            } catch (e: IndexOutOfBoundsException) {
+                throw IllegalArgumentException("target indices for the move not exist in the original list")
+            }
+        }
+
+        return this.copy(
+            crossers = newCrossers,
+            pastMoves = pastMoves + listOf(crosserIndicesAndMove),
+            totalCost = totalCost + move.moveType.cost
+        )
     }
 }
 
