@@ -28,7 +28,7 @@ data class GamePlayState(
     }
 }
 
-class GameSituationTeller(private val crossers: List<RiverCrosser>, rules: GameSituationRules) {
+class GameSituationTeller(val crossers: List<RiverCrosser>, val rules: GameSituationRules) {
     fun getCurrentValidMoves(): Pair<CrosserIndices, Move> {
         TODO()
     }
