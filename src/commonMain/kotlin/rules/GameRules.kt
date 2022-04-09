@@ -1,8 +1,5 @@
 package rules
 
-import MoveType
-import RiverCrosserPosition
-
 
 data class RiverCrosserType(val id: String, val occupiedBoatSpace: Int = 1)
 // Use data class instead of enum because for future feature if crosser type is defined by external config

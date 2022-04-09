@@ -1,6 +1,7 @@
+package gamePlay
+
+import rules.MoveType
+import rules.RiverCrosserPosition
+
 data class Move(val moveType: MoveType, val targetPosition: RiverCrosserPosition)
 
-enum class MoveType {
-    DRIVE_BOAT,
-    TRANSIT
-}

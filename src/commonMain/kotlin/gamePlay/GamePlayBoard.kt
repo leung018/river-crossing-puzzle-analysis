@@ -1,8 +1,6 @@
 package gamePlay
 
 import rules.GameRules
-import Move
-import RiverCrosser
 
 typealias CrosserIndices = Set<Int>
 

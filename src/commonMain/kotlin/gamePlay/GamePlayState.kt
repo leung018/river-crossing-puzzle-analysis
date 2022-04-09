@@ -1,8 +1,6 @@
 package gamePlay
 
-import Move
 import rules.MoveTypeCostRules
-import RiverCrosser
 
 data class GamePlayState(
     val crossers: List<RiverCrosser>,

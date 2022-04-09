@@ -3,13 +3,11 @@ package gamePlay
 import rules.classic.ClassicGameRules
 import rules.classic.FATHER
 import rules.classic.MOTHER
-import Move
-import MoveType
-import RiverCrosser
+import rules.MoveType
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
-import RiverCrosserPosition.*
+import rules.RiverCrosserPosition.*
 
 internal class GamePlayStateTest {
     @Test

@@ -1,8 +1,8 @@
 package rules.classic
 
-import MoveType
-import RiverCrosserPosition
-import RiverCrosserPosition.*
+import rules.MoveType
+import rules.RiverCrosserPosition
+import rules.RiverCrosserPosition.*
 import rules.GameRules
 import rules.RiverCrosserType
 
