@@ -1,5 +1,3 @@
-const val BOAT_SIZE = 2
-
 typealias CrosserIndices = Set<Int>
 
 data class GamePlayState(
