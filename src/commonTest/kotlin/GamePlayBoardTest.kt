@@ -5,7 +5,7 @@ import RiverCrosserPosition.*
 
 internal class GamePlayStateTest {
     @Test
-    fun `newStateAppliedMoves when CrosserIndices is not valid`() {
+    fun `newStateAppliedMoves when CrosserIndices out of original list range`() {
         val s = GamePlayState(listOf(), listOf(), 0)
         assertFailsWith<IllegalArgumentException> {
             s.newStateAppliedMoves(
@@ -16,7 +16,7 @@ internal class GamePlayStateTest {
     }
 
     @Test
-    fun `newStateAppliedMoves when input move is Valid`() {
+    fun `newStateAppliedMoves when input move is valid`() {
         val originalState =
             GamePlayState(listOf(RiverCrosser(FATHER), RiverCrosser(MOTHER, BOAT_ON_ORIGINAL_RIVER_SIZE)), listOf(), 0)
         val newState =
