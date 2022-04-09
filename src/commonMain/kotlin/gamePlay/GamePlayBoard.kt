@@ -8,11 +8,11 @@ typealias CrosserIndices = Set<Int>
 
 class GamePlayBoard private constructor(crossers: List<RiverCrosser>, private val rules: GameRules) {
     companion object {
-        fun getLowestCostGameSolvingPossibleMovesList(
+        fun getLowestCostGameSolvingPossibleMoves(
             initialCrossers: List<RiverCrosser>,
             rules: GameRules
-        ): List<Pair<CrosserIndices, Move>> {
-            return GamePlayBoard(initialCrossers, rules).getLowestCostGameSolvingPossibleMovesList()
+        ): Set<List<Pair<CrosserIndices, Move>>> {
+            return GamePlayBoard(initialCrossers, rules).getLowestCostGameSolvingPossibleMoves()
         }
 
     }
@@ -24,7 +24,7 @@ class GamePlayBoard private constructor(crossers: List<RiverCrosser>, private va
     private val winGamePlayStatesWithLowestTotalCostList =
         mutableListOf<GamePlayState>() //all totalCost are same in this list
 
-    private fun getLowestCostGameSolvingPossibleMovesList(): List<Pair<CrosserIndices, Move>> {
+    private fun getLowestCostGameSolvingPossibleMoves(): Set<List<Pair<CrosserIndices, Move>>> {
         TODO()
         /* For each state () in activeGamePlayStatesList:
                 obtain each valid moves (GameSituationTeller.getCurrentValidMoves)
