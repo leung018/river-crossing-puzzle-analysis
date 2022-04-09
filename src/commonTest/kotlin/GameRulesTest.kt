@@ -1,6 +1,6 @@
-import org.junit.jupiter.api.Test
-
-import org.junit.jupiter.api.Assertions.*
+import kotlin.test.Test
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 
 internal class GameRulesTest {
 
