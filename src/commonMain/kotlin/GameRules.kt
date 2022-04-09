@@ -10,7 +10,7 @@ val SON = RiverCrosserType("SON")
 val DAUGHTER = RiverCrosserType("DAUGHTER")
 val MASTER = RiverCrosserType("MASTER")
 
-object GameRulesObj : GameRules { // In the future, may be GameRules are configurable. But now just use GameRulesObj
+object ClassicGameRules : GameRules {
     override val canDriveBoatCrosserTypes = setOf(FATHER, MOTHER)
 
     override fun canGameContinue(crosserTypesInSamePlace: Set<RiverCrosserType>): Boolean {
@@ -30,9 +30,18 @@ object GameRulesObj : GameRules { // In the future, may be GameRules are configu
         setOf(BOAT_ON_TARGET_RIVER_SIDE),
         setOf(TARGET_RIVER_SIDE)
     )
+
+    override fun getMoveCost(type: MoveType): Int {
+        return when (type) {
+            MoveType.TRANSIT -> 0
+            MoveType.DRIVE_BOAT -> 1
+        }
+    }
 }
 
-interface GameRules {
+interface GameRules : GameSituationRules, MoveTypeCostRules
+
+interface GameSituationRules {
     val canDriveBoatCrosserTypes: Set<RiverCrosserType>
     fun canGameContinue(crosserTypesInSamePlace: Set<RiverCrosserType>): Boolean
 
@@ -42,4 +51,8 @@ interface GameRules {
     val samePlaceDefinitions: Set<Set<RiverCrosserPosition>>
     val boatCapacity: Int
         get() = 2
+}
+
+interface MoveTypeCostRules {
+    fun getMoveCost(type: MoveType): Int
 }

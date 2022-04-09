@@ -5,10 +5,13 @@ data class GamePlayState(
     val pastMoves: List<Pair<CrosserIndices, Move>>,
     val totalCost: Int = 0,
 ) {
-    fun newStateAppliedMoves(crosserIndicesAndMove: Pair<CrosserIndices, Move>): GamePlayState {
+    fun newStateAppliedMoves(
+        crosserIndicesAndMove: Pair<CrosserIndices, Move>,
+        moveTypeCostRules: MoveTypeCostRules
+    ): GamePlayState {
         val newCrossers = crossers.toMutableList()
-
         val (indices, move) = crosserIndicesAndMove
+
         for (i in indices) {
             try {
                 newCrossers[i] = newCrossers[i].copy(position = move.targetPosition)
@@ -20,12 +23,12 @@ data class GamePlayState(
         return this.copy(
             crossers = newCrossers,
             pastMoves = pastMoves + listOf(crosserIndicesAndMove),
-            totalCost = totalCost + move.moveType.cost
+            totalCost = totalCost + moveTypeCostRules.getMoveCost(move.moveType)
         )
     }
 }
 
-class GameSituationTeller(private val crossers: List<RiverCrosser>, rules: GameRules) {
+class GameSituationTeller(private val crossers: List<RiverCrosser>, rules: GameSituationRules) {
     fun getCurrentValidMoves(): Pair<CrosserIndices, Move> {
         TODO()
     }
