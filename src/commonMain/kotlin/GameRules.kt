@@ -1,6 +1,6 @@
 import RiverCrosserPosition.*
 
-data class RiverCrosserType(val id: String)
+data class RiverCrosserType(val id: String, val occupiedBoatSpace: Int = 1)
 // Use data class instead of enum because for future feature if crosser type is defined by external config
 
 val DOG = RiverCrosserType("DOG")
@@ -40,4 +40,6 @@ interface GameRules {
      * Define which set of positions are considered as the same place
      */
     val samePlaceDefinitions: Set<Set<RiverCrosserPosition>>
+    val boatCapacity: Int
+        get() = 2
 }
