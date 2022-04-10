@@ -18,7 +18,7 @@ data class GamePlayState(
             try {
                 newCrossers[i] = newCrossers[i].copy(position = move.targetPosition)
             } catch (e: IndexOutOfBoundsException) {
-                throw IllegalArgumentException("target indices for the move not exist in the original list")
+                throw IllegalArgumentException("Target indices for the move not exist in the original list")
             }
         }
 
