@@ -1,9 +1,9 @@
 package rules.classic
 
+import rules.GameRules
 import rules.MoveType
 import rules.RiverCrosserPosition
 import rules.RiverCrosserPosition.*
-import rules.GameRules
 import rules.RiverCrosserType
 
 val DOG = RiverCrosserType("DOG")
