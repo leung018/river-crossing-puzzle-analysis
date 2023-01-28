@@ -1,13 +1,14 @@
 package gamePlay
 
+import rules.MoveType
+import rules.RiverCrosserPosition.BOAT_ON_ORIGINAL_RIVER_SIZE
+import rules.RiverCrosserPosition.BOAT_ON_TARGET_RIVER_SIDE
 import rules.classic.ClassicGameRules
 import rules.classic.FATHER
 import rules.classic.MOTHER
-import rules.MoveType
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
-import rules.RiverCrosserPosition.*
 
 internal class GamePlayStateTest {
     @Test
