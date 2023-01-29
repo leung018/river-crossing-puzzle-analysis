@@ -2,7 +2,7 @@ package gamePlay
 
 import rules.GameSituationRules
 
-class GameSituationTeller(val crossers: List<RiverCrosser>, val rules: GameSituationRules) {
+class GameSituationTeller(private val crossers: List<RiverCrosser>, val rules: GameSituationRules) {
     init {
         validateCrossers()
     }
