@@ -1,16 +1,21 @@
 package gamePlay
 
+import rules.BoatPosition
 import rules.GameSituationRules
 import rules.MoveType
 import rules.RiverCrosserPosition
 
-class GameSituationTeller(private val crossers: List<RiverCrosser>, val rules: GameSituationRules) {
+class GameSituationTeller(private val currentPositions: CurrentPositions, val rules: GameSituationRules) {
     init {
         validateCrossers()
     }
 
+    constructor(
+        crossers: List<RiverCrosser>, boatPosition: BoatPosition, rules: GameSituationRules
+    ) : this(CurrentPositions(crossers, boatPosition), rules)
+
     private fun validateCrossers() {
-        if (crossers.isEmpty()) {
+        if (currentPositions.crossers.isEmpty()) {
             throw IllegalArgumentException("Input crossers cannot be empty")
         }
         validateCrossersType()
@@ -18,7 +23,7 @@ class GameSituationTeller(private val crossers: List<RiverCrosser>, val rules: G
     }
 
     private fun validateCrossersType() {
-        for (crosser in crossers) {
+        for (crosser in currentPositions.crossers) {
             if (!rules.validRiverCrosserTypes.contains(crosser.type)) {
                 throw IllegalArgumentException("Crossers contain type that rules not exist")
             }
@@ -26,22 +31,7 @@ class GameSituationTeller(private val crossers: List<RiverCrosser>, val rules: G
     }
 
     private fun validateCrossersPosition() {
-        var inOriginalRiverSizeBoatCount = 0
-        var inTargetRiverSizeBoatCount = 0
-        for (crosser in crossers) {
-            if (crosser.position == RiverCrosserPosition.BOAT_ON_ORIGINAL_RIVER_SIZE) {
-                inOriginalRiverSizeBoatCount++
-            }
-            if (crosser.position == RiverCrosserPosition.BOAT_ON_TARGET_RIVER_SIDE) {
-                inTargetRiverSizeBoatCount++
-            }
-        }
-
-        if (inOriginalRiverSizeBoatCount > 0 && inTargetRiverSizeBoatCount > 0) {
-            throw IllegalArgumentException("Crossers cannot in boat on different river size at the same time")
-        }
-
-        val inBoatCount = inOriginalRiverSizeBoatCount + inTargetRiverSizeBoatCount
+        val inBoatCount = currentPositions.crossers.count { it.position == RiverCrosserPosition.BOAT }
         if (inBoatCount > rules.boatCapacity) {
             throw IllegalArgumentException("More crossers are in the boat than its capacity")
         }
@@ -49,17 +39,16 @@ class GameSituationTeller(private val crossers: List<RiverCrosser>, val rules: G
 
     fun getCurrentValidMoves(): Set<Pair<CrosserIndices, Move>> {
         val newMoves = mutableSetOf<Pair<CrosserIndices, Move>>()
-        for ((index, crosser) in crossers.withIndex()) {
-            if (crosser.position == RiverCrosserPosition.ORIGINAL_RIVER_SIDE) {
-                newMoves.add(setOf(index) to Move(MoveType.TRANSIT, RiverCrosserPosition.BOAT_ON_ORIGINAL_RIVER_SIZE))
-            } else if (crosser.position == RiverCrosserPosition.BOAT_ON_ORIGINAL_RIVER_SIZE) {
+        for ((index, crosser) in currentPositions.crossers.withIndex()) {
+            if (crosser.position == RiverCrosserPosition.ORIGINAL_RIVERSIDE) {
+                newMoves.add(setOf(index) to Move(MoveType.TRANSIT))
+            } else if (crosser.position == RiverCrosserPosition.BOAT) {
                 newMoves.add(
-                    getCrossersIndicesOfPosition(RiverCrosserPosition.BOAT_ON_ORIGINAL_RIVER_SIZE) to Move(
+                    getCrossersIndicesOfPosition(RiverCrosserPosition.BOAT) to Move(
                         MoveType.DRIVE_BOAT,
-                        RiverCrosserPosition.BOAT_ON_TARGET_RIVER_SIDE
                     )
                 )
-                newMoves.add(setOf(index) to Move(MoveType.TRANSIT, RiverCrosserPosition.ORIGINAL_RIVER_SIDE))
+                newMoves.add(setOf(index) to Move(MoveType.TRANSIT))
             }
         }
         return newMoves
@@ -67,7 +56,7 @@ class GameSituationTeller(private val crossers: List<RiverCrosser>, val rules: G
 
     private fun getCrossersIndicesOfPosition(targetPosition: RiverCrosserPosition): CrosserIndices {
         val crosserIndices = mutableSetOf<Int>()
-        for ((index, crosser) in crossers.withIndex()) {
+        for ((index, crosser) in currentPositions.crossers.withIndex()) {
             if (crosser.position == targetPosition) {
                 crosserIndices.add(index)
             }

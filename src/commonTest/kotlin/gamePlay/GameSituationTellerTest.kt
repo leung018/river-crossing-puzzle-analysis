@@ -1,9 +1,6 @@
 package gamePlay
 
-import rules.GameSituationRules
-import rules.MoveType
-import rules.RiverCrosserPosition
-import rules.RiverCrosserType
+import rules.*
 import rules.classic.ClassicGameRules
 import rules.classic.FATHER
 import kotlin.test.Test
@@ -12,9 +9,10 @@ import kotlin.test.assertFailsWith
 
 private fun newGameSituationTeller(
     crossers: List<RiverCrosser>,
+    boatPosition: BoatPosition = BoatPosition.ORIGINAL_RIVERSIDE,
     rules: GameSituationRules = ClassicGameRules
 ): GameSituationTeller {
-    return GameSituationTeller(crossers, rules)
+    return GameSituationTeller(crossers, boatPosition, rules)
 }
 
 private fun newClassicRulesCrosserWhoCanDriveBoat(position: RiverCrosserPosition) =
@@ -32,7 +30,7 @@ internal class GameSituationTellerTest {
     fun `constructor when crossers list contain type that is not valid`() {
         val nonClassicType = RiverCrosserType("NOT_VALID")
         assertFailsWith<IllegalArgumentException> {
-            newGameSituationTeller(crossers = listOf(RiverCrosser(nonClassicType)), ClassicGameRules)
+            newGameSituationTeller(crossers = listOf(RiverCrosser(nonClassicType)), rules = ClassicGameRules)
         }
     }
 
@@ -41,30 +39,9 @@ internal class GameSituationTellerTest {
         assertFailsWith<IllegalArgumentException> {
             newGameSituationTeller(
                 crossers = listOf(
-                    newClassicRulesCrosserWhoCanDriveBoat(RiverCrosserPosition.BOAT_ON_TARGET_RIVER_SIDE),
-                    newClassicRulesCrosserWhoCanDriveBoat(RiverCrosserPosition.BOAT_ON_TARGET_RIVER_SIDE),
-                    newClassicRulesCrosserWhoCanDriveBoat(RiverCrosserPosition.BOAT_ON_TARGET_RIVER_SIDE)
-                )
-            )
-        }
-        assertFailsWith<IllegalArgumentException> {
-            newGameSituationTeller(
-                crossers = listOf(
-                    newClassicRulesCrosserWhoCanDriveBoat(RiverCrosserPosition.BOAT_ON_ORIGINAL_RIVER_SIZE),
-                    newClassicRulesCrosserWhoCanDriveBoat(RiverCrosserPosition.BOAT_ON_ORIGINAL_RIVER_SIZE),
-                    newClassicRulesCrosserWhoCanDriveBoat(RiverCrosserPosition.BOAT_ON_ORIGINAL_RIVER_SIZE)
-                )
-            )
-        }
-    }
-
-    @Test
-    fun `constructor when crossers list with two crosser on different boat position`() {
-        assertFailsWith<IllegalArgumentException> {
-            newGameSituationTeller(
-                crossers = listOf(
-                    newClassicRulesCrosserWhoCanDriveBoat(RiverCrosserPosition.BOAT_ON_ORIGINAL_RIVER_SIZE),
-                    newClassicRulesCrosserWhoCanDriveBoat(RiverCrosserPosition.BOAT_ON_TARGET_RIVER_SIDE),
+                    newClassicRulesCrosserWhoCanDriveBoat(RiverCrosserPosition.BOAT),
+                    newClassicRulesCrosserWhoCanDriveBoat(RiverCrosserPosition.BOAT),
+                    newClassicRulesCrosserWhoCanDriveBoat(RiverCrosserPosition.BOAT)
                 )
             )
         }
@@ -73,12 +50,11 @@ internal class GameSituationTellerTest {
     @Test
     fun `getCurrentValidMoves when one boat driver crosser on ORIGINAL RIVER SIDE`() {
         val actualMoveSet =
-            newGameSituationTeller(crossers = listOf(newClassicRulesCrosserWhoCanDriveBoat(RiverCrosserPosition.ORIGINAL_RIVER_SIDE)))
+            newGameSituationTeller(crossers = listOf(newClassicRulesCrosserWhoCanDriveBoat(RiverCrosserPosition.ORIGINAL_RIVERSIDE)))
                 .getCurrentValidMoves()
         val expectedMoveSet = setOf(
             setOf(0) to Move(
                 MoveType.TRANSIT,
-                RiverCrosserPosition.BOAT_ON_ORIGINAL_RIVER_SIZE
             )
         )
         assertEquals(expectedMoveSet, actualMoveSet)
@@ -87,17 +63,15 @@ internal class GameSituationTellerTest {
     @Test
     fun `getCurrentValidMoves when one boat driver crosser in boat on original river side`() {
         val actualMoveSet =
-            newGameSituationTeller(crossers = listOf(newClassicRulesCrosserWhoCanDriveBoat(RiverCrosserPosition.BOAT_ON_ORIGINAL_RIVER_SIZE)))
+            newGameSituationTeller(crossers = listOf(newClassicRulesCrosserWhoCanDriveBoat(RiverCrosserPosition.BOAT)))
                 .getCurrentValidMoves()
 
         val expectedMoveSet = setOf(
             setOf(0) to Move(
                 MoveType.TRANSIT,
-                RiverCrosserPosition.ORIGINAL_RIVER_SIDE
             ),
             setOf(0) to Move(
                 MoveType.DRIVE_BOAT,
-                RiverCrosserPosition.BOAT_ON_TARGET_RIVER_SIDE
             )
         )
         assertEquals(expectedMoveSet, actualMoveSet)
@@ -108,23 +82,21 @@ internal class GameSituationTellerTest {
         val actualMoveSet =
             newGameSituationTeller(
                 crossers = listOf(
-                    newClassicRulesCrosserWhoCanDriveBoat(RiverCrosserPosition.BOAT_ON_ORIGINAL_RIVER_SIZE),
-                    newClassicRulesCrosserWhoCanDriveBoat(RiverCrosserPosition.BOAT_ON_ORIGINAL_RIVER_SIZE),
-                    newClassicRulesCrosserWhoCanDriveBoat(RiverCrosserPosition.TARGET_RIVER_SIDE),
-                )
+                    newClassicRulesCrosserWhoCanDriveBoat(RiverCrosserPosition.BOAT),
+                    newClassicRulesCrosserWhoCanDriveBoat(RiverCrosserPosition.BOAT),
+                    newClassicRulesCrosserWhoCanDriveBoat(RiverCrosserPosition.TARGET_RIVERSIDE),
+                ),
+                boatPosition = BoatPosition.ORIGINAL_RIVERSIDE
             ).getCurrentValidMoves()
         val expectedMoveSet = setOf(
             setOf(0) to Move(
                 MoveType.TRANSIT,
-                RiverCrosserPosition.ORIGINAL_RIVER_SIDE
             ),
             setOf(1) to Move(
                 MoveType.TRANSIT,
-                RiverCrosserPosition.ORIGINAL_RIVER_SIDE
             ),
             setOf(0, 1) to Move(
                 MoveType.DRIVE_BOAT,
-                RiverCrosserPosition.BOAT_ON_TARGET_RIVER_SIDE
             )
         )
         assertEquals(expectedMoveSet, actualMoveSet)

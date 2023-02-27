@@ -2,8 +2,6 @@ package rules.classic
 
 import rules.GameRules
 import rules.MoveType
-import rules.RiverCrosserPosition
-import rules.RiverCrosserPosition.*
 import rules.RiverCrosserType
 
 val DOG = RiverCrosserType("DOG")
@@ -27,13 +25,6 @@ object ClassicGameRules : GameRules {
             return false
         return true
     }
-
-    override val samePlaceDefinitions: Set<Set<RiverCrosserPosition>> = setOf(
-        setOf(ORIGINAL_RIVER_SIDE),
-        setOf(BOAT_ON_ORIGINAL_RIVER_SIZE),
-        setOf(BOAT_ON_TARGET_RIVER_SIDE),
-        setOf(TARGET_RIVER_SIDE)
-    )
 
     override fun getMoveCost(type: MoveType): Int {
         return when (type) {

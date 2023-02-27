@@ -1,5 +1,16 @@
 package rules
 
+import gamePlay.Move
+
+enum class BoatPosition {
+    ORIGINAL_RIVERSIDE, TARGET_RIVERSIDE
+}
+
 enum class RiverCrosserPosition {
-    ORIGINAL_RIVER_SIDE, BOAT_ON_ORIGINAL_RIVER_SIZE, BOAT_ON_TARGET_RIVER_SIDE, TARGET_RIVER_SIDE
+    ORIGINAL_RIVERSIDE, BOAT, TARGET_RIVERSIDE
+}
+
+fun RiverCrosserPosition.newPosition(move: Move): RiverCrosserPosition {
+    // TODO
+    return RiverCrosserPosition.BOAT
 }

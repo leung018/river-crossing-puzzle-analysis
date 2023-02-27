@@ -14,7 +14,7 @@ interface GameSituationRules {
     /**
      * Define which set of positions are considered as the same place
      */
-    val samePlaceDefinitions: Set<Set<RiverCrosserPosition>>
+    fun samePlaceDefinitions() {} // TODO
     val boatCapacity: Int
         get() = 2
 }
