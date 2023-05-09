@@ -1,6 +1,7 @@
 package gamePlay
 
 import rules.BoatPosition
+import rules.MoveType
 import rules.MoveTypeCostRules
 import rules.newPosition
 
@@ -31,9 +32,22 @@ data class GamePlayState(
         }
 
         return this.copy(
-            currentPositions = CurrentPositions(crossers = newCrossers),
+            currentPositions = CurrentPositions(crossers = newCrossers, boatPosition = newBoatPosition(move)),
             pastMoves = pastMoves + listOf(crosserIndicesAndMove),
             totalCost = totalCost + moveTypeCostRules.getMoveCost(move.moveType)
         )
+    }
+
+    private fun newBoatPosition(move: Move): BoatPosition {
+        return when (move.moveType) {
+            MoveType.DRIVE_BOAT -> {
+                when (currentPositions.boatPosition) {
+                    BoatPosition.ORIGINAL_RIVERSIDE -> BoatPosition.TARGET_RIVERSIDE
+                    BoatPosition.TARGET_RIVERSIDE -> BoatPosition.ORIGINAL_RIVERSIDE
+                }
+            }
+
+            else -> currentPositions.boatPosition
+        }
     }
 }

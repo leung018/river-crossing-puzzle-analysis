@@ -28,7 +28,7 @@ internal class GamePlayStateTest {
             GamePlayState(
                 CurrentPositions(
                     listOf(
-                        RiverCrosser(FATHER),
+                        RiverCrosser(FATHER, RiverCrosserPosition.ORIGINAL_RIVERSIDE),
                         RiverCrosser(MOTHER, RiverCrosserPosition.BOAT)
                     ),
                     boatPosition = BoatPosition.ORIGINAL_RIVERSIDE
@@ -45,6 +45,34 @@ internal class GamePlayStateTest {
                 boatPosition = BoatPosition.TARGET_RIVERSIDE
             ),
             listOf((setOf(1) to Move(MoveType.DRIVE_BOAT))),
+            1
+        )
+
+        assertEquals(expectedState, newState)
+    }
+
+    @Test
+    fun `newStateAppliedMoves when drive boat from target river side`() {
+        val originalState =
+            GamePlayState(
+                CurrentPositions(
+                    listOf(
+                        RiverCrosser(MOTHER, RiverCrosserPosition.BOAT)
+                    ),
+                    boatPosition = BoatPosition.TARGET_RIVERSIDE
+                ), listOf(), 0
+            )
+        val newState =
+            originalState.newStateAppliedMoves(
+                setOf(0) to Move(MoveType.DRIVE_BOAT),
+                ClassicGameRules
+            )
+        val expectedState = GamePlayState(
+            CurrentPositions(
+                listOf(RiverCrosser(MOTHER, RiverCrosserPosition.BOAT)),
+                boatPosition = BoatPosition.ORIGINAL_RIVERSIDE
+            ),
+            listOf((setOf(0) to Move(MoveType.DRIVE_BOAT))),
             1
         )
 
