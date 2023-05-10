@@ -55,9 +55,12 @@ class GameSituationTeller(private val gamePlayPositions: GamePlayPositions, priv
         // boat moves
         getCrossersIndicesOfPosition(RiverCrosserPosition.BOAT).let {
             if (it.isNotEmpty()) {
-                newMoves.add(
-                    it to Move.DRIVE_BOAT
-                )
+                if (it.map { index -> gamePlayPositions.crossers[index] }
+                        .any { crosser -> rules.canDriveBoatCrosserTypes.contains(crosser.type) }) {
+                    newMoves.add(
+                        it to Move.DRIVE_BOAT
+                    )
+                }
                 newMoves.add(
                     it to Move.TRANSIT
                 )

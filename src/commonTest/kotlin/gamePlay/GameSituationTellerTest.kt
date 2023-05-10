@@ -153,4 +153,25 @@ internal class GameSituationTellerTest {
                 .getCurrentValidMoves()
         assertEquals(emptySet(), actualMoveSet)
     }
+
+    @Test
+    fun `getCurrentValidMoves when crossers on boat can not drive`() {
+        val actualMoveSet =
+            newGameSituationTeller(
+                newGamePlayPositions(
+                    crossers = listOf(
+                        newClassicCrosser(
+                            position = RiverCrosserPosition.BOAT,
+                            canDriveBoat = false
+                        ),
+                    ),
+                ),
+                rules = ClassicGameRules
+            )
+                .getCurrentValidMoves()
+        val expectedMoveSet = setOf(
+            setOf(0) to Move.TRANSIT,
+        )
+        assertEquals(expectedMoveSet, actualMoveSet)
+    }
 }
