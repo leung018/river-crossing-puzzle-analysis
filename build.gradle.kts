@@ -1,5 +1,6 @@
 plugins {
     kotlin("multiplatform") version "1.8.21"
+    id("org.jetbrains.kotlinx.kover") version "0.6.1"
 }
 
 group = "me.leung"
