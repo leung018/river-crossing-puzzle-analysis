@@ -180,4 +180,62 @@ internal class GamePlayStateTest {
             ), newState.gamePlayPositions
         )
     }
+
+    @Test
+    fun `newStateAppliedMoves when drive boat move for riverside crosser`() {
+        val originalState =
+            GamePlayState(
+                GamePlayPositions(
+                    listOf(
+                        RiverCrosser(FATHER, RiverCrosserPosition.ORIGINAL_RIVERSIDE),
+                        RiverCrosser(MOTHER, RiverCrosserPosition.BOAT),
+                    ),
+                    boatPosition = BoatPosition.ORIGINAL_RIVERSIDE
+                )
+            )
+        assertFailsWith<IllegalArgumentException> {
+            originalState.newStateAppliedMoves(
+                setOf(0) to Move(MoveType.DRIVE_BOAT),
+                ClassicGameRules
+            )
+        }
+    }
+
+    @Test
+    fun `newStateAppliedMoves when transit for original riverside crosser but boat is on the other side`() {
+        val originalState =
+            GamePlayState(
+                GamePlayPositions(
+                    listOf(
+                        RiverCrosser(FATHER, RiverCrosserPosition.ORIGINAL_RIVERSIDE),
+                    ),
+                    boatPosition = BoatPosition.TARGET_RIVERSIDE
+                )
+            )
+        assertFailsWith<IllegalArgumentException> {
+            originalState.newStateAppliedMoves(
+                setOf(0) to Move(MoveType.TRANSIT),
+                ClassicGameRules
+            )
+        }
+    }
+
+    @Test
+    fun `newStateAppliedMoves when transit for target riverside crosser but boat is on the other side`() {
+        val originalState =
+            GamePlayState(
+                GamePlayPositions(
+                    listOf(
+                        RiverCrosser(FATHER, RiverCrosserPosition.TARGET_RIVERSIDE),
+                    ),
+                    boatPosition = BoatPosition.ORIGINAL_RIVERSIDE
+                )
+            )
+        assertFailsWith<IllegalArgumentException> {
+            originalState.newStateAppliedMoves(
+                setOf(0) to Move(MoveType.TRANSIT),
+                ClassicGameRules
+            )
+        }
+    }
 }

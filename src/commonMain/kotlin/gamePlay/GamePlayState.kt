@@ -18,7 +18,8 @@ data class GamePlayState(
 ) {
 
     /**
-     * @throws IllegalArgumentException if the target indices for the move not exist in the original list or the move is not valid
+     * @throws IllegalArgumentException if the target indices for the move not exist in the original list or the move is
+     * not valid in current game play positions.
      */
     fun newStateAppliedMoves(
         crosserIndicesAndMove: Pair<CrosserIndices, Move>,
@@ -30,6 +31,20 @@ data class GamePlayState(
         for (i in indices) {
             try {
                 val oldCrosserPosition = newCrossers[i].position
+
+                // validate if the move is valid in current game play positions
+                if (oldCrosserPosition != RiverCrosserPosition.BOAT && move.moveType == MoveType.DRIVE_BOAT) {
+                    throw IllegalArgumentException("Crosser at index $i is not at boat")
+                }
+                if (move.moveType == MoveType.TRANSIT) {
+                    if (oldCrosserPosition == RiverCrosserPosition.ORIGINAL_RIVERSIDE && gamePlayPositions.boatPosition == BoatPosition.TARGET_RIVERSIDE) {
+                        throw IllegalArgumentException("Crosser at index $i is at original riverside and boat is at target riverside")
+                    }
+                    if (oldCrosserPosition == RiverCrosserPosition.TARGET_RIVERSIDE && gamePlayPositions.boatPosition == BoatPosition.ORIGINAL_RIVERSIDE) {
+                        throw IllegalArgumentException("Crosser at index $i is at target riverside and boat is at original riverside")
+                    }
+                }
+
                 newCrossers[i] = newCrossers[i].copy(position = oldCrosserPosition.newCrosserPosition(move))
             } catch (e: IndexOutOfBoundsException) {
                 throw IllegalArgumentException("Target indices for the move not exist in the original list")
