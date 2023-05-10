@@ -40,7 +40,7 @@ class GameSituationTeller(private val gamePlayPositions: GamePlayPositions, priv
     fun getCurrentValidMoves(): Set<Pair<CrosserIndices, Move>> {
         val newMoves = mutableSetOf<Pair<CrosserIndices, Move>>()
 
-        // riverside moves
+        // moves of crossers on riverside
         getCrossersIndicesOfPosition(gamePlayPositions.boatPosition.nearRiverCrosserPosition()).let {
             if (it.isNotEmpty()) {
                 newMoves.add(
@@ -52,7 +52,7 @@ class GameSituationTeller(private val gamePlayPositions: GamePlayPositions, priv
             }
         }
 
-        // boat moves
+        // moves of crossers on boat
         getCrossersIndicesOfPosition(RiverCrosserPosition.BOAT).let {
             if (it.isNotEmpty()) {
                 if (canDriveBoat(it)) {
