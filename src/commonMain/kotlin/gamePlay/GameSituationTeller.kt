@@ -1,18 +1,13 @@
 package gamePlay
 
-import rules.BoatPosition
 import rules.GameSituationRules
 import rules.Move
 import rules.RiverCrosserPosition
 
-class GameSituationTeller(private val gamePlayPositions: GamePlayPositions, val rules: GameSituationRules) {
+class GameSituationTeller(private val gamePlayPositions: GamePlayPositions, private val rules: GameSituationRules) {
     init {
         validateCrossers()
     }
-
-    constructor(
-        crossers: List<RiverCrosser>, boatPosition: BoatPosition, rules: GameSituationRules
-    ) : this(GamePlayPositions(crossers, boatPosition), rules)
 
     private fun validateCrossers() {
         if (gamePlayPositions.crossers.isEmpty()) {
@@ -37,16 +32,26 @@ class GameSituationTeller(private val gamePlayPositions: GamePlayPositions, val 
         }
     }
 
+    /**
+     * @return set of pairs of crossers indices and move that can be applied to a valid game state.
+     * But it doesn't mean that the game state after applying the move will not game over.
+     */
     fun getCurrentValidMoves(): Set<Pair<CrosserIndices, Move>> {
         val newMoves = mutableSetOf<Pair<CrosserIndices, Move>>()
         for ((index, crosser) in gamePlayPositions.crossers.withIndex()) {
             if (crosser.position == RiverCrosserPosition.ORIGINAL_RIVERSIDE) {
                 newMoves.add(setOf(index) to Move.TRANSIT)
+                newMoves.add(
+                    getCrossersIndicesOfPosition(RiverCrosserPosition.ORIGINAL_RIVERSIDE) to Move.TRANSIT
+                )
             } else if (crosser.position == RiverCrosserPosition.BOAT) {
                 newMoves.add(
                     getCrossersIndicesOfPosition(RiverCrosserPosition.BOAT) to Move.DRIVE_BOAT
                 )
                 newMoves.add(setOf(index) to Move.TRANSIT)
+                newMoves.add(
+                    getCrossersIndicesOfPosition(RiverCrosserPosition.BOAT) to Move.TRANSIT
+                )
             }
         }
         return newMoves
