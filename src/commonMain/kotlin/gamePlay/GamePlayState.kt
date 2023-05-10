@@ -6,13 +6,13 @@ import rules.MoveTypeCostRules
 import rules.RiverCrosserPosition
 import rules.classic.ClassicGameRules
 
-data class CurrentPositions(
+data class GamePlayPositions(
     val crossers: List<RiverCrosser>,
     val boatPosition: BoatPosition = BoatPosition.ORIGINAL_RIVERSIDE
 )
 
 data class GamePlayState(
-    val currentPositions: CurrentPositions,
+    val gamePlayPositions: GamePlayPositions,
     val pastMoves: List<Pair<CrosserIndices, Move>> = listOf(),
     val totalCost: Int = 0,
 ) {
@@ -24,7 +24,7 @@ data class GamePlayState(
         crosserIndicesAndMove: Pair<CrosserIndices, Move>,
         moveTypeCostRules: MoveTypeCostRules = ClassicGameRules
     ): GamePlayState {
-        val newCrossers = currentPositions.crossers.toMutableList()
+        val newCrossers = gamePlayPositions.crossers.toMutableList()
         val (indices, move) = crosserIndicesAndMove
 
         for (i in indices) {
@@ -37,7 +37,7 @@ data class GamePlayState(
         }
 
         return this.copy(
-            currentPositions = CurrentPositions(crossers = newCrossers, boatPosition = newBoatPosition(move)),
+            gamePlayPositions = GamePlayPositions(crossers = newCrossers, boatPosition = newBoatPosition(move)),
             pastMoves = pastMoves + listOf(crosserIndicesAndMove),
             totalCost = totalCost + moveTypeCostRules.getMoveCost(move.moveType)
         )
@@ -46,13 +46,13 @@ data class GamePlayState(
     private fun newBoatPosition(move: Move): BoatPosition {
         return when (move.moveType) {
             MoveType.DRIVE_BOAT -> {
-                when (currentPositions.boatPosition) {
+                when (gamePlayPositions.boatPosition) {
                     BoatPosition.ORIGINAL_RIVERSIDE -> BoatPosition.TARGET_RIVERSIDE
                     BoatPosition.TARGET_RIVERSIDE -> BoatPosition.ORIGINAL_RIVERSIDE
                 }
             }
 
-            else -> currentPositions.boatPosition
+            else -> gamePlayPositions.boatPosition
         }
     }
 
@@ -61,7 +61,7 @@ data class GamePlayState(
             MoveType.DRIVE_BOAT -> RiverCrosserPosition.BOAT
             MoveType.TRANSIT -> when (this) {
                 RiverCrosserPosition.ORIGINAL_RIVERSIDE, RiverCrosserPosition.TARGET_RIVERSIDE -> RiverCrosserPosition.BOAT
-                RiverCrosserPosition.BOAT -> when (currentPositions.boatPosition) {
+                RiverCrosserPosition.BOAT -> when (gamePlayPositions.boatPosition) {
                     BoatPosition.ORIGINAL_RIVERSIDE -> RiverCrosserPosition.ORIGINAL_RIVERSIDE
                     BoatPosition.TARGET_RIVERSIDE -> RiverCrosserPosition.TARGET_RIVERSIDE
                 }

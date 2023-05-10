@@ -13,7 +13,7 @@ import kotlin.test.assertFailsWith
 internal class GamePlayStateTest {
     @Test
     fun `newStateAppliedMoves when CrosserIndices out of original list range`() {
-        val s = GamePlayState(CurrentPositions(listOf()))
+        val s = GamePlayState(GamePlayPositions(listOf()))
         assertFailsWith<IllegalArgumentException> {
             s.newStateAppliedMoves(
                 setOf(0) to Move(MoveType.TRANSIT)
@@ -25,7 +25,7 @@ internal class GamePlayStateTest {
     fun `newStateAppliedMoves when one crosser drive boat from original riverside and one crosser stay at riverside`() {
         val originalState =
             GamePlayState(
-                CurrentPositions(
+                GamePlayPositions(
                     listOf(
                         RiverCrosser(FATHER, RiverCrosserPosition.ORIGINAL_RIVERSIDE),
                         RiverCrosser(MOTHER, RiverCrosserPosition.BOAT)
@@ -39,7 +39,7 @@ internal class GamePlayStateTest {
                 ClassicGameRules
             )
         val expectedState = GamePlayState(
-            CurrentPositions(
+            GamePlayPositions(
                 listOf(RiverCrosser(FATHER), RiverCrosser(MOTHER, RiverCrosserPosition.BOAT)),
                 boatPosition = BoatPosition.TARGET_RIVERSIDE
             ),
@@ -54,7 +54,7 @@ internal class GamePlayStateTest {
     fun `newStateAppliedMoves when drive boat from target riverside`() {
         val originalState =
             GamePlayState(
-                CurrentPositions(
+                GamePlayPositions(
                     listOf(
                         RiverCrosser(MOTHER, RiverCrosserPosition.BOAT)
                     ),
@@ -67,10 +67,10 @@ internal class GamePlayStateTest {
             )
 
         assertEquals(
-            CurrentPositions(
+            GamePlayPositions(
                 listOf(RiverCrosser(MOTHER, RiverCrosserPosition.BOAT)),
                 boatPosition = BoatPosition.ORIGINAL_RIVERSIDE
-            ), newState.currentPositions
+            ), newState.gamePlayPositions
         )
     }
 
@@ -78,7 +78,7 @@ internal class GamePlayStateTest {
     fun `newStateAppliedMoves when transit from original riverside to boat`() {
         val originalState =
             GamePlayState(
-                CurrentPositions(
+                GamePlayPositions(
                     listOf(
                         RiverCrosser(FATHER, RiverCrosserPosition.ORIGINAL_RIVERSIDE),
                     ),
@@ -91,12 +91,12 @@ internal class GamePlayStateTest {
             )
 
         assertEquals(
-            CurrentPositions(
+            GamePlayPositions(
                 listOf(
                     RiverCrosser(FATHER, RiverCrosserPosition.BOAT),
                 ),
                 boatPosition = BoatPosition.ORIGINAL_RIVERSIDE
-            ), newState.currentPositions
+            ), newState.gamePlayPositions
         )
     }
 
@@ -104,7 +104,7 @@ internal class GamePlayStateTest {
     fun `newStateAppliedMoves when transit from target riverside to boat`() {
         val originalState =
             GamePlayState(
-                CurrentPositions(
+                GamePlayPositions(
                     listOf(
                         RiverCrosser(FATHER, RiverCrosserPosition.TARGET_RIVERSIDE),
                     ),
@@ -118,12 +118,12 @@ internal class GamePlayStateTest {
             )
 
         assertEquals(
-            CurrentPositions(
+            GamePlayPositions(
                 listOf(
                     RiverCrosser(FATHER, RiverCrosserPosition.BOAT),
                 ),
                 boatPosition = BoatPosition.TARGET_RIVERSIDE
-            ), newState.currentPositions
+            ), newState.gamePlayPositions
         )
     }
 
@@ -131,7 +131,7 @@ internal class GamePlayStateTest {
     fun `newStateAppliedMoves when transit from boat in original riverside`() {
         val originalState =
             GamePlayState(
-                CurrentPositions(
+                GamePlayPositions(
                     listOf(
                         RiverCrosser(FATHER, RiverCrosserPosition.BOAT),
                     ),
@@ -145,12 +145,12 @@ internal class GamePlayStateTest {
             )
 
         assertEquals(
-            CurrentPositions(
+            GamePlayPositions(
                 listOf(
                     RiverCrosser(FATHER, RiverCrosserPosition.ORIGINAL_RIVERSIDE),
                 ),
                 boatPosition = BoatPosition.ORIGINAL_RIVERSIDE
-            ), newState.currentPositions
+            ), newState.gamePlayPositions
         )
     }
 
@@ -158,7 +158,7 @@ internal class GamePlayStateTest {
     fun `newStateAppliedMoves when transit from boat in target riverside`() {
         val originalState =
             GamePlayState(
-                CurrentPositions(
+                GamePlayPositions(
                     listOf(
                         RiverCrosser(FATHER, RiverCrosserPosition.BOAT),
                     ),
@@ -172,12 +172,12 @@ internal class GamePlayStateTest {
             )
 
         assertEquals(
-            CurrentPositions(
+            GamePlayPositions(
                 listOf(
                     RiverCrosser(FATHER, RiverCrosserPosition.TARGET_RIVERSIDE),
                 ),
                 boatPosition = BoatPosition.TARGET_RIVERSIDE
-            ), newState.currentPositions
+            ), newState.gamePlayPositions
         )
     }
 }
