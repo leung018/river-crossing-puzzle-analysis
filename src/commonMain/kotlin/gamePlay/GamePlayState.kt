@@ -1,9 +1,6 @@
 package gamePlay
 
-import rules.BoatPosition
-import rules.Move
-import rules.MoveTypeCostRules
-import rules.RiverCrosserPosition
+import rules.*
 import rules.classic.ClassicGameRules
 
 data class GamePlayPositions(
@@ -60,13 +57,7 @@ data class GamePlayState(
 
     private fun newBoatPosition(move: Move): BoatPosition {
         return when (move) {
-            Move.DRIVE_BOAT -> {
-                when (gamePlayPositions.boatPosition) {
-                    BoatPosition.ORIGINAL_RIVERSIDE -> BoatPosition.TARGET_RIVERSIDE
-                    BoatPosition.TARGET_RIVERSIDE -> BoatPosition.ORIGINAL_RIVERSIDE
-                }
-            }
-
+            Move.DRIVE_BOAT -> gamePlayPositions.boatPosition.opposite()
             else -> gamePlayPositions.boatPosition
         }
     }
@@ -76,10 +67,7 @@ data class GamePlayState(
             Move.DRIVE_BOAT -> RiverCrosserPosition.BOAT
             Move.TRANSIT -> when (this) {
                 RiverCrosserPosition.ORIGINAL_RIVERSIDE, RiverCrosserPosition.TARGET_RIVERSIDE -> RiverCrosserPosition.BOAT
-                RiverCrosserPosition.BOAT -> when (gamePlayPositions.boatPosition) {
-                    BoatPosition.ORIGINAL_RIVERSIDE -> RiverCrosserPosition.ORIGINAL_RIVERSIDE
-                    BoatPosition.TARGET_RIVERSIDE -> RiverCrosserPosition.TARGET_RIVERSIDE
-                }
+                RiverCrosserPosition.BOAT -> gamePlayPositions.boatPosition.nearRiverCrosserPosition()
             }
         }
     }

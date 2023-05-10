@@ -1,9 +1,9 @@
 package gamePlay
 
-import rules.BoatPosition
 import rules.GameSituationRules
 import rules.Move
 import rules.RiverCrosserPosition
+import rules.nearRiverCrosserPosition
 
 class GameSituationTeller(private val gamePlayPositions: GamePlayPositions, private val rules: GameSituationRules) {
     init {
@@ -39,31 +39,34 @@ class GameSituationTeller(private val gamePlayPositions: GamePlayPositions, priv
      */
     fun getCurrentValidMoves(): Set<Pair<CrosserIndices, Move>> {
         val newMoves = mutableSetOf<Pair<CrosserIndices, Move>>()
-        for ((index, crosser) in gamePlayPositions.crossers.withIndex()) {
-            if (crosser.position == RiverCrosserPosition.ORIGINAL_RIVERSIDE) {
-                if (gamePlayPositions.boatPosition == BoatPosition.ORIGINAL_RIVERSIDE) {
-                    newMoves.add(setOf(index) to Move.TRANSIT)
-                    newMoves.add(
-                        getCrossersIndicesOfPosition(RiverCrosserPosition.ORIGINAL_RIVERSIDE) to Move.TRANSIT
-                    )
-                }
-            } else if (crosser.position == RiverCrosserPosition.BOAT) {
+
+        // riverside moves
+        getCrossersIndicesOfPosition(gamePlayPositions.boatPosition.nearRiverCrosserPosition()).let {
+            if (it.isNotEmpty()) {
                 newMoves.add(
-                    getCrossersIndicesOfPosition(RiverCrosserPosition.BOAT) to Move.DRIVE_BOAT
+                    it to Move.TRANSIT
                 )
-                newMoves.add(setOf(index) to Move.TRANSIT)
-                newMoves.add(
-                    getCrossersIndicesOfPosition(RiverCrosserPosition.BOAT) to Move.TRANSIT
-                )
-            } else if (crosser.position == RiverCrosserPosition.TARGET_RIVERSIDE) {
-                if (gamePlayPositions.boatPosition == BoatPosition.TARGET_RIVERSIDE) {
+                for (index in it) {
                     newMoves.add(setOf(index) to Move.TRANSIT)
-                    newMoves.add(
-                        getCrossersIndicesOfPosition(RiverCrosserPosition.TARGET_RIVERSIDE) to Move.TRANSIT
-                    )
                 }
             }
         }
+
+        // boat moves
+        getCrossersIndicesOfPosition(RiverCrosserPosition.BOAT).let {
+            if (it.isNotEmpty()) {
+                newMoves.add(
+                    it to Move.DRIVE_BOAT
+                )
+                newMoves.add(
+                    it to Move.TRANSIT
+                )
+                for (index in it) {
+                    newMoves.add(setOf(index) to Move.TRANSIT)
+                }
+            }
+        }
+
         return newMoves
     }
 
