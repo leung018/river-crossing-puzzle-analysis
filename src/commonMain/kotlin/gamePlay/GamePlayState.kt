@@ -16,6 +16,10 @@ data class GamePlayState(
     val pastMoves: List<Pair<CrosserIndices, Move>> = listOf(),
     val totalCost: Int = 0,
 ) {
+
+    /**
+     * @throws IllegalArgumentException if the target indices for the move not exist in the original list or the move is not valid
+     */
     fun newStateAppliedMoves(
         crosserIndicesAndMove: Pair<CrosserIndices, Move>,
         moveTypeCostRules: MoveTypeCostRules = ClassicGameRules
