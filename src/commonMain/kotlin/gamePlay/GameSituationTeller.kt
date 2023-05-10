@@ -1,5 +1,6 @@
 package gamePlay
 
+import rules.BoatPosition
 import rules.GameSituationRules
 import rules.Move
 import rules.RiverCrosserPosition
@@ -40,10 +41,12 @@ class GameSituationTeller(private val gamePlayPositions: GamePlayPositions, priv
         val newMoves = mutableSetOf<Pair<CrosserIndices, Move>>()
         for ((index, crosser) in gamePlayPositions.crossers.withIndex()) {
             if (crosser.position == RiverCrosserPosition.ORIGINAL_RIVERSIDE) {
-                newMoves.add(setOf(index) to Move.TRANSIT)
-                newMoves.add(
-                    getCrossersIndicesOfPosition(RiverCrosserPosition.ORIGINAL_RIVERSIDE) to Move.TRANSIT
-                )
+                if (gamePlayPositions.boatPosition == BoatPosition.ORIGINAL_RIVERSIDE) {
+                    newMoves.add(setOf(index) to Move.TRANSIT)
+                    newMoves.add(
+                        getCrossersIndicesOfPosition(RiverCrosserPosition.ORIGINAL_RIVERSIDE) to Move.TRANSIT
+                    )
+                }
             } else if (crosser.position == RiverCrosserPosition.BOAT) {
                 newMoves.add(
                     getCrossersIndicesOfPosition(RiverCrosserPosition.BOAT) to Move.DRIVE_BOAT
@@ -52,6 +55,13 @@ class GameSituationTeller(private val gamePlayPositions: GamePlayPositions, priv
                 newMoves.add(
                     getCrossersIndicesOfPosition(RiverCrosserPosition.BOAT) to Move.TRANSIT
                 )
+            } else if (crosser.position == RiverCrosserPosition.TARGET_RIVERSIDE) {
+                if (gamePlayPositions.boatPosition == BoatPosition.TARGET_RIVERSIDE) {
+                    newMoves.add(setOf(index) to Move.TRANSIT)
+                    newMoves.add(
+                        getCrossersIndicesOfPosition(RiverCrosserPosition.TARGET_RIVERSIDE) to Move.TRANSIT
+                    )
+                }
             }
         }
         return newMoves
