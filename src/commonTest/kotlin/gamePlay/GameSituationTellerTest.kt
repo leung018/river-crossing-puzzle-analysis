@@ -53,9 +53,7 @@ internal class GameSituationTellerTest {
             newGameSituationTeller(crossers = listOf(newClassicRulesCrosserWhoCanDriveBoat(RiverCrosserPosition.ORIGINAL_RIVERSIDE)))
                 .getCurrentValidMoves()
         val expectedMoveSet = setOf(
-            setOf(0) to Move(
-                MoveType.TRANSIT,
-            )
+            setOf(0) to Move.TRANSIT
         )
         assertEquals(expectedMoveSet, actualMoveSet)
     }
@@ -67,12 +65,8 @@ internal class GameSituationTellerTest {
                 .getCurrentValidMoves()
 
         val expectedMoveSet = setOf(
-            setOf(0) to Move(
-                MoveType.TRANSIT,
-            ),
-            setOf(0) to Move(
-                MoveType.DRIVE_BOAT,
-            )
+            setOf(0) to Move.TRANSIT,
+            setOf(0) to Move.DRIVE_BOAT
         )
         assertEquals(expectedMoveSet, actualMoveSet)
     }
@@ -89,15 +83,9 @@ internal class GameSituationTellerTest {
                 boatPosition = BoatPosition.ORIGINAL_RIVERSIDE
             ).getCurrentValidMoves()
         val expectedMoveSet = setOf(
-            setOf(0) to Move(
-                MoveType.TRANSIT,
-            ),
-            setOf(1) to Move(
-                MoveType.TRANSIT,
-            ),
-            setOf(0, 1) to Move(
-                MoveType.DRIVE_BOAT,
-            )
+            setOf(0) to Move.TRANSIT,
+            setOf(1) to Move.TRANSIT,
+            setOf(0, 1) to Move.DRIVE_BOAT
         )
         assertEquals(expectedMoveSet, actualMoveSet)
     }

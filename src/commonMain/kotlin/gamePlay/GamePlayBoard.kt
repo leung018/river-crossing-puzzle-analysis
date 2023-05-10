@@ -1,6 +1,7 @@
 package gamePlay
 
 import rules.GameRules
+import rules.Move
 
 typealias CrosserIndices = Set<Int>
 

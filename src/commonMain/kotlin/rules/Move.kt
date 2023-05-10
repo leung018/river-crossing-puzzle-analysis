@@ -1,6 +1,6 @@
 package rules
 
-enum class MoveType {
+enum class Move {
     DRIVE_BOAT,
     TRANSIT
 }

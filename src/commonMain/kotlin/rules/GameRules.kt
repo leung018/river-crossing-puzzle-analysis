@@ -20,5 +20,5 @@ interface GameSituationRules {
 }
 
 interface MoveTypeCostRules {
-    fun getMoveCost(type: MoveType): Int
+    fun getMoveCost(move: Move): Int
 }

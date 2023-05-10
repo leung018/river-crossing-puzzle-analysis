@@ -1,7 +1,7 @@
 package gamePlay
 
 import rules.BoatPosition
-import rules.MoveType
+import rules.Move
 import rules.RiverCrosserPosition
 import rules.classic.ClassicGameRules
 import rules.classic.FATHER
@@ -16,7 +16,7 @@ internal class GamePlayStateTest {
         val s = GamePlayState(GamePlayPositions(listOf()))
         assertFailsWith<IllegalArgumentException> {
             s.newStateAppliedMoves(
-                setOf(0) to Move(MoveType.TRANSIT)
+                setOf(0) to Move.TRANSIT
             )
         }
     }
@@ -35,7 +35,7 @@ internal class GamePlayStateTest {
             )
         val newState =
             originalState.newStateAppliedMoves(
-                setOf(1) to Move(MoveType.DRIVE_BOAT),
+                setOf(1) to Move.DRIVE_BOAT,
                 ClassicGameRules
             )
         val expectedState = GamePlayState(
@@ -43,7 +43,7 @@ internal class GamePlayStateTest {
                 listOf(RiverCrosser(FATHER), RiverCrosser(MOTHER, RiverCrosserPosition.BOAT)),
                 boatPosition = BoatPosition.TARGET_RIVERSIDE
             ),
-            listOf((setOf(1) to Move(MoveType.DRIVE_BOAT))),
+            listOf((setOf(1) to Move.DRIVE_BOAT)),
             1
         )
 
@@ -63,7 +63,7 @@ internal class GamePlayStateTest {
             )
         val newState =
             originalState.newStateAppliedMoves(
-                setOf(0) to Move(MoveType.DRIVE_BOAT),
+                setOf(0) to Move.DRIVE_BOAT,
             )
 
         assertEquals(
@@ -87,7 +87,7 @@ internal class GamePlayStateTest {
             )
         val newState =
             originalState.newStateAppliedMoves(
-                setOf(0) to Move(MoveType.TRANSIT),
+                setOf(0) to Move.TRANSIT,
             )
 
         assertEquals(
@@ -113,7 +113,7 @@ internal class GamePlayStateTest {
             )
         val newState =
             originalState.newStateAppliedMoves(
-                setOf(0) to Move(MoveType.TRANSIT),
+                setOf(0) to Move.TRANSIT,
                 ClassicGameRules
             )
 
@@ -140,7 +140,7 @@ internal class GamePlayStateTest {
             )
         val newState =
             originalState.newStateAppliedMoves(
-                setOf(0) to Move(MoveType.TRANSIT),
+                setOf(0) to Move.TRANSIT,
                 ClassicGameRules
             )
 
@@ -167,7 +167,7 @@ internal class GamePlayStateTest {
             )
         val newState =
             originalState.newStateAppliedMoves(
-                setOf(0) to Move(MoveType.TRANSIT),
+                setOf(0) to Move.TRANSIT,
                 ClassicGameRules
             )
 
@@ -195,7 +195,7 @@ internal class GamePlayStateTest {
             )
         assertFailsWith<IllegalArgumentException> {
             originalState.newStateAppliedMoves(
-                setOf(0) to Move(MoveType.DRIVE_BOAT),
+                setOf(0) to Move.DRIVE_BOAT,
                 ClassicGameRules
             )
         }
@@ -214,7 +214,7 @@ internal class GamePlayStateTest {
             )
         assertFailsWith<IllegalArgumentException> {
             originalState.newStateAppliedMoves(
-                setOf(0) to Move(MoveType.TRANSIT),
+                setOf(0) to Move.TRANSIT,
                 ClassicGameRules
             )
         }
@@ -233,7 +233,7 @@ internal class GamePlayStateTest {
             )
         assertFailsWith<IllegalArgumentException> {
             originalState.newStateAppliedMoves(
-                setOf(0) to Move(MoveType.TRANSIT),
+                setOf(0) to Move.TRANSIT,
                 ClassicGameRules
             )
         }

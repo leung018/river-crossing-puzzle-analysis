@@ -2,7 +2,7 @@ package gamePlay
 
 import rules.BoatPosition
 import rules.GameSituationRules
-import rules.MoveType
+import rules.Move
 import rules.RiverCrosserPosition
 
 class GameSituationTeller(private val gamePlayPositions: GamePlayPositions, val rules: GameSituationRules) {
@@ -41,14 +41,12 @@ class GameSituationTeller(private val gamePlayPositions: GamePlayPositions, val 
         val newMoves = mutableSetOf<Pair<CrosserIndices, Move>>()
         for ((index, crosser) in gamePlayPositions.crossers.withIndex()) {
             if (crosser.position == RiverCrosserPosition.ORIGINAL_RIVERSIDE) {
-                newMoves.add(setOf(index) to Move(MoveType.TRANSIT))
+                newMoves.add(setOf(index) to Move.TRANSIT)
             } else if (crosser.position == RiverCrosserPosition.BOAT) {
                 newMoves.add(
-                    getCrossersIndicesOfPosition(RiverCrosserPosition.BOAT) to Move(
-                        MoveType.DRIVE_BOAT,
-                    )
+                    getCrossersIndicesOfPosition(RiverCrosserPosition.BOAT) to Move.DRIVE_BOAT
                 )
-                newMoves.add(setOf(index) to Move(MoveType.TRANSIT))
+                newMoves.add(setOf(index) to Move.TRANSIT)
             }
         }
         return newMoves

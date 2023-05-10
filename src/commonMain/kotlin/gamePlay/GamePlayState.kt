@@ -1,7 +1,7 @@
 package gamePlay
 
 import rules.BoatPosition
-import rules.MoveType
+import rules.Move
 import rules.MoveTypeCostRules
 import rules.RiverCrosserPosition
 import rules.classic.ClassicGameRules
@@ -33,10 +33,10 @@ data class GamePlayState(
                 val oldCrosserPosition = newCrossers[i].position
 
                 // validate if the move is valid in current game play positions
-                if (oldCrosserPosition != RiverCrosserPosition.BOAT && move.moveType == MoveType.DRIVE_BOAT) {
+                if (oldCrosserPosition != RiverCrosserPosition.BOAT && move == Move.DRIVE_BOAT) {
                     throw IllegalArgumentException("Crosser at index $i is not at boat")
                 }
-                if (move.moveType == MoveType.TRANSIT) {
+                if (move == Move.TRANSIT) {
                     if (oldCrosserPosition == RiverCrosserPosition.ORIGINAL_RIVERSIDE && gamePlayPositions.boatPosition == BoatPosition.TARGET_RIVERSIDE) {
                         throw IllegalArgumentException("Crosser at index $i is at original riverside and boat is at target riverside")
                     }
@@ -54,13 +54,13 @@ data class GamePlayState(
         return this.copy(
             gamePlayPositions = GamePlayPositions(crossers = newCrossers, boatPosition = newBoatPosition(move)),
             pastMoves = pastMoves + listOf(crosserIndicesAndMove),
-            totalCost = totalCost + moveTypeCostRules.getMoveCost(move.moveType)
+            totalCost = totalCost + moveTypeCostRules.getMoveCost(move)
         )
     }
 
     private fun newBoatPosition(move: Move): BoatPosition {
-        return when (move.moveType) {
-            MoveType.DRIVE_BOAT -> {
+        return when (move) {
+            Move.DRIVE_BOAT -> {
                 when (gamePlayPositions.boatPosition) {
                     BoatPosition.ORIGINAL_RIVERSIDE -> BoatPosition.TARGET_RIVERSIDE
                     BoatPosition.TARGET_RIVERSIDE -> BoatPosition.ORIGINAL_RIVERSIDE
@@ -72,9 +72,9 @@ data class GamePlayState(
     }
 
     private fun RiverCrosserPosition.newCrosserPosition(move: Move): RiverCrosserPosition {
-        return when (move.moveType) {
-            MoveType.DRIVE_BOAT -> RiverCrosserPosition.BOAT
-            MoveType.TRANSIT -> when (this) {
+        return when (move) {
+            Move.DRIVE_BOAT -> RiverCrosserPosition.BOAT
+            Move.TRANSIT -> when (this) {
                 RiverCrosserPosition.ORIGINAL_RIVERSIDE, RiverCrosserPosition.TARGET_RIVERSIDE -> RiverCrosserPosition.BOAT
                 RiverCrosserPosition.BOAT -> when (gamePlayPositions.boatPosition) {
                     BoatPosition.ORIGINAL_RIVERSIDE -> RiverCrosserPosition.ORIGINAL_RIVERSIDE
