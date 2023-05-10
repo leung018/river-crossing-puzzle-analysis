@@ -55,8 +55,7 @@ class GameSituationTeller(private val gamePlayPositions: GamePlayPositions, priv
         // boat moves
         getCrossersIndicesOfPosition(RiverCrosserPosition.BOAT).let {
             if (it.isNotEmpty()) {
-                if (it.map { index -> gamePlayPositions.crossers[index] }
-                        .any { crosser -> rules.canDriveBoatCrosserTypes.contains(crosser.type) }) {
+                if (canDriveBoat(it)) {
                     newMoves.add(
                         it to Move.DRIVE_BOAT
                     )
@@ -81,6 +80,11 @@ class GameSituationTeller(private val gamePlayPositions: GamePlayPositions, priv
             }
         }
         return crosserIndices
+    }
+
+    private fun canDriveBoat(crosserIndices: CrosserIndices): Boolean {
+        return crosserIndices.map { index -> gamePlayPositions.crossers[index] }
+            .any { crosser -> rules.boatDriverTypes.contains(crosser.type) }
     }
 
     fun isWin(): Boolean {

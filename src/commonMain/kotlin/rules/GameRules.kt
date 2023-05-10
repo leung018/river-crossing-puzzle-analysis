@@ -8,7 +8,12 @@ interface GameRules : GameSituationRules, MoveTypeCostRules
 
 interface GameSituationRules {
     val validRiverCrosserTypes: Set<RiverCrosserType>
-    val canDriveBoatCrosserTypes: Set<RiverCrosserType>
+
+    /**
+     * Define which crosser types can drive the boat
+     */
+    val boatDriverTypes: Set<RiverCrosserType>
+
     fun canGameContinue(crosserTypesInSamePlace: Set<RiverCrosserType>): Boolean
 
     /**
