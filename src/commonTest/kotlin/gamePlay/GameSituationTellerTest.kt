@@ -174,4 +174,36 @@ internal class GameSituationTellerTest {
         )
         assertEquals(expectedMoveSet, actualMoveSet)
     }
+
+    @Test
+    fun `getCurrentValidMoves when number of crossers on riverside is more than the capacity of boat`() {
+        val actualMoveSet =
+            newGameSituationTeller(
+                newGamePlayPositions(
+                    crossers = listOf(
+                        newClassicCrosser(
+                            position = RiverCrosserPosition.ORIGINAL_RIVERSIDE,
+                        ),
+                        newClassicCrosser(
+                            position = RiverCrosserPosition.ORIGINAL_RIVERSIDE,
+                        ),
+                        newClassicCrosser(
+                            position = RiverCrosserPosition.ORIGINAL_RIVERSIDE,
+                        ),
+                    ),
+                    boatPosition = BoatPosition.ORIGINAL_RIVERSIDE,
+                ),
+                rules = ClassicGameRules
+            )
+                .getCurrentValidMoves()
+        val expectedMoveSet = setOf(
+            setOf(0) to Move.TRANSIT,
+            setOf(1) to Move.TRANSIT,
+            setOf(2) to Move.TRANSIT,
+            setOf(0, 1) to Move.TRANSIT,
+            setOf(0, 2) to Move.TRANSIT,
+            setOf(1, 2) to Move.TRANSIT,
+        )
+        assertEquals(expectedMoveSet, actualMoveSet)
+    }
 }

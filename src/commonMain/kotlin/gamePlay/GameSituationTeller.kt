@@ -43,7 +43,7 @@ class GameSituationTeller(private val gamePlayPositions: GamePlayPositions, priv
         // moves of crossers on riverside
         getCrossersIndicesOfPosition(gamePlayPositions.boatPosition.nearRiverCrosserPosition()).let {
             if (it.isNotEmpty()) {
-                newMoves.add(
+                newMoves.add( // TODO: change to use combination selecting at most boat capacity of crossers here
                     it to Move.TRANSIT
                 )
                 for (index in it) {
@@ -60,7 +60,7 @@ class GameSituationTeller(private val gamePlayPositions: GamePlayPositions, priv
                         it to Move.DRIVE_BOAT
                     )
                 }
-                newMoves.add(
+                newMoves.add( // TODO: add more unit test and change to use all possible combinations of crossers here
                     it to Move.TRANSIT
                 )
                 for (index in it) {
