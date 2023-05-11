@@ -229,7 +229,7 @@ internal class GameSituationTellerTest {
     }
 
     @Test
-    fun `isGameOver when prohibited combination of crossers in the same place with boat and nearby riverside is same place`() {
+    fun `isGameOver when prohibited combination of crossers in the same place but differ in position`() {
         data class TestCase(
             val positionA: RiverCrosserPosition,
             val positionB: RiverCrosserPosition,
@@ -269,7 +269,7 @@ internal class GameSituationTellerTest {
     }
 
     @Test
-    fun `isGameOver when allowed combination of crossers in the same place with boat and nearby riverside is same place`() {
+    fun `isGameOver when allowed combination of crossers in the same place but differ in position`() {
         newGameSituationTeller(
             newGamePlayPositions(
                 crossers = listOf(
