@@ -10,7 +10,7 @@ fun BoatPosition.opposite(): BoatPosition =
         BoatPosition.TARGET_RIVERSIDE -> BoatPosition.ORIGINAL_RIVERSIDE
     }
 
-fun BoatPosition.nearRiverCrosserPosition(): RiverCrosserPosition =
+fun BoatPosition.nearbyRiversideForCrosser(): RiverCrosserPosition =
     when (this) {
         BoatPosition.ORIGINAL_RIVERSIDE -> RiverCrosserPosition.ORIGINAL_RIVERSIDE
         BoatPosition.TARGET_RIVERSIDE -> RiverCrosserPosition.TARGET_RIVERSIDE

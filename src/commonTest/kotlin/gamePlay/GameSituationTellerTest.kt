@@ -227,4 +227,64 @@ internal class GameSituationTellerTest {
                 }
         }
     }
+
+    @Test
+    fun `isGameOver when prohibited combination of crossers in the same place with boat and nearby riverside is same place`() {
+        data class TestCase(
+            val positionA: RiverCrosserPosition,
+            val positionB: RiverCrosserPosition,
+            val boatPosition: BoatPosition
+        )
+
+        val testCases = listOf(
+            TestCase(
+                positionA = RiverCrosserPosition.ORIGINAL_RIVERSIDE,
+                positionB = RiverCrosserPosition.BOAT,
+                boatPosition = BoatPosition.ORIGINAL_RIVERSIDE
+            ),
+            TestCase(
+                positionA = RiverCrosserPosition.TARGET_RIVERSIDE,
+                positionB = RiverCrosserPosition.BOAT,
+                boatPosition = BoatPosition.TARGET_RIVERSIDE
+            ),
+        )
+
+        for (case in testCases) {
+            newGameSituationTeller(
+                newGamePlayPositions(
+                    crossers = listOf(
+                        RiverCrosser(type = FATHER, position = case.positionA),
+                        RiverCrosser(type = DAUGHTER, position = case.positionB),
+                    ),
+                    boatPosition = case.boatPosition,
+                ),
+                rules = object : GameRules by ClassicGameRules {
+                    override val areBoatAndNearByRiversideInSamePlace: Boolean = true
+                }
+            ).isGameOver()
+                .let {
+                    assertTrue(it)
+                }
+        }
+    }
+
+    @Test
+    fun `isGameOver when allowed combination of crossers in the same place with boat and nearby riverside is same place`() {
+        newGameSituationTeller(
+            newGamePlayPositions(
+                crossers = listOf(
+                    RiverCrosser(type = FATHER, position = RiverCrosserPosition.ORIGINAL_RIVERSIDE),
+                    RiverCrosser(type = MASTER, position = RiverCrosserPosition.BOAT),
+                ),
+                boatPosition = BoatPosition.ORIGINAL_RIVERSIDE,
+            ),
+            rules = object : GameRules by ClassicGameRules {
+                override val areBoatAndNearByRiversideInSamePlace: Boolean = true
+            }
+        ).isGameOver()
+            .let {
+                assertFalse(it)
+            }
+    }
+
 }

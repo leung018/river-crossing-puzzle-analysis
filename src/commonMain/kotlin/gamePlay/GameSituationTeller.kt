@@ -1,9 +1,6 @@
 package gamePlay
 
-import rules.GameSituationRules
-import rules.Move
-import rules.RiverCrosserPosition
-import rules.nearRiverCrosserPosition
+import rules.*
 import util.getCombinations
 
 class GameSituationTeller(private val gamePlayPositions: GamePlayPositions, private val rules: GameSituationRules) {
@@ -42,7 +39,7 @@ class GameSituationTeller(private val gamePlayPositions: GamePlayPositions, priv
         val newMoves = mutableSetOf<Pair<CrosserIndices, Move>>()
 
         // moves of crossers on riverside
-        getCrossersIndicesOfPosition(gamePlayPositions.boatPosition.nearRiverCrosserPosition()).let {
+        getCrossersIndicesOfPosition(gamePlayPositions.boatPosition.nearbyRiversideForCrosser()).let {
             if (it.isNotEmpty()) {
                 getCombinations(it, rules.boatCapacity).forEach { possibleIndices ->
                     newMoves.add(
@@ -94,20 +91,29 @@ class GameSituationTeller(private val gamePlayPositions: GamePlayPositions, priv
     }
 
     fun isGameOver(): Boolean {
-        if (rules.areBoatAndNearByRiversideInSamePlace) {
-            TODO()
+        val places: List<Set<RiverCrosserPosition>> = if (rules.areBoatAndNearByRiversideInSamePlace) {
+            listOf(
+                setOf(gamePlayPositions.boatPosition.nearbyRiversideForCrosser(), RiverCrosserPosition.BOAT),
+                setOf(gamePlayPositions.boatPosition.opposite().nearbyRiversideForCrosser())
+            )
         } else {
-            for (position in RiverCrosserPosition.values()) {
-                if (!canGameContinueAtPosition(position)) {
-                    return true
-                }
-            }
-            return false
+            RiverCrosserPosition.values().map { setOf(it) }
         }
+
+        for (place in places) {
+            val crossers = filterCrossersAtPositions(place)
+            if (!canAllCrossersSurvive(crossers)) {
+                return true
+            }
+        }
+        return false
     }
 
-    private fun canGameContinueAtPosition(position: RiverCrosserPosition): Boolean {
-        val crosserTypes = gamePlayPositions.crossers.filter { it.position == position }.map(RiverCrosser::type)
-        return rules.canGameContinue(crosserTypes.toSet())
+    private fun filterCrossersAtPositions(positions: Set<RiverCrosserPosition>): Set<RiverCrosser> {
+        return gamePlayPositions.crossers.filter { positions.contains(it.position) }.toSet()
+    }
+
+    private fun canAllCrossersSurvive(crosser: Set<RiverCrosser>): Boolean {
+        return rules.canGameContinue(crosser.map(RiverCrosser::type).toSet())
     }
 }

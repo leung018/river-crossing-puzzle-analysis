@@ -67,7 +67,7 @@ data class GamePlayState(
             Move.DRIVE_BOAT -> RiverCrosserPosition.BOAT
             Move.TRANSIT -> when (this) {
                 RiverCrosserPosition.ORIGINAL_RIVERSIDE, RiverCrosserPosition.TARGET_RIVERSIDE -> RiverCrosserPosition.BOAT
-                RiverCrosserPosition.BOAT -> gamePlayPositions.boatPosition.nearRiverCrosserPosition()
+                RiverCrosserPosition.BOAT -> gamePlayPositions.boatPosition.nearbyRiversideForCrosser()
             }
         }
     }
