@@ -1,9 +1,7 @@
 package rules.classic
 
 import rules.GameRules
-import rules.MoveType
-import rules.RiverCrosserPosition
-import rules.RiverCrosserPosition.*
+import rules.Move
 import rules.RiverCrosserType
 
 val DOG = RiverCrosserType("DOG")
@@ -15,7 +13,7 @@ val MASTER = RiverCrosserType("MASTER")
 
 object ClassicGameRules : GameRules {
     override val validRiverCrosserTypes: Set<RiverCrosserType> = setOf(DOG, FATHER, MOTHER, SON, DAUGHTER, MASTER)
-    override val canDriveBoatCrosserTypes = setOf(FATHER, MOTHER)
+    override val boatDriverTypes = setOf(FATHER, MOTHER)
 
     override fun canGameContinue(crosserTypesInSamePlace: Set<RiverCrosserType>): Boolean {
         val typesSet: Set<RiverCrosserType> = crosserTypesInSamePlace
@@ -28,17 +26,12 @@ object ClassicGameRules : GameRules {
         return true
     }
 
-    override val samePlaceDefinitions: Set<Set<RiverCrosserPosition>> = setOf(
-        setOf(ORIGINAL_RIVER_SIDE),
-        setOf(BOAT_ON_ORIGINAL_RIVER_SIZE),
-        setOf(BOAT_ON_TARGET_RIVER_SIDE),
-        setOf(TARGET_RIVER_SIDE)
-    )
-
-    override fun getMoveCost(type: MoveType): Int {
-        return when (type) {
-            MoveType.TRANSIT -> 0
-            MoveType.DRIVE_BOAT -> 1
+    override fun getMoveCost(move: Move): Int {
+        return when (move) {
+            Move.TRANSIT -> 0
+            Move.DRIVE_BOAT -> 1
         }
     }
+
+    override val areBoatAndNearByRiversideInSamePlace: Boolean = false
 }

@@ -8,17 +8,30 @@ interface GameRules : GameSituationRules, MoveTypeCostRules
 
 interface GameSituationRules {
     val validRiverCrosserTypes: Set<RiverCrosserType>
-    val canDriveBoatCrosserTypes: Set<RiverCrosserType>
+
+    /**
+     * Define which crosser types can drive the boat.
+     */
+    val boatDriverTypes: Set<RiverCrosserType>
+
+    /**
+     * Define which crosser types can stay together in the same place and which crosser types will cause game over.
+     * For the definition of same place, see `areBoatAndNearByRiversideInSamePlace`.
+     */
     fun canGameContinue(crosserTypesInSamePlace: Set<RiverCrosserType>): Boolean
 
     /**
-     * Define which set of positions are considered as the same place
+     * If it is true, it means that the boat and the nearby riverside are in the same place.
+     *
+     * e.g. Given that crosser A on the boat and crosser B on the nearby riverside.
+     * A and B are considered in the same place if and only if `areBoatAndNearByRiversideInSamePlace` is true.
      */
-    val samePlaceDefinitions: Set<Set<RiverCrosserPosition>>
+    val areBoatAndNearByRiversideInSamePlace: Boolean
+
     val boatCapacity: Int
         get() = 2
 }
 
 interface MoveTypeCostRules {
-    fun getMoveCost(type: MoveType): Int
+    fun getMoveCost(move: Move): Int
 }

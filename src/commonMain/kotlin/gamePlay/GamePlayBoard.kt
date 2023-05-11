@@ -1,6 +1,7 @@
 package gamePlay
 
 import rules.GameRules
+import rules.Move
 
 typealias CrosserIndices = Set<Int>
 
@@ -18,7 +19,7 @@ class GamePlayBoard private constructor(crossers: List<RiverCrosser>, private va
     private var transitedCrossersSet: Set<List<RiverCrosser>> = mutableSetOf()
 
     private val activeGamePlayStatesList =
-        MutableList(1) { GamePlayState(crossers, emptyList()) }
+        MutableList(1) { GamePlayState(GamePlayPositions(crossers = crossers), emptyList()) }
     private val winGamePlayStatesWithLowestTotalCostList =
         mutableListOf<GamePlayState>() //all totalCost are same in this list
 
