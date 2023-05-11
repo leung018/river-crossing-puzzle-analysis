@@ -101,19 +101,19 @@ class GameSituationTeller(private val gamePlayPositions: GamePlayPositions, priv
         }
 
         for (place in places) {
-            val crossers = filterCrossersAtPositions(place)
-            if (!canAllCrossersSurvive(crossers)) {
+            val crossers = filterCrossersAt(place)
+            if (!canGameContinue(crossers)) {
                 return true
             }
         }
         return false
     }
 
-    private fun filterCrossersAtPositions(positions: Set<RiverCrosserPosition>): Set<RiverCrosser> {
+    private fun filterCrossersAt(positions: Set<RiverCrosserPosition>): Set<RiverCrosser> {
         return gamePlayPositions.crossers.filter { positions.contains(it.position) }.toSet()
     }
 
-    private fun canAllCrossersSurvive(crosser: Set<RiverCrosser>): Boolean {
-        return rules.canGameContinue(crosser.map(RiverCrosser::type).toSet())
+    private fun canGameContinue(crossersInSamePlace: Set<RiverCrosser>): Boolean {
+        return rules.canGameContinue(crossersInSamePlace.map(RiverCrosser::type).toSet())
     }
 }
