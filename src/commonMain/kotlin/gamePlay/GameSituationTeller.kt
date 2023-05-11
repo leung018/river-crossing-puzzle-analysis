@@ -15,19 +15,19 @@ class GameSituationTeller(private val gamePlayPositions: GamePlayPositions, priv
         if (gamePlayPositions.crossers.isEmpty()) {
             throw IllegalArgumentException("Input crossers cannot be empty")
         }
-        validateCrossersType()
-        validateCrossersPosition()
+        validateCrosserTypes()
+        validateCrosserPositions()
     }
 
-    private fun validateCrossersType() {
+    private fun validateCrosserTypes() {
         for (crosser in gamePlayPositions.crossers) {
             if (!rules.validRiverCrosserTypes.contains(crosser.type)) {
-                throw IllegalArgumentException("Crossers contain type that rules not exist")
+                throw IllegalArgumentException("Crossers contain type that does not exist in rules")
             }
         }
     }
 
-    private fun validateCrossersPosition() {
+    private fun validateCrosserPositions() {
         val inBoatCount = gamePlayPositions.crossers.count { it.position == RiverCrosserPosition.BOAT }
         if (inBoatCount > rules.boatCapacity) {
             throw IllegalArgumentException("More crossers are in the boat than its capacity")
