@@ -4,6 +4,7 @@ import rules.GameSituationRules
 import rules.Move
 import rules.RiverCrosserPosition
 import rules.nearRiverCrosserPosition
+import util.getCombinations
 
 class GameSituationTeller(private val gamePlayPositions: GamePlayPositions, private val rules: GameSituationRules) {
     init {
@@ -43,11 +44,10 @@ class GameSituationTeller(private val gamePlayPositions: GamePlayPositions, priv
         // moves of crossers on riverside
         getCrossersIndicesOfPosition(gamePlayPositions.boatPosition.nearRiverCrosserPosition()).let {
             if (it.isNotEmpty()) {
-                newMoves.add( // TODO: change to use combination selecting at most boat capacity of crossers here
-                    it to Move.TRANSIT
-                )
-                for (index in it) {
-                    newMoves.add(setOf(index) to Move.TRANSIT)
+                getCombinations(it, rules.boatCapacity).forEach { possibleIndices ->
+                    newMoves.add(
+                        possibleIndices to Move.TRANSIT
+                    )
                 }
             }
         }
@@ -55,16 +55,18 @@ class GameSituationTeller(private val gamePlayPositions: GamePlayPositions, priv
         // moves of crossers on boat
         getCrossersIndicesOfPosition(RiverCrosserPosition.BOAT).let {
             if (it.isNotEmpty()) {
+                // moves that drive boat
                 if (canDriveBoat(it)) {
                     newMoves.add(
                         it to Move.DRIVE_BOAT
                     )
                 }
-                newMoves.add( // TODO: add more unit test and change to use all possible combinations of crossers here
-                    it to Move.TRANSIT
-                )
-                for (index in it) {
-                    newMoves.add(setOf(index) to Move.TRANSIT)
+
+                // moves that transit to riverside
+                getCombinations(it, it.size).forEach { possibleIndices ->
+                    newMoves.add(
+                        possibleIndices to Move.TRANSIT
+                    )
                 }
             }
         }
