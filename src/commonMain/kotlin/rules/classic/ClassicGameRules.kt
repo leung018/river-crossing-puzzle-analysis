@@ -32,4 +32,6 @@ object ClassicGameRules : GameRules {
             Move.DRIVE_BOAT -> 1
         }
     }
+
+    override val areBoatAndNearByRiversideInSamePlace: Boolean = false
 }
