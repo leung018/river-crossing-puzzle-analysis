@@ -2,11 +2,10 @@ package gamePlay
 
 import rules.*
 import rules.classic.ClassicGameRules
+import rules.classic.DAUGHTER
 import rules.classic.FATHER
 import rules.classic.MASTER
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertFailsWith
+import kotlin.test.*
 
 private fun newGameSituationTeller(
     gameplayPositions: GamePlayPositions,
@@ -205,5 +204,45 @@ internal class GameSituationTellerTest {
             setOf(1, 2) to Move.TRANSIT,
         )
         assertEquals(expectedMoveSet, actualMoveSet)
+    }
+
+    @Test
+    fun `isGameOver when prohibited combination of crossers in the same position`() {
+        val testCasePositions = RiverCrosserPosition.values()
+
+        for (position in testCasePositions) {
+            newGameSituationTeller(
+                newGamePlayPositions(
+                    crossers = listOf(
+                        RiverCrosser(type = FATHER, position = position),
+                        RiverCrosser(type = DAUGHTER, position = position),
+                    ),
+                ),
+                rules = ClassicGameRules
+            ).isGameOver()
+                .let {
+                    assertTrue(it)
+                }
+        }
+    }
+
+    @Test
+    fun `isGameOver when allowed combination of crossers in the same position`() {
+        val testCasePositions = RiverCrosserPosition.values()
+
+        for (position in testCasePositions) {
+            newGameSituationTeller(
+                newGamePlayPositions(
+                    crossers = listOf(
+                        RiverCrosser(type = FATHER, position = position),
+                        RiverCrosser(type = MASTER, position = position),
+                    ),
+                ),
+                rules = ClassicGameRules
+            ).isGameOver()
+                .let {
+                    assertFalse(it)
+                }
+        }
     }
 }

@@ -94,6 +94,20 @@ class GameSituationTeller(private val gamePlayPositions: GamePlayPositions, priv
     }
 
     fun isGameOver(): Boolean {
-        TODO()
+        if (rules.areBoatAndNearByRiversideInSamePlace) {
+            TODO()
+        } else {
+            for (position in RiverCrosserPosition.values()) {
+                if (!canGameContinueAtPosition(position)) {
+                    return true
+                }
+            }
+            return false
+        }
+    }
+
+    private fun canGameContinueAtPosition(position: RiverCrosserPosition): Boolean {
+        val crosserTypes = gamePlayPositions.crossers.filter { it.position == position }.map(RiverCrosser::type)
+        return rules.canGameContinue(crosserTypes.toSet())
     }
 }
