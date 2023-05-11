@@ -87,7 +87,7 @@ class GameSituationTeller(private val gamePlayPositions: GamePlayPositions, priv
     }
 
     fun isWin(): Boolean {
-        TODO()
+        return gamePlayPositions.crossers.all { it.position == RiverCrosserPosition.TARGET_RIVERSIDE }
     }
 
     fun isGameOver(): Boolean {

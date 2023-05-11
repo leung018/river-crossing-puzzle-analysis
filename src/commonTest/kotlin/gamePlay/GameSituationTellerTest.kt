@@ -287,4 +287,43 @@ internal class GameSituationTellerTest {
             }
     }
 
+    @Test
+    fun `isWin when all crossers are on target riverside`() {
+        newGameSituationTeller(
+            newGamePlayPositions(
+                crossers = listOf(
+                    newClassicCrosser(
+                        position = RiverCrosserPosition.TARGET_RIVERSIDE,
+                    ),
+                    newClassicCrosser(
+                        position = RiverCrosserPosition.TARGET_RIVERSIDE,
+                    ),
+                ),
+            ),
+            rules = ClassicGameRules
+        ).isWin()
+            .let {
+                assertTrue(it)
+            }
+    }
+
+    @Test
+    fun `isWin when not all crossers are on target riverside`() {
+        newGameSituationTeller(
+            newGamePlayPositions(
+                crossers = listOf(
+                    newClassicCrosser(
+                        position = RiverCrosserPosition.TARGET_RIVERSIDE,
+                    ),
+                    newClassicCrosser(
+                        position = RiverCrosserPosition.ORIGINAL_RIVERSIDE,
+                    ),
+                ),
+            ),
+            rules = ClassicGameRules
+        ).isWin()
+            .let {
+                assertFalse(it)
+            }
+    }
 }
