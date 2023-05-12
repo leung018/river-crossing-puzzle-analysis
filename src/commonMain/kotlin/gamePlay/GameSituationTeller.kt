@@ -3,6 +3,9 @@ package gamePlay
 import rules.*
 import util.getCombinations
 
+/**
+ * @throws IllegalArgumentException if the input gamePlayPositions is invalid.
+ */
 class GameSituationTeller(private val gamePlayPositions: GamePlayPositions, private val rules: GameSituationRules) {
     init {
         validateCrossers()
