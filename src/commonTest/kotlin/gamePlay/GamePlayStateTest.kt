@@ -15,7 +15,7 @@ internal class GamePlayStateTest {
     fun `newStateAppliedMoves when CrosserIndices out of original list range`() {
         val s = GamePlayState(GamePlayPositions(listOf()))
         assertFailsWith<IllegalArgumentException> {
-            s.newStateAppliedMoves(
+            s.newStateAppliedMove(
                 setOf(0) to Move.TRANSIT
             )
         }
@@ -34,7 +34,7 @@ internal class GamePlayStateTest {
                 ), listOf(), 0
             )
         val newState =
-            originalState.newStateAppliedMoves(
+            originalState.newStateAppliedMove(
                 setOf(1) to Move.DRIVE_BOAT,
                 ClassicGameRules
             )
@@ -62,7 +62,7 @@ internal class GamePlayStateTest {
                 )
             )
         val newState =
-            originalState.newStateAppliedMoves(
+            originalState.newStateAppliedMove(
                 setOf(0) to Move.DRIVE_BOAT,
             )
 
@@ -86,7 +86,7 @@ internal class GamePlayStateTest {
                 )
             )
         val newState =
-            originalState.newStateAppliedMoves(
+            originalState.newStateAppliedMove(
                 setOf(0) to Move.TRANSIT,
             )
 
@@ -112,7 +112,7 @@ internal class GamePlayStateTest {
                 )
             )
         val newState =
-            originalState.newStateAppliedMoves(
+            originalState.newStateAppliedMove(
                 setOf(0) to Move.TRANSIT,
                 ClassicGameRules
             )
@@ -139,7 +139,7 @@ internal class GamePlayStateTest {
                 )
             )
         val newState =
-            originalState.newStateAppliedMoves(
+            originalState.newStateAppliedMove(
                 setOf(0) to Move.TRANSIT,
                 ClassicGameRules
             )
@@ -166,7 +166,7 @@ internal class GamePlayStateTest {
                 )
             )
         val newState =
-            originalState.newStateAppliedMoves(
+            originalState.newStateAppliedMove(
                 setOf(0) to Move.TRANSIT,
                 ClassicGameRules
             )
@@ -194,7 +194,7 @@ internal class GamePlayStateTest {
                 )
             )
         assertFailsWith<IllegalArgumentException> {
-            originalState.newStateAppliedMoves(
+            originalState.newStateAppliedMove(
                 setOf(0) to Move.DRIVE_BOAT,
                 ClassicGameRules
             )
@@ -213,7 +213,7 @@ internal class GamePlayStateTest {
                 )
             )
         assertFailsWith<IllegalArgumentException> {
-            originalState.newStateAppliedMoves(
+            originalState.newStateAppliedMove(
                 setOf(0) to Move.TRANSIT,
                 ClassicGameRules
             )
@@ -232,7 +232,7 @@ internal class GamePlayStateTest {
                 )
             )
         assertFailsWith<IllegalArgumentException> {
-            originalState.newStateAppliedMoves(
+            originalState.newStateAppliedMove(
                 setOf(0) to Move.TRANSIT,
                 ClassicGameRules
             )

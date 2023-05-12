@@ -15,10 +15,10 @@ data class GamePlayState(
 ) {
 
     /**
-     * @throws IllegalArgumentException if the target indices for the move not exist in the original list or the move is
+     * @throws IllegalArgumentException if any of the target indices not exist in the crossers list or the move is
      * not valid in current game play positions.
      */
-    fun newStateAppliedMoves(
+    fun newStateAppliedMove(
         crosserIndicesAndMove: Pair<CrosserIndices, Move>,
         moveTypeCostRules: MoveTypeCostRules = ClassicGameRules
     ): GamePlayState {
