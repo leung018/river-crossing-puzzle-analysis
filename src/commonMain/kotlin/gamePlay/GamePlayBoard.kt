@@ -10,9 +10,12 @@ class GamePlayBoard private constructor(gamePlayPositions: GamePlayPositions, pr
 
     companion object {
         /**
+         * @param crosserTypes the types of crossers at the original riverside.
+         *
          * @return a set of list of pairs of crosser indices and moves, each list is one of the lowest cost solutions of the game.
-         * If there are many lowest cost solution list, only those with minimum length will be returned.
-         * Each pair means the indices of crossers to move and the move to apply.
+         * Each pair means the indices of crossers to move and the move to apply. The indices are corresponding to input crosserTypes.
+         *
+         * If there are many lowest cost solutions, only those with minimum length will be returned.
          */
         fun getMinCostGameSolvingMoves(
             crosserTypes: List<RiverCrosserType>,
