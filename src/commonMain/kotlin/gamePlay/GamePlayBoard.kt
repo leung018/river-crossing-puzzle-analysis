@@ -2,31 +2,34 @@ package gamePlay
 
 import rules.GameRules
 import rules.Move
+import rules.RiverCrosserType
 
 typealias CrosserIndices = Set<Int>
 
-class GamePlayBoard private constructor(crossers: List<RiverCrosser>, private val rules: GameRules) {
-    /**
-     * @return a set of list of pairs of crosser indices and moves, each list is one of the lowest cost solutions of the game.
-     * Each pair means the indices of crossers to move and the move to apply.
-     */
+class GamePlayBoard private constructor(gamePlayPositions: GamePlayPositions, private val rules: GameRules) {
+
     companion object {
-        fun getLowestCostGameSolvingMoves(
-            initialCrossers: List<RiverCrosser>,
+        /**
+         * @return a set of list of pairs of crosser indices and moves, each list is one of the lowest cost solutions of the game.
+         * If there are many lowest cost solution list, only those with minimum length will be returned.
+         * Each pair means the indices of crossers to move and the move to apply.
+         */
+        fun getMinCostGameSolvingMoves(
+            crosserTypes: List<RiverCrosserType>,
             rules: GameRules
         ): Set<List<Pair<CrosserIndices, Move>>> {
-            return GamePlayBoard(initialCrossers, rules).getLowestCostGameSolvingMoves()
+            TODO()
         }
 
     }
 
     private var transitedPositions: Set<GamePlayPositions> = mutableSetOf()
 
-    private val activeGamePlayStates = mutableSetOf(GamePlayState(GamePlayPositions(crossers = crossers)))
+    private val activeGamePlayStates = mutableSetOf(GamePlayState(gamePlayPositions))
 
     private val minCostWinningStates = mutableListOf<GamePlayState>()
 
-    private fun getLowestCostGameSolvingMoves(): Set<List<Pair<CrosserIndices, Move>>> {
+    private fun getMinCostGameSolvingMoves(): Set<List<Pair<CrosserIndices, Move>>> {
         TODO()
         /* For each state in activeGamePlayStates:
                 obtain each valid moves (GameSituationTeller.getCurrentValidMoves)

@@ -5,10 +5,17 @@ import rules.classic.ClassicGameRules
 import rules.classic.DAUGHTER
 import rules.classic.FATHER
 import rules.classic.MASTER
-import testUtil.newClassicCrosser
-import testUtil.newGameSituationTeller
 import kotlin.test.*
 
+private fun newClassicCrosser(position: RiverCrosserPosition, canDriveBoat: Boolean = false) =
+    RiverCrosser(type = if (canDriveBoat) FATHER else MASTER, position)
+
+private fun newGameSituationTeller(
+    gameplayPositions: GamePlayPositions,
+    rules: GameSituationRules = ClassicGameRules,
+): GameSituationTeller {
+    return GameSituationTeller(gameplayPositions, rules)
+}
 
 internal class GameSituationTellerTest {
     @Test
