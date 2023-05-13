@@ -31,7 +31,7 @@ class GamePlayBoardTest {
                 crosserTypes = listOf(FATHER, SON), expectedMoves = setOf(
                     listOf(
                         setOf(0, 1) to Move.TRANSIT,
-                        setOf(0) to Move.DRIVE_BOAT,
+                        setOf(0, 1) to Move.DRIVE_BOAT,
                         setOf(0, 1) to Move.TRANSIT,
                     )
                 )
