@@ -283,7 +283,7 @@ internal class GameSituationTellerTest {
     @Test
     fun `isWin when all crossers are on target riverside`() {
         newGameSituationTeller(
-            newGamePlayPositions(
+            GamePlayPositions(
                 crossers = listOf(
                     newClassicCrosser(
                         position = RiverCrosserPosition.TARGET_RIVERSIDE,
@@ -303,7 +303,7 @@ internal class GameSituationTellerTest {
     @Test
     fun `isWin when not all crossers are on target riverside`() {
         newGameSituationTeller(
-            newGamePlayPositions(
+            GamePlayPositions(
                 crossers = listOf(
                     newClassicCrosser(
                         position = RiverCrosserPosition.TARGET_RIVERSIDE,
