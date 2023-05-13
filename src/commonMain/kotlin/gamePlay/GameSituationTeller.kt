@@ -36,24 +36,16 @@ class GameSituationTeller(private val gamePlayPositions: GamePlayPositions, priv
 
     /**
      * @return set of pairs of crossers indices and move that can be applied to a valid game state.
+     * Target crossers of a move must have the same position.
      * But it doesn't mean that the game state after applying the move will not game over.
      */
     fun getCurrentValidMoves(): Set<Pair<CrosserIndices, Move>> {
         val newMoves = mutableSetOf<Pair<CrosserIndices, Move>>()
 
-        // moves of crossers on riverside
-        getCrossersIndicesOfPosition(gamePlayPositions.boatPosition.nearbyRiversideForCrosser()).let {
-            if (it.isNotEmpty()) {
-                getCombinations(it, rules.boatCapacity).forEach { possibleIndices ->
-                    newMoves.add(
-                        possibleIndices to Move.TRANSIT
-                    )
-                }
-            }
-        }
-
         // moves of crossers on boat
+        val numOfCrossersOnBoat: Int
         getCrossersIndicesOfPosition(RiverCrosserPosition.BOAT).let {
+            numOfCrossersOnBoat = it.size
             if (it.isNotEmpty()) {
                 // moves that drive boat
                 if (canDriveBoat(it)) {
@@ -64,6 +56,20 @@ class GameSituationTeller(private val gamePlayPositions: GamePlayPositions, priv
 
                 // moves that transit to riverside
                 getCombinations(it, it.size).forEach { possibleIndices ->
+                    newMoves.add(
+                        possibleIndices to Move.TRANSIT
+                    )
+                }
+            }
+        }
+
+        // moves of crossers on riverside
+        getCrossersIndicesOfPosition(gamePlayPositions.boatPosition.nearbyRiversideForCrosser()).let {
+            if (it.isNotEmpty()) {
+                getCombinations(
+                    it,
+                    rules.boatCapacity - numOfCrossersOnBoat
+                ).forEach { possibleIndices ->
                     newMoves.add(
                         possibleIndices to Move.TRANSIT
                     )

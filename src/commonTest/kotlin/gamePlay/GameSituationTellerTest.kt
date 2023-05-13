@@ -87,6 +87,29 @@ internal class GameSituationTellerTest {
     }
 
     @Test
+    fun `getCurrentValidMoves when one crosser on boat and two other crossers on riverside`() {
+        val actualMoveSet =
+            newGameSituationTeller(
+                GamePlayPositions(
+                    crossers = listOf(
+                        newClassicCrosser(position = RiverCrosserPosition.ORIGINAL_RIVERSIDE),
+                        newClassicCrosser(position = RiverCrosserPosition.ORIGINAL_RIVERSIDE),
+                        newClassicCrosser(position = RiverCrosserPosition.BOAT, canDriveBoat = false),
+                    ),
+                    boatPosition = BoatPosition.ORIGINAL_RIVERSIDE,
+                ),
+                rules = ClassicGameRules
+            )
+                .getCurrentValidMoves()
+        val expectedMoveSet = setOf(
+            setOf(0) to Move.TRANSIT, // move to boat
+            setOf(1) to Move.TRANSIT, // move to boat
+            setOf(2) to Move.TRANSIT, // move to riverside
+        )
+        assertEquals(expectedMoveSet, actualMoveSet)
+    }
+
+    @Test
     fun `getCurrentValidMoves when two boat crossers in boat and one of them can drive boat on original river side and one crosser on target river side`() {
         val actualMoveSet =
             newGameSituationTeller(
