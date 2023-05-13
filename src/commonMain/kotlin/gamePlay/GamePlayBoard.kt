@@ -21,19 +21,29 @@ class GamePlayBoard private constructor(gamePlayPositions: GamePlayPositions, pr
             crosserTypes: List<RiverCrosserType>,
             rules: GameRules
         ): Set<List<Pair<CrosserIndices, Move>>> {
-            TODO()
+            return GamePlayBoard(
+                GamePlayPositions(crosserTypes.map { RiverCrosser(it) }),
+                rules
+            ).getMinCostGameSolvingMoves()
         }
 
     }
 
-    private var transitedPositions: Set<GamePlayPositions> = mutableSetOf()
+    private var transitedPositions: MutableSet<GamePlayPositions> = mutableSetOf()
 
     private val activeGamePlayStates = mutableSetOf(GamePlayState(gamePlayPositions))
 
     private val minCostWinningStates = mutableListOf<GamePlayState>()
 
+    private fun getMinWinningCost(): Int {
+        return if (minCostWinningStates.isEmpty()) {
+            Int.MAX_VALUE
+        } else {
+            minCostWinningStates[0].totalCost
+        }
+    }
+
     private fun getMinCostGameSolvingMoves(): Set<List<Pair<CrosserIndices, Move>>> {
-        TODO()
         /* For each state in activeGamePlayStates:
                 obtain each valid moves (GameSituationTeller.getCurrentValidMoves)
                 futureStates = []
@@ -42,7 +52,7 @@ class GamePlayBoard private constructor(gamePlayPositions: GamePlayPositions, pr
                     if the new state's position not in transitedPositions
                         add to transitedPositions
                         if this new state is win (GameSituationTeller.isWin):
-                            if totalCost is equal to those in minCostWinningStates 
+                            if totalCost is equal to those in minCostWinningStates
                                 add to minCostWinningStates
                             if totalCost is less than those in minCostWinningStates
                                 drop the minCostWinningStates and let it contain this new state only
@@ -57,5 +67,41 @@ class GamePlayBoard private constructor(gamePlayPositions: GamePlayPositions, pr
            return past moves of minCostWinningStates
         */
 
+        while (activeGamePlayStates.isNotEmpty()) {
+            for (currentState in activeGamePlayStates) {
+                val nextStates = mutableListOf<GamePlayState>()
+                val possibleMoves = newGameSituationTeller(currentState.gamePlayPositions).getCurrentValidMoves()
+
+                for ((crosserIndices, move) in possibleMoves) {
+                    val newState = currentState.newStateAppliedMove(crosserIndices to move, rules)
+                    if (newState.gamePlayPositions !in transitedPositions) {
+                        transitedPositions.add(newState.gamePlayPositions)
+                        if (newGameSituationTeller(newState.gamePlayPositions).isWin()) {
+                            if (newState.totalCost == getMinWinningCost()) {
+                                minCostWinningStates.add(newState)
+                            } else if (newState.totalCost < getMinWinningCost()) {
+                                minCostWinningStates.clear()
+                                minCostWinningStates.add(newState)
+                            }
+                        } else {
+                            if (newState.totalCost == getMinWinningCost()) {
+                                continue
+                            } else if (!newGameSituationTeller(newState.gamePlayPositions).isGameOver()) {
+                                nextStates.add(newState)
+                            }
+                        }
+                    }
+                }
+
+                activeGamePlayStates.remove(currentState)
+                activeGamePlayStates.addAll(nextStates)
+            }
+        }
+
+        return minCostWinningStates.map { it.pastMoves }.toSet()
+    }
+
+    private fun newGameSituationTeller(positions: GamePlayPositions): GameSituationTeller {
+        return GameSituationTeller(positions, rules)
     }
 }
