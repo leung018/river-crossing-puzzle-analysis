@@ -36,6 +36,28 @@ class GamePlayBoardTest {
                     )
                 )
             ),
+            TestCase(
+                crosserTypes = listOf(FATHER, SON, SON), expectedMoves = setOf(
+                    listOf(
+                        setOf(0, 1) to Move.TRANSIT,
+                        setOf(0, 1) to Move.DRIVE_BOAT,
+                        setOf(1) to Move.TRANSIT,
+                        setOf(0) to Move.DRIVE_BOAT,
+                        setOf(2) to Move.TRANSIT,
+                        setOf(0, 2) to Move.DRIVE_BOAT,
+                        setOf(0, 2) to Move.TRANSIT
+                    ),
+                    listOf(
+                        setOf(0, 2) to Move.TRANSIT,
+                        setOf(0, 2) to Move.DRIVE_BOAT,
+                        setOf(2) to Move.TRANSIT,
+                        setOf(0) to Move.DRIVE_BOAT,
+                        setOf(1) to Move.TRANSIT,
+                        setOf(0, 1) to Move.DRIVE_BOAT,
+                        setOf(0, 1) to Move.TRANSIT
+                    ),
+                )
+            ),
         )
 
         testCases.forEach { testCase ->
