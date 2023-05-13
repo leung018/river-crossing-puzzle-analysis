@@ -19,7 +19,7 @@ data class GamePlayState(
      * not valid in current game play positions.
      */
     fun newStateAppliedMove(
-        crosserIndicesAndMove: Pair<CrosserIndices, Move>,
+        crosserIndicesAndMove: Pair<CrosserIndices, Move>, // TODO: Throw exception if crosserIndices are refer to crossers at different positions. Refactor Pair to a class and move duplicated comments to it.
         moveTypeCostRules: MoveTypeCostRules = ClassicGameRules
     ): GamePlayState {
         val newCrossers = gamePlayPositions.crossers.toMutableList()
