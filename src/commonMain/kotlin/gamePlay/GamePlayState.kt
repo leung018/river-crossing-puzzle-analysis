@@ -6,7 +6,12 @@ import rules.classic.ClassicGameRules
 data class GamePlayPositions(
     val crossers: List<RiverCrosser>,
     val boatPosition: BoatPosition = BoatPosition.ORIGINAL_RIVERSIDE
-)
+) {
+    /** @return positions of initial crossers at the start of the game. */
+    constructor(crosserTypes: List<RiverCrosserType>) : this(
+        crossers = crosserTypes.map { RiverCrosser(it) }
+    )
+}
 
 data class GamePlayState(
     val gamePlayPositions: GamePlayPositions,

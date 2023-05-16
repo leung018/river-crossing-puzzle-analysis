@@ -13,7 +13,7 @@ import kotlin.test.assertFailsWith
 internal class GamePlayStateTest {
     @Test
     fun `newStateAppliedMoves when CrosserIndices out of original list range`() {
-        val s = GamePlayState(GamePlayPositions(listOf()))
+        val s = GamePlayState(GamePlayPositions(listOf<RiverCrosser>()))
         assertFailsWith<IllegalArgumentException> {
             s.newStateAppliedMove(
                 setOf(0) to Move.TRANSIT

@@ -4,7 +4,9 @@ import rules.Move
 import rules.RiverCrosserType
 import rules.classic.ClassicGameRules
 import rules.classic.FATHER
+import rules.classic.MOTHER
 import rules.classic.SON
+import testutil.assertIsWinAfterMoves
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -14,57 +16,73 @@ class GamePlayBoardTest {
     fun `test getMinCostGameSolvingMoves when crossers can reach target riverside`() {
         data class TestCase(
             val crosserTypes: List<RiverCrosserType>,
-            val expectedMoves: Set<List<Pair<Set<Int>, Move>>>
+            val sampleAnswer: List<Pair<Set<Int>, Move>> // there may be more than one possible answer and the one returned from the function is one of them
         )
 
         val testCases = listOf(
             TestCase(
-                crosserTypes = listOf(FATHER), expectedMoves = setOf(
-                    listOf(
-                        setOf(0) to Move.TRANSIT,
-                        setOf(0) to Move.DRIVE_BOAT,
-                        setOf(0) to Move.TRANSIT,
-                    )
+                crosserTypes = listOf(FATHER), sampleAnswer =
+                listOf(
+                    setOf(0) to Move.TRANSIT,
+                    setOf(0) to Move.DRIVE_BOAT,
+                    setOf(0) to Move.TRANSIT,
                 )
+
             ),
             TestCase(
-                crosserTypes = listOf(FATHER, SON), expectedMoves = setOf(
-                    listOf(
-                        setOf(0, 1) to Move.TRANSIT,
-                        setOf(0, 1) to Move.DRIVE_BOAT,
-                        setOf(0, 1) to Move.TRANSIT,
-                    )
+                crosserTypes = listOf(FATHER, SON), sampleAnswer =
+                listOf(
+                    setOf(0, 1) to Move.TRANSIT,
+                    setOf(0, 1) to Move.DRIVE_BOAT,
+                    setOf(0, 1) to Move.TRANSIT,
                 )
+
             ),
             TestCase(
-                crosserTypes = listOf(FATHER, SON, SON), expectedMoves = setOf(
-                    listOf(
-                        setOf(0, 1) to Move.TRANSIT,
-                        setOf(0, 1) to Move.DRIVE_BOAT,
-                        setOf(1) to Move.TRANSIT,
-                        setOf(0) to Move.DRIVE_BOAT,
-                        setOf(2) to Move.TRANSIT,
-                        setOf(0, 2) to Move.DRIVE_BOAT,
-                        setOf(0, 2) to Move.TRANSIT
-                    ),
-                    listOf(
-                        setOf(0, 2) to Move.TRANSIT,
-                        setOf(0, 2) to Move.DRIVE_BOAT,
-                        setOf(2) to Move.TRANSIT,
-                        setOf(0) to Move.DRIVE_BOAT,
-                        setOf(1) to Move.TRANSIT,
-                        setOf(0, 1) to Move.DRIVE_BOAT,
-                        setOf(0, 1) to Move.TRANSIT
-                    ),
-                )
+                crosserTypes = listOf(FATHER, SON, SON),
+                sampleAnswer =
+                listOf(
+                    setOf(0, 1) to Move.TRANSIT,
+                    setOf(0, 1) to Move.DRIVE_BOAT,
+                    setOf(1) to Move.TRANSIT,
+                    setOf(0) to Move.DRIVE_BOAT,
+                    setOf(2) to Move.TRANSIT,
+                    setOf(0, 2) to Move.DRIVE_BOAT,
+                    setOf(0, 2) to Move.TRANSIT
+                ),
             ),
+            TestCase(
+                crosserTypes = listOf(FATHER, MOTHER, SON),
+                sampleAnswer = listOf(
+                    setOf(0, 2) to Move.TRANSIT,
+                    setOf(0, 2) to Move.DRIVE_BOAT,
+                    setOf(2) to Move.TRANSIT,
+                    setOf(0) to Move.DRIVE_BOAT,
+                    setOf(1) to Move.TRANSIT,
+                    setOf(0, 1) to Move.DRIVE_BOAT,
+                    setOf(0, 1) to Move.TRANSIT
+                )
+
+            )
         )
 
         testCases.forEach { testCase ->
             val actualMoves = GamePlayBoard.getMinCostGameSolvingMoves(
                 testCase.crosserTypes, ClassicGameRules
+            )!!
+            assertEquals(
+                testCase.sampleAnswer.filter { it.second == Move.DRIVE_BOAT }.size,
+                actualMoves.filter { it.second == Move.DRIVE_BOAT }.size,
             )
-            assertEquals(testCase.expectedMoves, actualMoves)
+            assertEquals(
+                testCase.sampleAnswer.size,
+                actualMoves.size,
+            )
+            assertIsWinAfterMoves(
+                GamePlayState(GamePlayPositions(testCase.crosserTypes)),
+                actualMoves,
+                ClassicGameRules
+            )
         }
     }
 
@@ -75,7 +93,7 @@ class GamePlayBoardTest {
                 SON
             ), ClassicGameRules
         )
-        assertEquals(emptySet(), actualMoves)
+        assertEquals(null, actualMoves)
     }
 
 }
