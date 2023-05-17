@@ -41,7 +41,7 @@ class GamePlayBoard private constructor(gamePlayPositions: GamePlayPositions, pr
     }
 
     private fun getMinSizeOfWinningMoves(): Int {
-        return optimalWinningState?.totalCost ?: Int.MAX_VALUE
+        return optimalWinningState?.pastMoves?.size ?: Int.MAX_VALUE
     }
 
     private fun getMinCostGameSolvingMoves(): List<Pair<CrosserIndices, Move>>? {
