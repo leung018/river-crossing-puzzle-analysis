@@ -24,12 +24,14 @@ class GamePlayBoard private constructor(gamePlayPositions: GamePlayPositions, pr
 
     }
 
-    /**
-     * activePositions means positions neither game over nor win.
-     */
-    private val activePositionsToMinCost: MutableMap<GamePlayPositions, Int> = mutableMapOf()
-
     private val activeGamePlayStates = mutableSetOf(GamePlayState(gamePlayPositions))
+
+    /**
+     * The key of the map means transited positions that are neither game over nor game win.
+     */
+    private val activePositionsToMinCost: MutableMap<GamePlayPositions, Int> = mutableMapOf(
+        gamePlayPositions to 0
+    )
 
     /**
      *  optimalWinningState is the state that using the minimum sizes of moves to achieve the minimum cost of solutions.
@@ -53,7 +55,7 @@ class GamePlayBoard private constructor(gamePlayPositions: GamePlayPositions, pr
 
                 for ((crosserIndices, move) in possibleMoves) {
                     val newState = currentState.newStateAppliedMove(crosserIndices to move, rules)
-                    if (isOptimalWinningSolution(newState)) { // comparing to optimalWinningState, determine whether newState is won and optimal.
+                    if (isOptimalWinningSolution(newState)) {
                         optimalWinningState = newState
                         continue
                     }
@@ -65,7 +67,7 @@ class GamePlayBoard private constructor(gamePlayPositions: GamePlayPositions, pr
                         continue
                     }
 
-                    if (isUsedMinCostOfMoves(newState)) { // comparing to the one with the same positions of newState at activePositionsToMinCost.
+                    if (!activePositionsToMinCost.containsKey(newState.gamePlayPositions) || activePositionsToMinCost[newState.gamePlayPositions]!! > newState.totalCost) {
                         activePositionsToMinCost[gamePlayPositions] = newState.totalCost
                         nextStates.add(newState)
                     }
@@ -81,10 +83,6 @@ class GamePlayBoard private constructor(gamePlayPositions: GamePlayPositions, pr
 
     private fun isOptimalWinningSolution(newState: GamePlayState): Boolean {
         return newGameSituationTeller(newState.gamePlayPositions).isWon() && ((newState.totalCost == getMinWinningCost() && newState.pastMoves.size < getMinSizeOfWinningMoves()) || newState.totalCost < getMinWinningCost())
-    }
-
-    private fun isUsedMinCostOfMoves(newState: GamePlayState): Boolean {
-        return !activePositionsToMinCost.containsKey(newState.gamePlayPositions) || activePositionsToMinCost[newState.gamePlayPositions]!! > newState.totalCost
     }
 
     private fun newGameSituationTeller(positions: GamePlayPositions): GameSituationTeller {
