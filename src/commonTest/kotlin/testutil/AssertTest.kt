@@ -10,11 +10,11 @@ import rules.classic.FATHER
 import kotlin.test.Test
 import kotlin.test.assertFailsWith
 
-class AssertIsWinAfterMovesTest {
+class AssertisWonAfterMovesTest {
     @Test
-    fun `test assertIsWinAfterMoves when is not win`() {
+    fun `test assertisWonAfterMoves when is not win`() {
         assertFailsWith<AssertionError> {
-            assertIsWinAfterMoves(
+            assertisWonAfterMoves(
                 GamePlayState(
                     GamePlayPositions(
                         listOf(
@@ -33,8 +33,8 @@ class AssertIsWinAfterMovesTest {
     }
 
     @Test
-    fun `test assertIsWinAfterMove when is win`() {
-        assertIsWinAfterMoves(
+    fun `test assertisWonAfterMove when is win`() {
+        assertisWonAfterMoves(
             GamePlayState(
                 GamePlayPositions(
                     listOf(
@@ -56,8 +56,8 @@ class AssertIsWinAfterMovesTest {
     }
 
     @Test
-    fun `test assertIsWinAfterMove when moves is empty`() {
-        assertIsWinAfterMoves(
+    fun `test assertisWonAfterMove when moves is empty`() {
+        assertisWonAfterMoves(
             GamePlayState(
                 GamePlayPositions(
                     listOf(

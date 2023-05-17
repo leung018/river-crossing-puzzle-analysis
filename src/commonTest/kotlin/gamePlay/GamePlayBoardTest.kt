@@ -6,7 +6,7 @@ import rules.classic.ClassicGameRules
 import rules.classic.FATHER
 import rules.classic.MOTHER
 import rules.classic.SON
-import testutil.assertIsWinAfterMoves
+import testutil.assertisWonAfterMoves
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -78,7 +78,7 @@ class GamePlayBoardTest {
                 testCase.sampleAnswer.size,
                 actualMoves.size,
             )
-            assertIsWinAfterMoves(
+            assertisWonAfterMoves(
                 GamePlayState(GamePlayPositions(testCase.crosserTypes)),
                 actualMoves,
                 ClassicGameRules

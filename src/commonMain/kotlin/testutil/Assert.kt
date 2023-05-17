@@ -6,7 +6,7 @@ import gamePlay.GameSituationTeller
 import rules.GameSituationRules
 import kotlin.test.assertTrue
 
-fun assertIsWinAfterMoves(
+fun assertisWonAfterMoves(
     initialState: GamePlayState,
     moves: List<Pair<CrosserIndices, rules.Move>>,
     rules: GameSituationRules,
@@ -17,7 +17,7 @@ fun assertIsWinAfterMoves(
         state = state.newStateAppliedMove(move)
     }
     assertTrue(
-        GameSituationTeller(gamePlayPositions = state.gamePlayPositions, rules = rules).isWin(),
+        GameSituationTeller(gamePlayPositions = state.gamePlayPositions, rules = rules).isWon(),
         message ?: "Expected win after applied moves but is not. InitialState: $initialState, moves: $moves"
     )
 }

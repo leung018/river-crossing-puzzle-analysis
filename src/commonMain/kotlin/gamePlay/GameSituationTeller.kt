@@ -95,7 +95,7 @@ class GameSituationTeller(private val gamePlayPositions: GamePlayPositions, priv
             .any { crosser -> rules.boatDriverTypes.contains(crosser.type) }
     }
 
-    fun isWin(): Boolean {
+    fun isWon(): Boolean {
         return gamePlayPositions.crossers.all { it.position == RiverCrosserPosition.TARGET_RIVERSIDE }
     }
 

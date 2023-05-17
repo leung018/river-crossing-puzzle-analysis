@@ -304,7 +304,7 @@ internal class GameSituationTellerTest {
     }
 
     @Test
-    fun `isWin when all crossers are on target riverside`() {
+    fun `isWon when all crossers are on target riverside`() {
         newGameSituationTeller(
             GamePlayPositions(
                 crossers = listOf(
@@ -317,14 +317,14 @@ internal class GameSituationTellerTest {
                 ),
             ),
             rules = ClassicGameRules
-        ).isWin()
+        ).isWon()
             .let {
                 assertTrue(it)
             }
     }
 
     @Test
-    fun `isWin when not all crossers are on target riverside`() {
+    fun `isWon when not all crossers are on target riverside`() {
         newGameSituationTeller(
             GamePlayPositions(
                 crossers = listOf(
@@ -337,7 +337,7 @@ internal class GameSituationTellerTest {
                 ),
             ),
             rules = ClassicGameRules
-        ).isWin()
+        ).isWon()
             .let {
                 assertFalse(it)
             }
