@@ -7,6 +7,6 @@ fun main() {
         GamePlayBoard.getMinCostGameSolvingMoves(
             listOf(FATHER, MOTHER, SON, DAUGHTER, DAUGHTER, MASTER, DOG),
             ClassicGameRules
-        )
+        ) // TODO: need bug fix. Expecting solution is found but result is null
     )
 }

@@ -9,6 +9,9 @@ import rules.RiverCrosserType
 class GamePlayBoard private constructor(gamePlayPositions: GamePlayPositions, private val rules: GameRules) {
 
     companion object {
+        /**
+         * @return the optimal solution for the game. Null if no solution exists.
+         */
         fun getMinCostGameSolvingMoves(
             initialCrosserTypes: List<RiverCrosserType>,
             rules: GameRules
@@ -47,6 +50,8 @@ class GamePlayBoard private constructor(gamePlayPositions: GamePlayPositions, pr
 
                     val newPositions = newState.gamePlayPositions
                     if (newGameSituationTeller(newPositions).isGameOver()) {
+                        println("currentPosition: ${currentState.gamePlayPositions.crossers.map { it.position }} boatPosition: ${currentState.gamePlayPositions.boatPosition}")
+                        println("pastMoves: ${currentState.pastMoves}")
                         continue
                     }
 
