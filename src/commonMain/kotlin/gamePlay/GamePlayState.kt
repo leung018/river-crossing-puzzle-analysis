@@ -42,31 +42,16 @@ data class GamePlayState(
 
         for (i in move.crosserIndices) {
             try {
-                val oldCrosserPosition = newCrossers[i].position
-
-                // validate if the move is valid in current game play positions
-                if (oldCrosserPosition != RiverCrosserPosition.BOAT && move.type == MoveType.DRIVE_BOAT) {
-                    throw IllegalArgumentException("Crosser at index $i is not at boat")
-                }
-                if (move.type == MoveType.TRANSIT) {
-                    if (oldCrosserPosition == RiverCrosserPosition.ORIGINAL_RIVERSIDE && gamePlayPositions.boatPosition == BoatPosition.TARGET_RIVERSIDE) {
-                        throw IllegalArgumentException("Crosser at index $i is at original riverside and boat is at target riverside")
-                    }
-                    if (oldCrosserPosition == RiverCrosserPosition.TARGET_RIVERSIDE && gamePlayPositions.boatPosition == BoatPosition.ORIGINAL_RIVERSIDE) {
-                        throw IllegalArgumentException("Crosser at index $i is at target riverside and boat is at original riverside")
-                    }
-                }
-
-                newCrossers[i] = newCrossers[i].copy(position = oldCrosserPosition.newCrosserPosition(move.type))
+                validateCanMoveBeApplied(i, move.type)
+                newCrossers[i] =
+                    newCrossers[i].copy(position = gamePlayPositions.crossers[i].position.newCrosserPosition(move.type))
             } catch (e: IndexOutOfBoundsException) {
                 throw IllegalArgumentException("Target indices for the move don't exist in the original list")
             }
         }
 
-        move.crosserIndices.map { gamePlayPositions.crossers[it] }.distinct().let {
-            if (it.size != 1) {
-                throw IllegalArgumentException("Crossers at target indices must have the same position")
-            }
+        if (!isCrosserIndicesAtSamePosition(move.crosserIndices)) {
+            throw IllegalArgumentException("Crossers at target indices must have the same position")
         }
 
         return this.copy(
@@ -74,6 +59,29 @@ data class GamePlayState(
             pastMoves = pastMoves + listOf(move),
             totalCost = totalCost + moveTypeCostRules.getMoveCost(move.type)
         )
+    }
+
+    private fun isCrosserIndicesAtSamePosition(crosserIndices: Set<Int>): Boolean {
+        return crosserIndices.map { gamePlayPositions.crossers[it] }.distinct().let {
+            it.size == 1
+        }
+    }
+
+    private fun validateCanMoveBeApplied(crosserIndex: Int, moveType: MoveType) {
+        val oldCrosserPosition = gamePlayPositions.crossers[crosserIndex].position
+
+        if (oldCrosserPosition != RiverCrosserPosition.BOAT && moveType == MoveType.DRIVE_BOAT) {
+            throw IllegalArgumentException("Crosser at index $crosserIndex is not at boat")
+        }
+
+        if (moveType == MoveType.TRANSIT) {
+            if (oldCrosserPosition == RiverCrosserPosition.ORIGINAL_RIVERSIDE && gamePlayPositions.boatPosition == BoatPosition.TARGET_RIVERSIDE) {
+                throw IllegalArgumentException("Crosser at index $crosserIndex is at original riverside and boat is at target riverside")
+            }
+            if (oldCrosserPosition == RiverCrosserPosition.TARGET_RIVERSIDE && gamePlayPositions.boatPosition == BoatPosition.ORIGINAL_RIVERSIDE) {
+                throw IllegalArgumentException("Crosser at index $crosserIndex is at target riverside and boat is at original riverside")
+            }
+        }
     }
 
     private fun newBoatPosition(moveType: MoveType): BoatPosition {
