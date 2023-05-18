@@ -1,14 +1,14 @@
 package testutil
 
-import gamePlay.CrosserIndices
 import gamePlay.GamePlayState
 import gamePlay.GameSituationTeller
+import gamePlay.Move
 import rules.GameSituationRules
 import kotlin.test.assertTrue
 
-fun assertisWonAfterMoves(
+fun assertIsWonAfterMoves(
     initialState: GamePlayState,
-    moves: List<Pair<CrosserIndices, rules.Move>>,
+    moves: List<Move>,
     rules: GameSituationRules,
     message: String? = null,
 ) {

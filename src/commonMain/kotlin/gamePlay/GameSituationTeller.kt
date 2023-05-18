@@ -35,12 +35,11 @@ class GameSituationTeller(private val gamePlayPositions: GamePlayPositions, priv
     }
 
     /**
-     * @return set of pairs of crossers indices and move that can be applied to a valid game state.
-     * Target crossers of a move must have the same position.
+     * @return set of moves that can be applied to a valid game state.
      * But it doesn't mean that the game state after applying the move will not game over.
      */
-    fun getCurrentValidMoves(): Set<Pair<CrosserIndices, Move>> {
-        val newMoves = mutableSetOf<Pair<CrosserIndices, Move>>()
+    fun getCurrentValidMoves(): Set<Move> {
+        val newMoves = mutableSetOf<Move>()
 
         // moves of crossers on boat
         val numOfCrossersOnBoat: Int
@@ -50,14 +49,14 @@ class GameSituationTeller(private val gamePlayPositions: GamePlayPositions, priv
                 // moves that drive boat
                 if (canDriveBoat(it)) {
                     newMoves.add(
-                        it to Move.DRIVE_BOAT
+                        Move(it, MoveType.DRIVE_BOAT)
                     )
                 }
 
                 // moves that transit to riverside
                 getCombinations(it, it.size).forEach { possibleIndices ->
                     newMoves.add(
-                        possibleIndices to Move.TRANSIT
+                        Move(possibleIndices, MoveType.TRANSIT)
                     )
                 }
             }
@@ -71,7 +70,7 @@ class GameSituationTeller(private val gamePlayPositions: GamePlayPositions, priv
                     rules.boatCapacity - numOfCrossersOnBoat
                 ).forEach { possibleIndices ->
                     newMoves.add(
-                        possibleIndices to Move.TRANSIT
+                        Move(possibleIndices, MoveType.TRANSIT)
                     )
                 }
             }
@@ -80,7 +79,7 @@ class GameSituationTeller(private val gamePlayPositions: GamePlayPositions, priv
         return newMoves
     }
 
-    private fun getCrossersIndicesOfPosition(targetPosition: RiverCrosserPosition): CrosserIndices {
+    private fun getCrossersIndicesOfPosition(targetPosition: RiverCrosserPosition): Set<Int> {
         val crosserIndices = mutableSetOf<Int>()
         for ((index, crosser) in gamePlayPositions.crossers.withIndex()) {
             if (crosser.position == targetPosition) {
@@ -90,7 +89,7 @@ class GameSituationTeller(private val gamePlayPositions: GamePlayPositions, priv
         return crosserIndices
     }
 
-    private fun canDriveBoat(crosserIndices: CrosserIndices): Boolean {
+    private fun canDriveBoat(crosserIndices: Set<Int>): Boolean {
         return crosserIndices.map { index -> gamePlayPositions.crossers[index] }
             .any { crosser -> rules.boatDriverTypes.contains(crosser.type) }
     }

@@ -2,19 +2,21 @@ package testutil
 
 import gamePlay.GamePlayPositions
 import gamePlay.GamePlayState
+import gamePlay.Move
 import gamePlay.RiverCrosser
 import rules.BoatPosition
+import rules.MoveType
 import rules.RiverCrosserPosition
 import rules.classic.ClassicGameRules
 import rules.classic.FATHER
 import kotlin.test.Test
 import kotlin.test.assertFailsWith
 
-class AssertisWonAfterMovesTest {
+class AssertIsWonAfterMovesTest {
     @Test
-    fun `test assertisWonAfterMoves when is not win`() {
+    fun `test assertIsWonAfterMoves when is not win`() {
         assertFailsWith<AssertionError> {
-            assertisWonAfterMoves(
+            assertIsWonAfterMoves(
                 GamePlayState(
                     GamePlayPositions(
                         listOf(
@@ -26,15 +28,15 @@ class AssertisWonAfterMovesTest {
                         BoatPosition.ORIGINAL_RIVERSIDE
                     ),
                 ),
-                listOf(setOf(0) to rules.Move.TRANSIT),
+                listOf(Move(setOf(0), MoveType.TRANSIT)),
                 ClassicGameRules
             )
         }
     }
 
     @Test
-    fun `test assertisWonAfterMove when is win`() {
-        assertisWonAfterMoves(
+    fun `test assertIsWonAfterMoves when is win`() {
+        assertIsWonAfterMoves(
             GamePlayState(
                 GamePlayPositions(
                     listOf(
@@ -47,17 +49,17 @@ class AssertisWonAfterMovesTest {
                 ),
             ),
             listOf(
-                setOf(0) to rules.Move.TRANSIT,
-                setOf(0) to rules.Move.DRIVE_BOAT,
-                setOf(0) to rules.Move.TRANSIT
+                Move(setOf(0), MoveType.TRANSIT),
+                Move(setOf(0), MoveType.DRIVE_BOAT),
+                Move(setOf(0), MoveType.TRANSIT)
             ),
             ClassicGameRules
         )
     }
 
     @Test
-    fun `test assertisWonAfterMove when moves is empty`() {
-        assertisWonAfterMoves(
+    fun `test assertIsWonAfterMoves when moves is empty`() {
+        assertIsWonAfterMoves(
             GamePlayState(
                 GamePlayPositions(
                     listOf(

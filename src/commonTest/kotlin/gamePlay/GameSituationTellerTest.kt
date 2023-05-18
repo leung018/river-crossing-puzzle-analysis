@@ -78,9 +78,9 @@ internal class GameSituationTellerTest {
                 )
                     .getCurrentValidMoves()
             val expectedMoveSet = setOf(
-                setOf(0) to Move.TRANSIT,
-                setOf(1) to Move.TRANSIT,
-                setOf(0, 1) to Move.TRANSIT
+                Move(setOf(0), MoveType.TRANSIT),
+                Move(setOf(1), MoveType.TRANSIT),
+                Move(setOf(0, 1), MoveType.TRANSIT)
             )
             assertEquals(expectedMoveSet, actualMoveSet)
         }
@@ -102,9 +102,9 @@ internal class GameSituationTellerTest {
             )
                 .getCurrentValidMoves()
         val expectedMoveSet = setOf(
-            setOf(0) to Move.TRANSIT, // move to boat
-            setOf(1) to Move.TRANSIT, // move to boat
-            setOf(2) to Move.TRANSIT, // move to riverside
+            Move(setOf(0), MoveType.TRANSIT), // move to boat
+            Move(setOf(1), MoveType.TRANSIT), // move to boat
+            Move(setOf(2), MoveType.TRANSIT), // move to riverside
         )
         assertEquals(expectedMoveSet, actualMoveSet)
     }
@@ -125,10 +125,10 @@ internal class GameSituationTellerTest {
             )
                 .getCurrentValidMoves()
         val expectedMoveSet = setOf(
-            setOf(0) to Move.TRANSIT,
-            setOf(1) to Move.TRANSIT,
-            setOf(0, 1) to Move.TRANSIT,
-            setOf(0, 1) to Move.DRIVE_BOAT
+            Move(setOf(0), MoveType.TRANSIT),
+            Move(setOf(1), MoveType.TRANSIT),
+            Move(setOf(0, 1), MoveType.TRANSIT),
+            Move(setOf(0, 1), MoveType.DRIVE_BOAT)
         )
         assertEquals(expectedMoveSet, actualMoveSet)
     }
@@ -167,7 +167,7 @@ internal class GameSituationTellerTest {
             )
                 .getCurrentValidMoves()
         val expectedMoveSet = setOf(
-            setOf(0) to Move.TRANSIT,
+            Move(setOf(0), MoveType.TRANSIT),
         )
         assertEquals(expectedMoveSet, actualMoveSet)
     }
@@ -194,12 +194,12 @@ internal class GameSituationTellerTest {
             )
                 .getCurrentValidMoves()
         val expectedMoveSet = setOf(
-            setOf(0) to Move.TRANSIT,
-            setOf(1) to Move.TRANSIT,
-            setOf(2) to Move.TRANSIT,
-            setOf(0, 1) to Move.TRANSIT,
-            setOf(0, 2) to Move.TRANSIT,
-            setOf(1, 2) to Move.TRANSIT,
+            Move(setOf(0), MoveType.TRANSIT),
+            Move(setOf(1), MoveType.TRANSIT),
+            Move(setOf(2), MoveType.TRANSIT),
+            Move(setOf(0, 1), MoveType.TRANSIT),
+            Move(setOf(0, 2), MoveType.TRANSIT),
+            Move(setOf(1, 2), MoveType.TRANSIT),
         )
         assertEquals(expectedMoveSet, actualMoveSet)
     }

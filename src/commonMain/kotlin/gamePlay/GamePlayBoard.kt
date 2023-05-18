@@ -1,25 +1,19 @@
 package gamePlay
 
 import rules.GameRules
-import rules.Move
 import rules.RiverCrosserType
-
-typealias CrosserIndices = Set<Int>
 
 /** Will compute the optimal solution when it is created.
  */
 class GamePlayBoard private constructor(gamePlayPositions: GamePlayPositions, private val rules: GameRules) {
 
     companion object {
-        /**
-         * @param crosserTypes the types of crossers at the original riverside.
-         */
         fun getMinCostGameSolvingMoves(
-            crosserTypes: List<RiverCrosserType>,
+            initialCrosserTypes: List<RiverCrosserType>,
             rules: GameRules
-        ): List<Pair<CrosserIndices, Move>>? {
+        ): List<Move>? {
             return GamePlayBoard(
-                GamePlayPositions(crosserTypes),
+                GamePlayPositions(initialCrosserTypes),
                 rules
             ).optimalWinningState?.pastMoves
         }
@@ -40,8 +34,8 @@ class GamePlayBoard private constructor(gamePlayPositions: GamePlayPositions, pr
                 val possibleMoves =
                     newGameSituationTeller(currentState.gamePlayPositions).getCurrentValidMoves()
 
-                for ((crosserIndices, move) in possibleMoves) {
-                    val newState = currentState.newStateAppliedMove(crosserIndices to move, rules)
+                for (move in possibleMoves) {
+                    val newState = currentState.newStateAppliedMove(move, rules)
                     if (isMoreOptimalWinningSolution(newState)) {
                         optimalWinningState = newState
                         continue
