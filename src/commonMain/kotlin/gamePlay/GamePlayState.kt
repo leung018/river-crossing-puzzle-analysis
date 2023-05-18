@@ -62,7 +62,7 @@ data class GamePlayState(
     }
 
     private fun isCrosserIndicesAtSamePosition(crosserIndices: Set<Int>): Boolean {
-        return crosserIndices.map { gamePlayPositions.crossers[it] }.distinct().let {
+        return crosserIndices.map { gamePlayPositions.crossers[it].position }.distinct().let {
             it.size == 1
         }
     }
