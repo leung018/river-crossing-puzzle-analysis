@@ -1,7 +1,7 @@
-package gamePlay
+package game
 
-import rules.*
-import rules.classic.ClassicGameRules
+import game.rules.*
+import game.rules.classic.ClassicGameRules
 
 /**
  * @param crosserIndices indices of crossers to move. They must have the same position.
@@ -93,8 +93,8 @@ data class GamePlayState(
 
     private fun RiverCrosserPosition.newCrosserPosition(moveType: MoveType): RiverCrosserPosition {
         return when (moveType) {
-            MoveType.DRIVE_BOAT -> RiverCrosserPosition.BOAT
-            MoveType.TRANSIT -> when (this) {
+            game.rules.MoveType.DRIVE_BOAT -> RiverCrosserPosition.BOAT
+            game.rules.MoveType.TRANSIT -> when (this) {
                 RiverCrosserPosition.ORIGINAL_RIVERSIDE, RiverCrosserPosition.TARGET_RIVERSIDE -> RiverCrosserPosition.BOAT
                 RiverCrosserPosition.BOAT -> gamePlayPositions.boatPosition.nearbyRiversideForCrosser()
             }

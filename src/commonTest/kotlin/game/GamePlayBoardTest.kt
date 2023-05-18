@@ -1,11 +1,11 @@
-package gamePlay
+package game
 
-import rules.MoveType
-import rules.RiverCrosserType
-import rules.classic.ClassicGameRules
-import rules.classic.FATHER
-import rules.classic.MOTHER
-import rules.classic.SON
+import game.rules.MoveType
+import game.rules.RiverCrosserType
+import game.rules.classic.ClassicGameRules
+import game.rules.classic.FATHER
+import game.rules.classic.MOTHER
+import game.rules.classic.SON
 import testutil.assertIsWonAfterMoves
 import kotlin.test.Test
 import kotlin.test.assertEquals

@@ -1,7 +1,7 @@
-package gamePlay
+package game
 
-import rules.GameRules
-import rules.RiverCrosserType
+import game.rules.GameRules
+import game.rules.RiverCrosserType
 
 /**
  * Will compute the optimal solution when its instance is created.

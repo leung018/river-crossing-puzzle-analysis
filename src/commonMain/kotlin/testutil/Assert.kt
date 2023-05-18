@@ -1,9 +1,9 @@
 package testutil
 
-import gamePlay.GamePlayState
-import gamePlay.GameSituationTeller
-import gamePlay.Move
-import rules.GameSituationRules
+import game.GamePlayState
+import game.GameSituationTeller
+import game.Move
+import game.rules.GameSituationRules
 import kotlin.test.assertTrue
 
 fun assertIsWonAfterMoves(

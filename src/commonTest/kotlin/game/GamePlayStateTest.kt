@@ -1,11 +1,11 @@
-package gamePlay
+package game
 
-import rules.BoatPosition
-import rules.MoveType
-import rules.RiverCrosserPosition
-import rules.classic.ClassicGameRules
-import rules.classic.FATHER
-import rules.classic.MOTHER
+import game.rules.BoatPosition
+import game.rules.MoveType
+import game.rules.RiverCrosserPosition
+import game.rules.classic.ClassicGameRules
+import game.rules.classic.FATHER
+import game.rules.classic.MOTHER
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith

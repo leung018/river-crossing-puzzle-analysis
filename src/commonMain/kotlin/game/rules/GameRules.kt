@@ -1,4 +1,4 @@
-package rules
+package game.rules
 
 
 data class RiverCrosserType(

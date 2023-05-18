@@ -1,10 +1,10 @@
-package gamePlay
+package game
 
-import rules.*
-import rules.classic.ClassicGameRules
-import rules.classic.DAUGHTER
-import rules.classic.FATHER
-import rules.classic.MASTER
+import game.rules.*
+import game.rules.classic.ClassicGameRules
+import game.rules.classic.DAUGHTER
+import game.rules.classic.FATHER
+import game.rules.classic.MASTER
 import kotlin.test.*
 
 private fun newClassicCrosser(position: RiverCrosserPosition, canDriveBoat: Boolean = false) =

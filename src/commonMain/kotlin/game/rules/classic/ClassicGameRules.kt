@@ -1,8 +1,8 @@
-package rules.classic
+package game.rules.classic
 
-import rules.GameRules
-import rules.MoveType
-import rules.RiverCrosserType
+import game.rules.GameRules
+import game.rules.MoveType
+import game.rules.RiverCrosserType
 
 val DOG = RiverCrosserType("DOG")
 val FATHER = RiverCrosserType("FATHER")
