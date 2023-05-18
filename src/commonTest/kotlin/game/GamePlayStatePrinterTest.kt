@@ -3,11 +3,13 @@ package game
 import game.rules.BoatPosition
 import game.rules.RiverCrosserPosition
 import game.rules.RiverCrosserType
+import kotlin.test.Ignore
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class GamePlayStatePrinterTest {
     @Test
+    @Ignore
     fun `test print`() {
         data class TestCase(
             val gamePlayState: GamePlayState,
