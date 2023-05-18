@@ -35,7 +35,7 @@ data class GamePlayState(
      * not valid in current game play positions.
      */
     fun newStateAppliedMove(
-        move: Move, // TODO: Throw exception if crosserIndices are refer to crossers at different positions.
+        move: Move,
         moveTypeCostRules: MoveTypeCostRules = ClassicGameRules
     ): GamePlayState {
         val newCrossers = gamePlayPositions.crossers.toMutableList()
@@ -60,6 +60,12 @@ data class GamePlayState(
                 newCrossers[i] = newCrossers[i].copy(position = oldCrosserPosition.newCrosserPosition(move.type))
             } catch (e: IndexOutOfBoundsException) {
                 throw IllegalArgumentException("Target indices for the move don't exist in the original list")
+            }
+        }
+
+        move.crosserIndices.map { gamePlayPositions.crossers[it] }.distinct().let {
+            if (it.size != 1) {
+                throw IllegalArgumentException("Crossers at target indices must have the same position")
             }
         }
 

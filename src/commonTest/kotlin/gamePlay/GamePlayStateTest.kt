@@ -12,11 +12,28 @@ import kotlin.test.assertFailsWith
 
 internal class GamePlayStateTest {
     @Test
-    fun `newStateAppliedMoves when CrosserIndices out of original list range`() {
+    fun `newStateAppliedMoves when crosserIndices out of original list range`() {
         val s = GamePlayState(GamePlayPositions(listOf<RiverCrosser>()))
         assertFailsWith<IllegalArgumentException> {
             s.newStateAppliedMove(
                 Move(setOf(0), MoveType.TRANSIT)
+            )
+        }
+    }
+
+    @Test
+    fun `newStateAppliedMoves when crosserIndices are in different position`() {
+        val s = GamePlayState(
+            GamePlayPositions(
+                listOf(
+                    RiverCrosser(FATHER, RiverCrosserPosition.ORIGINAL_RIVERSIDE),
+                    RiverCrosser(MOTHER, RiverCrosserPosition.BOAT),
+                )
+            )
+        )
+        assertFailsWith<IllegalArgumentException> {
+            s.newStateAppliedMove(
+                Move(setOf(0, 1), MoveType.TRANSIT)
             )
         }
     }
