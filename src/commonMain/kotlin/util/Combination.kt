@@ -1,6 +1,7 @@
 package util
 
-/** @return all combinations of elements in the input set which have size less than or equal to `maxNumOfElements`.
+/**
+ * @return all combinations of elements in the input set which have size less than or equal to `maxNumOfElements`.
  */
 fun <T> getCombinations(inputSet: Set<T>, maxNumOfElements: Int): Set<Set<T>> {
     val combinations = mutableSetOf<Set<T>>()

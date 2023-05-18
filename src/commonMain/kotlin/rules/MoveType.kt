@@ -1,6 +1,6 @@
 package rules
 
-enum class Move {
+enum class MoveType {
     /**
      *  Drive boat to the other riverside.
      */

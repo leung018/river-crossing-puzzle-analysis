@@ -1,7 +1,10 @@
 package rules
 
 
-data class RiverCrosserType(val id: String, val occupiedBoatSpace: Int = 1)
+data class RiverCrosserType(
+    val id: String,
+    val occupiedBoatSpace: Int = 1
+) // TODO: use occupiedBoatSpace instead of counting number of crossers in GameSituationTeller
 // Use data class instead of enum because for future feature if crosser type is defined by external config
 
 interface GameRules : GameSituationRules, MoveTypeCostRules
@@ -33,5 +36,5 @@ interface GameSituationRules {
 }
 
 interface MoveTypeCostRules {
-    fun getMoveCost(move: Move): Int
+    fun getMoveCost(moveType: MoveType): Int
 }

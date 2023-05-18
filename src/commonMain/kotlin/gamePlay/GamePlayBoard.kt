@@ -1,50 +1,90 @@
 package gamePlay
 
 import rules.GameRules
-import rules.Move
+import rules.RiverCrosserType
 
-typealias CrosserIndices = Set<Int>
+/**
+ * Will compute the optimal solution when its instance is created.
+ */
+class GamePlayBoard private constructor(gamePlayPositions: GamePlayPositions, private val rules: GameRules) {
 
-class GamePlayBoard private constructor(crossers: List<RiverCrosser>, private val rules: GameRules) {
     companion object {
-        fun getLowestCostGameSolvingPossibleMoves(
-            initialCrossers: List<RiverCrosser>,
+        /**
+         * @return the optimal solution for the game. Null if no solution exists.
+         */
+        fun getMinCostGameSolvingMoves(
+            initialCrosserTypes: List<RiverCrosserType>,
             rules: GameRules
-        ): Set<List<Pair<CrosserIndices, Move>>> {
-            return GamePlayBoard(initialCrossers, rules).getLowestCostGameSolvingPossibleMoves()
+        ): List<Move>? {
+            return GamePlayBoard(
+                GamePlayPositions(initialCrosserTypes),
+                rules
+            ).optimalWinningState?.pastMoves
         }
 
     }
 
-    private var transitedCrossersSet: Set<List<RiverCrosser>> = mutableSetOf()
+    init {
+        // active means neither game over nor game win.
+        val activeGamePlayStates = mutableSetOf(GamePlayState(gamePlayPositions))
+        val activePositionsToMinCost: MutableMap<GamePlayPositions, Int> = mutableMapOf(
+            gamePlayPositions to 0
+        )
 
-    private val activeGamePlayStatesList =
-        MutableList(1) { GamePlayState(GamePlayPositions(crossers = crossers), emptyList()) }
-    private val winGamePlayStatesWithLowestTotalCostList =
-        mutableListOf<GamePlayState>() //all totalCost are same in this list
+        // compute optimal winning state.
+        while (activeGamePlayStates.isNotEmpty()) {
+            for (currentState in activeGamePlayStates) {
+                val nextStates = mutableListOf<GamePlayState>()
+                val possibleMoves =
+                    newGameSituationTeller(currentState.gamePlayPositions).getCurrentValidMoves()
 
-    private fun getLowestCostGameSolvingPossibleMoves(): Set<List<Pair<CrosserIndices, Move>>> {
-        TODO()
-        /* For each state () in activeGamePlayStatesList:
-                obtain each valid moves (GameSituationTeller.getCurrentValidMoves)
-                futureStates = []
-                For each move:
-                    get new state after applied move (GamePlayState.newStateAppliedMoves)
-                    if the new state's crossers not in transitedCrossersSet
-                        add to transitedCrossersSet
-                        if this new state is win (GameSituationTeller.isWin):
-                            if totalCost is equal to those in winGamePlayStatesWithLowestTotalCostList
-                                add to list
-                                skip this loop;
-                            if totalCost is less than those
-                                drop the winGameStatesList and let the list contain this new state only
-                            skip this loop;
-                        if totalCost is equal to those in winGamePlayStatesWithLowestTotalCostList
-                            skip this loop;
-                        if this new state is not game over (GameSituationTeller.isGameOver)
-                            add to futureStates
-                replace old state by futureStates in activeGamePlayStatesList
-           Repeat above until activeGamePlayStatesList is Empty
-        */
+                for (move in possibleMoves) {
+                    val newState = currentState.newStateAppliedMove(move, rules)
+                    if (isOptimalWinningSolution(newState)) {
+                        optimalWinningState = newState
+                        continue
+                    }
+                    if (newState.totalCost >= getMinWinningCost()) {
+                        continue
+                    }
+
+                    val newPositions = newState.gamePlayPositions
+                    if (newGameSituationTeller(newPositions).isGameOver()) {
+                        println("currentPosition: ${currentState.gamePlayPositions.crossers.map { it.position }} boatPosition: ${currentState.gamePlayPositions.boatPosition}")
+                        println("pastMoves: ${currentState.pastMoves}")
+                        continue
+                    }
+
+                    if (!activePositionsToMinCost.containsKey(newPositions) || activePositionsToMinCost[newPositions]!! > newState.totalCost) {
+                        activePositionsToMinCost[newPositions] = newState.totalCost
+                        nextStates.add(newState)
+                    }
+                }
+
+                activeGamePlayStates.remove(currentState)
+                activeGamePlayStates.addAll(nextStates)
+            }
+        }
+    }
+
+    /**
+     *  optimalWinningState is the state that using the minimum sizes of moves to achieve the minimum cost of solutions.
+     */
+    private var optimalWinningState: GamePlayState? = null
+
+    private fun getMinWinningCost(): Int {
+        return optimalWinningState?.totalCost ?: Int.MAX_VALUE
+    }
+
+    private fun getMinSizeOfWinningMoves(): Int {
+        return optimalWinningState?.pastMoves?.size ?: Int.MAX_VALUE
+    }
+
+    private fun isOptimalWinningSolution(newState: GamePlayState): Boolean {
+        return newGameSituationTeller(newState.gamePlayPositions).isWon() && ((newState.totalCost == getMinWinningCost() && newState.pastMoves.size < getMinSizeOfWinningMoves()) || newState.totalCost < getMinWinningCost())
+    }
+
+    private fun newGameSituationTeller(positions: GamePlayPositions): GameSituationTeller {
+        return GameSituationTeller(positions, rules)
     }
 }

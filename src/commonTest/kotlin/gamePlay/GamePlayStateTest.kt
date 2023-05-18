@@ -1,7 +1,7 @@
 package gamePlay
 
 import rules.BoatPosition
-import rules.Move
+import rules.MoveType
 import rules.RiverCrosserPosition
 import rules.classic.ClassicGameRules
 import rules.classic.FATHER
@@ -12,11 +12,28 @@ import kotlin.test.assertFailsWith
 
 internal class GamePlayStateTest {
     @Test
-    fun `newStateAppliedMoves when CrosserIndices out of original list range`() {
-        val s = GamePlayState(GamePlayPositions(listOf()))
+    fun `newStateAppliedMoves when crosserIndices out of original list range`() {
+        val s = GamePlayState(GamePlayPositions(listOf<RiverCrosser>()))
         assertFailsWith<IllegalArgumentException> {
-            s.newStateAppliedMoves(
-                setOf(0) to Move.TRANSIT
+            s.newStateAppliedMove(
+                Move(setOf(0), MoveType.TRANSIT)
+            )
+        }
+    }
+
+    @Test
+    fun `newStateAppliedMoves when crosserIndices are in different position`() {
+        val s = GamePlayState(
+            GamePlayPositions(
+                listOf(
+                    RiverCrosser(FATHER, RiverCrosserPosition.ORIGINAL_RIVERSIDE),
+                    RiverCrosser(MOTHER, RiverCrosserPosition.BOAT),
+                )
+            )
+        )
+        assertFailsWith<IllegalArgumentException> {
+            s.newStateAppliedMove(
+                Move(setOf(0, 1), MoveType.TRANSIT)
             )
         }
     }
@@ -34,8 +51,8 @@ internal class GamePlayStateTest {
                 ), listOf(), 0
             )
         val newState =
-            originalState.newStateAppliedMoves(
-                setOf(1) to Move.DRIVE_BOAT,
+            originalState.newStateAppliedMove(
+                Move(setOf(1), MoveType.DRIVE_BOAT),
                 ClassicGameRules
             )
         val expectedState = GamePlayState(
@@ -43,8 +60,37 @@ internal class GamePlayStateTest {
                 listOf(RiverCrosser(FATHER), RiverCrosser(MOTHER, RiverCrosserPosition.BOAT)),
                 boatPosition = BoatPosition.TARGET_RIVERSIDE
             ),
-            listOf((setOf(1) to Move.DRIVE_BOAT)),
+            listOf(Move(setOf(1), MoveType.DRIVE_BOAT)),
             1
+        )
+
+        assertEquals(expectedState, newState)
+    }
+
+    @Test
+    fun `newStateAppliedMoves when two crossers transit from riverside to boat`() {
+        val originalState =
+            GamePlayState(
+                GamePlayPositions(
+                    listOf(
+                        RiverCrosser(FATHER, RiverCrosserPosition.ORIGINAL_RIVERSIDE),
+                        RiverCrosser(MOTHER, RiverCrosserPosition.ORIGINAL_RIVERSIDE),
+                    )
+                )
+            )
+        val newState =
+            originalState.newStateAppliedMove(
+                Move(setOf(0, 1), MoveType.TRANSIT),
+            )
+        val expectedState = GamePlayState(
+            GamePlayPositions(
+                listOf(
+                    RiverCrosser(FATHER, RiverCrosserPosition.BOAT),
+                    RiverCrosser(MOTHER, RiverCrosserPosition.BOAT),
+                )
+            ),
+            listOf(Move(setOf(0, 1), MoveType.TRANSIT)),
+            0
         )
 
         assertEquals(expectedState, newState)
@@ -62,8 +108,8 @@ internal class GamePlayStateTest {
                 )
             )
         val newState =
-            originalState.newStateAppliedMoves(
-                setOf(0) to Move.DRIVE_BOAT,
+            originalState.newStateAppliedMove(
+                Move(setOf(0), MoveType.DRIVE_BOAT),
             )
 
         assertEquals(
@@ -86,8 +132,8 @@ internal class GamePlayStateTest {
                 )
             )
         val newState =
-            originalState.newStateAppliedMoves(
-                setOf(0) to Move.TRANSIT,
+            originalState.newStateAppliedMove(
+                Move(setOf(0), MoveType.TRANSIT),
             )
 
         assertEquals(
@@ -112,8 +158,8 @@ internal class GamePlayStateTest {
                 )
             )
         val newState =
-            originalState.newStateAppliedMoves(
-                setOf(0) to Move.TRANSIT,
+            originalState.newStateAppliedMove(
+                Move(setOf(0), MoveType.TRANSIT),
                 ClassicGameRules
             )
 
@@ -139,8 +185,8 @@ internal class GamePlayStateTest {
                 )
             )
         val newState =
-            originalState.newStateAppliedMoves(
-                setOf(0) to Move.TRANSIT,
+            originalState.newStateAppliedMove(
+                Move(setOf(0), MoveType.TRANSIT),
                 ClassicGameRules
             )
 
@@ -166,8 +212,8 @@ internal class GamePlayStateTest {
                 )
             )
         val newState =
-            originalState.newStateAppliedMoves(
-                setOf(0) to Move.TRANSIT,
+            originalState.newStateAppliedMove(
+                Move(setOf(0), MoveType.TRANSIT),
                 ClassicGameRules
             )
 
@@ -194,8 +240,8 @@ internal class GamePlayStateTest {
                 )
             )
         assertFailsWith<IllegalArgumentException> {
-            originalState.newStateAppliedMoves(
-                setOf(0) to Move.DRIVE_BOAT,
+            originalState.newStateAppliedMove(
+                Move(setOf(0), MoveType.DRIVE_BOAT),
                 ClassicGameRules
             )
         }
@@ -213,8 +259,8 @@ internal class GamePlayStateTest {
                 )
             )
         assertFailsWith<IllegalArgumentException> {
-            originalState.newStateAppliedMoves(
-                setOf(0) to Move.TRANSIT,
+            originalState.newStateAppliedMove(
+                Move(setOf(0), MoveType.TRANSIT),
                 ClassicGameRules
             )
         }
@@ -232,8 +278,8 @@ internal class GamePlayStateTest {
                 )
             )
         assertFailsWith<IllegalArgumentException> {
-            originalState.newStateAppliedMoves(
-                setOf(0) to Move.TRANSIT,
+            originalState.newStateAppliedMove(
+                Move(setOf(0), MoveType.TRANSIT),
                 ClassicGameRules
             )
         }

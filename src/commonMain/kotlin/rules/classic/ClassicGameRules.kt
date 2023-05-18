@@ -1,7 +1,7 @@
 package rules.classic
 
 import rules.GameRules
-import rules.Move
+import rules.MoveType
 import rules.RiverCrosserType
 
 val DOG = RiverCrosserType("DOG")
@@ -26,10 +26,10 @@ object ClassicGameRules : GameRules {
         return true
     }
 
-    override fun getMoveCost(move: Move): Int {
-        return when (move) {
-            Move.TRANSIT -> 0
-            Move.DRIVE_BOAT -> 1
+    override fun getMoveCost(moveType: MoveType): Int {
+        return when (moveType) {
+            MoveType.TRANSIT -> 0
+            MoveType.DRIVE_BOAT -> 1
         }
     }
 
