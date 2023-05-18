@@ -1,4 +1,4 @@
-package rules
+package game.rules
 
 enum class BoatPosition {
     ORIGINAL_RIVERSIDE, TARGET_RIVERSIDE

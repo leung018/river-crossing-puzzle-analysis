@@ -1,7 +1,7 @@
-package gamePlay
+package game
 
-import rules.RiverCrosserPosition
-import rules.RiverCrosserType
+import game.rules.RiverCrosserPosition
+import game.rules.RiverCrosserType
 
 data class RiverCrosser(
     val type: RiverCrosserType,

@@ -1,14 +1,14 @@
 package testutil
 
-import gamePlay.GamePlayPositions
-import gamePlay.GamePlayState
-import gamePlay.Move
-import gamePlay.RiverCrosser
-import rules.BoatPosition
-import rules.MoveType
-import rules.RiverCrosserPosition
-import rules.classic.ClassicGameRules
-import rules.classic.FATHER
+import game.GamePlayPositions
+import game.GamePlayState
+import game.Move
+import game.RiverCrosser
+import game.rules.BoatPosition
+import game.rules.MoveType
+import game.rules.RiverCrosserPosition
+import game.rules.classic.ClassicGameRules
+import game.rules.classic.FATHER
 import kotlin.test.Test
 import kotlin.test.assertFailsWith
 

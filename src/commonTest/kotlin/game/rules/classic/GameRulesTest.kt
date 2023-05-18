@@ -1,4 +1,4 @@
-package rules.classic
+package game.rules.classic
 
 import kotlin.test.Test
 import kotlin.test.assertFalse

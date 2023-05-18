@@ -1,6 +1,6 @@
-package gamePlay
+package game
 
-import rules.*
+import game.rules.*
 import util.getCombinations
 
 /**
