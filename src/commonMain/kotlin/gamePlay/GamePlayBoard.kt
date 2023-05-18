@@ -3,7 +3,8 @@ package gamePlay
 import rules.GameRules
 import rules.RiverCrosserType
 
-/** Will compute the optimal solution when it is created.
+/**
+ * Will compute the optimal solution when its instance is created.
  */
 class GamePlayBoard private constructor(gamePlayPositions: GamePlayPositions, private val rules: GameRules) {
 

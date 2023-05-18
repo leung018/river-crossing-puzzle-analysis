@@ -16,7 +16,9 @@ data class GamePlayPositions(
     val crossers: List<RiverCrosser>,
     val boatPosition: BoatPosition = BoatPosition.ORIGINAL_RIVERSIDE
 ) {
-    /** @return positions of initial crossers at the start of the game. */
+    /**
+     * @return positions of initial crossers at the start of the game.
+     */
     constructor(initialCrosserTypes: List<RiverCrosserType>) : this(
         crossers = initialCrosserTypes.map { RiverCrosser(it) }
     )
