@@ -37,7 +37,7 @@ class GamePlayBoard private constructor(gamePlayPositions: GamePlayPositions, pr
 
                 for (move in possibleMoves) {
                     val newState = currentState.newStateAppliedMove(move, rules)
-                    if (isMoreOptimalWinningSolution(newState)) {
+                    if (isOptimalWinningSolution(newState)) {
                         optimalWinningState = newState
                         continue
                     }
@@ -75,7 +75,7 @@ class GamePlayBoard private constructor(gamePlayPositions: GamePlayPositions, pr
         return optimalWinningState?.pastMoves?.size ?: Int.MAX_VALUE
     }
 
-    private fun isMoreOptimalWinningSolution(newState: GamePlayState): Boolean {
+    private fun isOptimalWinningSolution(newState: GamePlayState): Boolean {
         return newGameSituationTeller(newState.gamePlayPositions).isWon() && ((newState.totalCost == getMinWinningCost() && newState.pastMoves.size < getMinSizeOfWinningMoves()) || newState.totalCost < getMinWinningCost())
     }
 
