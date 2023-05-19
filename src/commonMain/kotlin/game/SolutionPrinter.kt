@@ -25,7 +25,7 @@ class SolutionPrinter(private val printer: Printer = ConsolePrinter()) {
 
             // Print introduction
             printer.println()
-            printer.println("The following game state will be shown after each move, along with the last move made to achieve it.")
+            printer.println("The program will display the game state after each move, along with the last move made to achieve it.")
             printer.println("DRIVE_BOAT indicates that the boat has been driven from one riverside to another, while TRANSIT indicates movement from one riverside to the boat or vice versa.")
             printer.println("The total cost of moves used to reach the current game state will also be specified, with the cost of each move type according to the specified game rules.")
             printer.println()
@@ -37,6 +37,9 @@ class SolutionPrinter(private val printer: Printer = ConsolePrinter()) {
                 printer.println()
                 gamePlayStatePrinter.printState(state)
             }
+
+            printer.println()
+            printer.println("Finished!")
         } else {
             printer.println("No solution found for the specified input crosser types and rules!")
         }
