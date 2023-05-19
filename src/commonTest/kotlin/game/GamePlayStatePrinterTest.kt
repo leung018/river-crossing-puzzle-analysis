@@ -10,7 +10,7 @@ import kotlin.test.assertEquals
 
 class GamePlayStatePrinterTest {
     @Test
-    fun `test printLog`() {
+    fun `test printState`() {
         data class TestCase(
             val gamePlayState: GamePlayState,
             val expectedOutput: String
@@ -89,7 +89,7 @@ class GamePlayStatePrinterTest {
         for (testCase in testCases) {
             val printer = OutputTracePrinter()
             val gamePlayStatePrinter = GamePlayStatePrinter(printer)
-            gamePlayStatePrinter.printLog(
+            gamePlayStatePrinter.printState(
                 testCase.gamePlayState
             )
             assertEquals(testCase.expectedOutput.trimIndent().trimAllLines() + "\n", printer.getOutputTrace())

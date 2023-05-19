@@ -5,11 +5,11 @@ import game.rules.RiverCrosserPosition
 
 
 interface Printer {
-    fun print(log: String)
+    fun printLog(log: String)
 }
 
 class ConsolePrinter : Printer {
-    override fun print(log: String) {
+    override fun printLog(log: String) {
         print(log)
     }
 }
@@ -17,7 +17,7 @@ class ConsolePrinter : Printer {
 class OutputTracePrinter : Printer {
     private var trace: String = ""
 
-    override fun print(log: String) {
+    override fun printLog(log: String) {
         trace += log
     }
 
@@ -25,7 +25,7 @@ class OutputTracePrinter : Printer {
 }
 
 class GamePlayStatePrinter(private val printer: Printer) {
-    fun printLog(gamePlayState: GamePlayState) {
+    fun printState(gamePlayState: GamePlayState) {
         val gamePlayPositionsLog = gamePlayPositionsLog(gamePlayState.gamePlayPositions)
         myPrintln(gamePlayPositionsLog)
         printDashLine(gamePlayPositionsLog.longestLineLength())
@@ -34,7 +34,7 @@ class GamePlayStatePrinter(private val printer: Printer) {
     }
 
     private fun myPrintln(log: String) {
-        printer.print(log + "\n")
+        printer.printLog(log + "\n")
     }
 
     private fun gamePlayPositionsLog(gamePlayPositions: GamePlayPositions): String {
