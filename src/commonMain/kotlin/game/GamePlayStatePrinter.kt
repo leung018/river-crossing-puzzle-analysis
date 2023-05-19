@@ -2,39 +2,16 @@ package game
 
 import game.rules.BoatPosition
 import game.rules.RiverCrosserPosition
+import util.ConsolePrinter
+import util.Printer
 
-
-interface Printer {
-    fun printLog(log: String)
-}
-
-class ConsolePrinter : Printer {
-    override fun printLog(log: String) {
-        print(log)
-    }
-}
-
-class OutputTracePrinter : Printer {
-    private var trace: String = ""
-
-    override fun printLog(log: String) {
-        trace += log
-    }
-
-    fun getOutputTrace(): String = trace
-}
-
-class GamePlayStatePrinter(private val printer: Printer) {
+class GamePlayStatePrinter(private val printer: Printer = ConsolePrinter()) {
     fun printState(gamePlayState: GamePlayState) {
         val gamePlayPositionsLog = gamePlayPositionsLog(gamePlayState.gamePlayPositions)
-        myPrintln(gamePlayPositionsLog)
+        printer.println(gamePlayPositionsLog)
         printDashLine(gamePlayPositionsLog.longestLineLength())
-        myPrintln("Total cost: ${gamePlayState.totalCost}")
-        myPrintln("Last move:${gamePlayState.pastMoves.lastOrNull()?.let { " ${moveLog(it)}" } ?: ""}")
-    }
-
-    private fun myPrintln(log: String) {
-        printer.printLog(log + "\n")
+        printer.println("Total cost: ${gamePlayState.totalCost}")
+        printer.println("Last move:${gamePlayState.pastMoves.lastOrNull()?.let { " ${moveLog(it)}" } ?: ""}")
     }
 
     private fun gamePlayPositionsLog(gamePlayPositions: GamePlayPositions): String {
@@ -77,7 +54,7 @@ class GamePlayStatePrinter(private val printer: Printer) {
     }
 
     private fun printDashLine(length: Int) {
-        myPrintln("-".repeat(length))
+        printer.println("-".repeat(length))
     }
 
     private fun moveLog(move: Move): String {

@@ -4,6 +4,7 @@ import game.rules.BoatPosition
 import game.rules.MoveType
 import game.rules.RiverCrosserPosition
 import game.rules.RiverCrosserType
+import util.OutputTracePrinter
 import util.trimAllLines
 import kotlin.test.Test
 import kotlin.test.assertEquals
