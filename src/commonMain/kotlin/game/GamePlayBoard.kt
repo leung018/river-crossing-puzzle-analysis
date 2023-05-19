@@ -50,8 +50,6 @@ class GamePlayBoard private constructor(gamePlayPositions: GamePlayPositions, pr
 
                     val newPositions = newState.gamePlayPositions
                     if (newGameSituationTeller(newPositions).isGameOver()) {
-                        println("currentPosition: ${currentState.gamePlayPositions.crossers.map { it.position }} boatPosition: ${currentState.gamePlayPositions.boatPosition}")
-                        println("pastMoves: ${currentState.pastMoves}")
                         continue
                     }
 
