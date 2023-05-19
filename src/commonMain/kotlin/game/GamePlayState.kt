@@ -93,8 +93,8 @@ data class GamePlayState(
 
     private fun RiverCrosserPosition.newCrosserPosition(moveType: MoveType): RiverCrosserPosition {
         return when (moveType) {
-            game.rules.MoveType.DRIVE_BOAT -> RiverCrosserPosition.BOAT
-            game.rules.MoveType.TRANSIT -> when (this) {
+            MoveType.DRIVE_BOAT -> RiverCrosserPosition.BOAT
+            MoveType.TRANSIT -> when (this) {
                 RiverCrosserPosition.ORIGINAL_RIVERSIDE, RiverCrosserPosition.TARGET_RIVERSIDE -> RiverCrosserPosition.BOAT
                 RiverCrosserPosition.BOAT -> gamePlayPositions.boatPosition.nearbyRiversideForCrosser()
             }
