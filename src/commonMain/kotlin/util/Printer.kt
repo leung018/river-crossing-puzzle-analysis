@@ -3,7 +3,7 @@ package util
 interface Printer {
     fun print(log: String)
 
-    fun println(log: String) {
+    fun println(log: String = "") {
         print("$log\n")
     }
 }
