@@ -4,6 +4,7 @@ import game.rules.BoatPosition
 import game.rules.MoveType
 import game.rules.RiverCrosserPosition
 import game.rules.RiverCrosserType
+import util.trimAllLines
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -91,7 +92,7 @@ class GamePlayStatePrinterTest {
             gamePlayStatePrinter.printLog(
                 testCase.gamePlayState
             )
-            assertEquals(testCase.expectedOutput.trimIndent() + "\n", printer.getOutputTrace())
+            assertEquals(testCase.expectedOutput.trimIndent().trimAllLines() + "\n", printer.getOutputTrace())
         }
     }
 }

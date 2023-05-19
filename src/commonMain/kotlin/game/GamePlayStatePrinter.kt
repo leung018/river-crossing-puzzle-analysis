@@ -30,7 +30,7 @@ class GamePlayStatePrinter(private val printer: Printer) {
         myPrintln(gamePlayPositionsLog)
         printDashLine(gamePlayPositionsLog.longestLineLength())
         myPrintln("Total cost: ${gamePlayState.totalCost}")
-        myPrintln("Last move: ${gamePlayState.pastMoves.lastOrNull()?.let { moveLog(it) } ?: ""}")
+        myPrintln("Last move:${gamePlayState.pastMoves.lastOrNull()?.let { " ${moveLog(it)}" } ?: ""}")
     }
 
     private fun myPrintln(log: String) {
