@@ -30,6 +30,8 @@ class GamePlayStatePrinterTest {
                     pastMoves = listOf(),
                     totalCost = 0,
                 ), expectedOutput = """
+                    Round: 1
+                    ---------------------------------
                     Original riverside | HANDSOME(#1)
                     River              | <>(Boat)
                     River              |
@@ -54,6 +56,8 @@ class GamePlayStatePrinterTest {
                     ),
                     totalCost = 1,
                 ), expectedOutput = """
+                    Round: 3
+                    -----------------------------------------------------
                     Original riverside |
                     River              |
                     River              | <HANDSOME(#1), PRETTY(#2)>(Boat)
@@ -76,6 +80,8 @@ class GamePlayStatePrinterTest {
                     totalCost = 0,
                 ),
                 expectedOutput = """
+                    Round: 1
+                    -----------------------------------------
                     Original riverside |
                     River              | <HANDSOME(#1)>(Boat)
                     River              |

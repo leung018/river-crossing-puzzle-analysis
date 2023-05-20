@@ -8,6 +8,9 @@ import util.Printer
 class GamePlayStatePrinter(private val printer: Printer = ConsolePrinter()) {
     fun printState(gamePlayState: GamePlayState) {
         val gamePlayPositionsLog = gamePlayPositionsLog(gamePlayState.gamePlayPositions)
+
+        printer.println("Round: ${gamePlayState.pastMoves.size + 1}")
+        printDashLine(gamePlayPositionsLog.longestLineLength())
         printer.println(gamePlayPositionsLog)
         printDashLine(gamePlayPositionsLog.longestLineLength())
         printer.println("Total cost: ${gamePlayState.totalCost}")
