@@ -16,53 +16,55 @@ class GamePlayBoardTest {
     fun `test getMinCostGameSolvingMoves when crossers can reach target riverside`() {
         data class TestCase(
             val crosserTypes: List<RiverCrosserType>,
-            val sampleAnswer: List<Move> // there may be more than one possible answer and the one returned from the function is one of them
+            val expectedTotalCost: Int,
+            val expectedNumOfMoves: Int,
         )
 
         val testCases = listOf(
             TestCase(
-                crosserTypes = listOf(FATHER), sampleAnswer =
-                listOf(
-                    Move(setOf(0), MoveType.TRANSIT),
-                    Move(setOf(0), MoveType.DRIVE_BOAT),
-                    Move(setOf(0), MoveType.TRANSIT),
-                )
-
+                crosserTypes = listOf(FATHER),
+                expectedTotalCost = 1,
+                expectedNumOfMoves = 3,
+                // sample answer:
+                // Move(setOf(0), MoveType.TRANSIT),
+                // Move(setOf(0), MoveType.DRIVE_BOAT),
+                // Move(setOf(0), MoveType.TRANSIT),
             ),
             TestCase(
-                crosserTypes = listOf(FATHER, SON), sampleAnswer =
-                listOf(
-                    Move(setOf(0, 1), MoveType.TRANSIT),
-                    Move(setOf(0, 1), MoveType.DRIVE_BOAT),
-                    Move(setOf(0, 1), MoveType.TRANSIT),
-                )
+                crosserTypes = listOf(FATHER, SON),
+                expectedTotalCost = 1,
+                expectedNumOfMoves = 3,
+                // sample answer:
+                // Move(setOf(0, 1), MoveType.TRANSIT),
+                // Move(setOf(0, 1), MoveType.DRIVE_BOAT),
+                // Move(setOf(0, 1), MoveType.TRANSIT),
 
             ),
             TestCase(
                 crosserTypes = listOf(FATHER, SON, SON),
-                sampleAnswer =
-                listOf(
-                    Move(setOf(0, 1), MoveType.TRANSIT),
-                    Move(setOf(0, 1), MoveType.DRIVE_BOAT),
-                    Move(setOf(1), MoveType.TRANSIT),
-                    Move(setOf(0), MoveType.DRIVE_BOAT),
-                    Move(setOf(2), MoveType.TRANSIT),
-                    Move(setOf(0, 2), MoveType.DRIVE_BOAT),
-                    Move(setOf(0, 2), MoveType.TRANSIT)
-                ),
+                expectedTotalCost = 3,
+                expectedNumOfMoves = 7,
+                // sample answer:
+                // Move(setOf(0, 1), MoveType.TRANSIT),
+                // Move(setOf(0, 1), MoveType.DRIVE_BOAT),
+                // Move(setOf(1), MoveType.TRANSIT),
+                // Move(setOf(0), MoveType.DRIVE_BOAT),
+                // Move(setOf(2), MoveType.TRANSIT),
+                // Move(setOf(0, 2), MoveType.DRIVE_BOAT),
+                // Move(setOf(0, 2), MoveType.TRANSIT)
             ),
             TestCase(
                 crosserTypes = listOf(FATHER, MOTHER, SON),
-                sampleAnswer = listOf(
-                    Move(setOf(0, 2), MoveType.TRANSIT),
-                    Move(setOf(0, 2), MoveType.DRIVE_BOAT),
-                    Move(setOf(2), MoveType.TRANSIT),
-                    Move(setOf(0), MoveType.DRIVE_BOAT),
-                    Move(setOf(1), MoveType.TRANSIT),
-                    Move(setOf(0, 1), MoveType.DRIVE_BOAT),
-                    Move(setOf(0, 1), MoveType.TRANSIT)
-                )
-
+                expectedTotalCost = 3,
+                expectedNumOfMoves = 7,
+                // sample answer:
+                // Move(setOf(0, 2), MoveType.TRANSIT),
+                // Move(setOf(0, 2), MoveType.DRIVE_BOAT),
+                // Move(setOf(2), MoveType.TRANSIT),
+                // Move(setOf(0), MoveType.DRIVE_BOAT),
+                // Move(setOf(1), MoveType.TRANSIT),
+                // Move(setOf(0, 1), MoveType.DRIVE_BOAT),
+                // Move(setOf(0, 1), MoveType.TRANSIT)
             )
         )
 
@@ -71,11 +73,11 @@ class GamePlayBoardTest {
                 testCase.crosserTypes, ClassicGameRules
             )!!
             assertEquals(
-                testCase.sampleAnswer.filter { it.type == MoveType.DRIVE_BOAT }.size,
+                testCase.expectedTotalCost,
                 actualMoves.filter { it.type == MoveType.DRIVE_BOAT }.size,
             )
             assertEquals(
-                testCase.sampleAnswer.size,
+                testCase.expectedNumOfMoves,
                 actualMoves.size,
             )
             assertIsWonAfterMoves(
