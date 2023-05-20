@@ -13,7 +13,7 @@ val MASTER = RiverCrosserType("MASTER")
 
 object ClassicGameRules : GameRules {
     override val validRiverCrosserTypes: Set<RiverCrosserType> = setOf(DOG, FATHER, MOTHER, SON, DAUGHTER, MASTER)
-    override val boatDriverTypes = setOf(FATHER, MOTHER)
+    override val boatDriverTypes = setOf(FATHER, MOTHER, MASTER)
 
     override fun canGameContinue(crosserTypesInSamePlace: Set<RiverCrosserType>): Boolean {
         val typesSet: Set<RiverCrosserType> = crosserTypesInSamePlace
