@@ -20,8 +20,9 @@ interface GameSituationRules {
     /**
      * Define which crosser types can stay together in the same place and which crosser types will cause game over.
      * For the definition of same place, see `areBoatAndNearByRiversideInSamePlace`.
+     * List is used instead of Set is because some rule depend on number of crossers of the same types. e.g. two daughters at same place without parents will fight together.
      */
-    fun canGameContinue(crosserTypesInSamePlace: Set<RiverCrosserType>): Boolean
+    fun canGameContinue(crosserTypesInSamePlace: List<RiverCrosserType>): Boolean
 
     /**
      * If it is true, it means that the boat and the nearby riverside are in the same place.
