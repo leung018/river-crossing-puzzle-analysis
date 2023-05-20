@@ -11,6 +11,7 @@ class GamePlayBoard private constructor(gamePlayPositions: GamePlayPositions, pr
     companion object {
         /**
          * @return the optimal solution for the game. Null if no solution exists.
+         * Optimal solution is the one with minimum cost and minimum number of moves.
          */
         fun getMinCostGameSolvingMoves(
             initialCrosserTypes: List<RiverCrosserType>,
@@ -26,42 +27,43 @@ class GamePlayBoard private constructor(gamePlayPositions: GamePlayPositions, pr
 
     init {
         // active means neither game over nor game win.
-        val activeGamePlayStates = mutableSetOf(GamePlayState(gamePlayPositions))
+        val activeStateQueue = ArrayDeque<GamePlayState>()
+        activeStateQueue.add(GamePlayState(gamePlayPositions))
         val activePositionsToMinCost: MutableMap<GamePlayPositions, Int> = mutableMapOf(
             gamePlayPositions to 0
         )
 
-        // compute optimal winning state.
-        while (activeGamePlayStates.isNotEmpty()) {
-            for (currentState in activeGamePlayStates) {
-                val nextStates = mutableListOf<GamePlayState>()
-                val possibleMoves =
-                    newGameSituationTeller(currentState.gamePlayPositions).getCurrentValidMoves()
+        // Compute optimal winning state. Each state will be considered like a vertex in graph and this graph will be traversed in BFS order.
+        // Since in BFS order, the first winning state found within the same total cost will also have minimum number of moves.
+        while (activeStateQueue.isNotEmpty()) {
+            val currentState = activeStateQueue.removeFirst()
+            val nextStates = mutableListOf<GamePlayState>()
+            val possibleMoves =
+                newGameSituationTeller(currentState.gamePlayPositions).getCurrentValidMoves()
 
-                for (move in possibleMoves) {
-                    val newState = currentState.newStateAppliedMove(move, rules)
-                    if (isOptimalWinningSolution(newState)) {
-                        optimalWinningState = newState
-                        continue
-                    }
-                    if (newState.totalCost >= getMinWinningCost()) {
-                        continue
-                    }
-
-                    val newPositions = newState.gamePlayPositions
-                    if (newGameSituationTeller(newPositions).isGameOver()) {
-                        continue
-                    }
-
-                    if (!activePositionsToMinCost.containsKey(newPositions) || activePositionsToMinCost[newPositions]!! > newState.totalCost) {
-                        activePositionsToMinCost[newPositions] = newState.totalCost
-                        nextStates.add(newState)
-                    }
+            // Exploring neighbour states from currentState.
+            for (move in possibleMoves) {
+                val newState = currentState.newStateAppliedMove(move, rules)
+                val newPositions = newState.gamePlayPositions
+                if (newGameSituationTeller(newPositions).isWon() && newState.totalCost < getMinWinningCost()) {
+                    optimalWinningState = newState
+                    continue
+                }
+                if (newState.totalCost >= getMinWinningCost()) {
+                    continue
                 }
 
-                activeGamePlayStates.remove(currentState)
-                activeGamePlayStates.addAll(nextStates)
+                if (newGameSituationTeller(newPositions).isGameOver()) {
+                    continue
+                }
+
+                if (!activePositionsToMinCost.containsKey(newPositions) || activePositionsToMinCost[newPositions]!! > newState.totalCost) {
+                    activePositionsToMinCost[newPositions] = newState.totalCost
+                    nextStates.add(newState)
+                }
             }
+
+            activeStateQueue.addAll(nextStates)
         }
     }
 
@@ -72,14 +74,6 @@ class GamePlayBoard private constructor(gamePlayPositions: GamePlayPositions, pr
 
     private fun getMinWinningCost(): Int {
         return optimalWinningState?.totalCost ?: Int.MAX_VALUE
-    }
-
-    private fun getMinSizeOfWinningMoves(): Int {
-        return optimalWinningState?.pastMoves?.size ?: Int.MAX_VALUE
-    }
-
-    private fun isOptimalWinningSolution(newState: GamePlayState): Boolean {
-        return newGameSituationTeller(newState.gamePlayPositions).isWon() && ((newState.totalCost == getMinWinningCost() && newState.pastMoves.size < getMinSizeOfWinningMoves()) || newState.totalCost < getMinWinningCost())
     }
 
     private fun newGameSituationTeller(positions: GamePlayPositions): GameSituationTeller {

@@ -27,7 +27,7 @@ class SolutionPrinter(private val printer: Printer = ConsolePrinter()) {
             printer.println()
             printer.println("The program will display the game state after each move, along with the last move made to achieve it.")
             printer.println("DRIVE_BOAT indicates that the boat has been driven from one riverside to another, while TRANSIT indicates movement from one riverside to the boat or vice versa.")
-            printer.println("The total cost of moves used to reach the current game state will also be specified, with the cost of each move type according to the specified game rules.")
+            printer.println("The game rules will also configure the cost of DRIVE_BOAT and TRANSIT, determine whether the riverside and nearby boat are considered different places.")
             printer.println()
 
             var state = GamePlayState(GamePlayPositions(initialCrosserTypes))

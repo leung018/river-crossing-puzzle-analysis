@@ -11,7 +11,7 @@ fun main() {
             DAUGHTER,
             MASTER,
             DOG
-        ), // TODO: need bug fix. Expecting solution is found but result is not actually
+        ),
         ClassicGameRules
     )
 }
