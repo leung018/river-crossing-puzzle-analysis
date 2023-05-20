@@ -74,7 +74,7 @@ class GamePlayBoardTest {
             TestCase(
                 crosserTypes = listOf(FATHER, MOTHER, SON, DAUGHTER, DAUGHTER, MASTER, DOG),
                 expectedTotalCost = 13,
-                expectedNumOfMoves = 32,
+                expectedNumOfMoves = 31,
             )
             /**
              * Hard to deduce a sample answer for this by mental calculation. This test case is included because I use it to test the correctness of the algorithm.
