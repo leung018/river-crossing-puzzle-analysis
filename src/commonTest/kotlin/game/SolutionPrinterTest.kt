@@ -50,9 +50,14 @@ class SolutionPrinterTest {
                             RiverCrosserPosition.TARGET_RIVERSIDE
                         )
                     ), BoatPosition.TARGET_RIVERSIDE
-                ), GamePlayBoard.getMinCostGameSolvingMoves(initialCrosserTypes, ClassicGameRules)!!, 1
+                ),
+                GamePlayBoard.getMinCostGameSolvingMoves(initialCrosserTypes, ClassicGameRules)!!,
+                1 // In ClassicGameRules, the cost is total number of DRIVE_BOAT moves.
             )
         )
+
+        // Only assert beginning and winning state to avoid repeating the same logic in implementation of SolutionPrinter.
+        // And winning state can reflect that the implementation of outputting middle states is correct.
         assertTrue(solutionTracePrinter.getOutputTrace().contains(initialStateLog))
         assertTrue(solutionTracePrinter.getOutputTrace().contains(winningStateLog))
     }
