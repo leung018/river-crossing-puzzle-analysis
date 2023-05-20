@@ -10,7 +10,8 @@ import kotlin.test.assertTrue
 
 class SolutionPrinterTest {
     /**
-     *
+     * Below tests won't check the exact output message completely because some messages will be considered as implementation detail of UI.
+     * Tests don't need to couple with these implementation detail.
      */
 
     @Test
