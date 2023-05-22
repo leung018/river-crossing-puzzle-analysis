@@ -43,9 +43,8 @@ class GameSituationTeller(private val gamePlayPositions: GamePlayPositions, priv
         val newMoves = mutableSetOf<Move>()
 
         // moves of crossers on boat
-        val numOfCrossersOnBoat: Int
-        getCrossersIndicesOfPosition(RiverCrosserPosition.BOAT).let {
-            numOfCrossersOnBoat = it.size
+        val crosserIndicesOnBoat = getCrossersIndicesOfPosition(RiverCrosserPosition.BOAT)
+        crosserIndicesOnBoat.let {
             if (it.isNotEmpty()) {
                 // moves that drive boat
                 if (canDriveBoat(it)) {
@@ -68,11 +67,13 @@ class GameSituationTeller(private val gamePlayPositions: GamePlayPositions, priv
             if (it.isNotEmpty()) {
                 getCombinations(
                     it,
-                    rules.boatCapacity - numOfCrossersOnBoat
-                ).forEach { possibleIndices ->
-                    newMoves.add(
-                        Move(possibleIndices, MoveType.TRANSIT)
-                    )
+                    rules.boatCapacity - crosserIndicesOnBoat.size
+                ).forEach { possibleTransitIndices ->
+                    if (sumOfOccupiedBoatCapacity(possibleTransitIndices + crosserIndicesOnBoat) <= rules.boatCapacity) {
+                        newMoves.add(
+                            Move(possibleTransitIndices, MoveType.TRANSIT)
+                        )
+                    }
                 }
             }
         }
@@ -88,6 +89,11 @@ class GameSituationTeller(private val gamePlayPositions: GamePlayPositions, priv
             }
         }
         return crosserIndices
+    }
+
+    private fun sumOfOccupiedBoatCapacity(crosserIndices: Set<Int>): Int {
+        return crosserIndices.map { index -> gamePlayPositions.crossers[index] }
+            .sumOf { crosser -> crosser.type.occupiedBoatCapacity }
     }
 
     private fun canDriveBoat(crosserIndices: Set<Int>): Boolean {

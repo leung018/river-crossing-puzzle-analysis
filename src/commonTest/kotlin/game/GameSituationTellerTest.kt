@@ -108,6 +108,34 @@ internal class GameSituationTellerTest {
     }
 
     @Test
+    fun `getCurrentValidMoves when two crossers on riverside but one of them occupied 2 boat capacity`() {
+        val fatGuy = RiverCrosserType("FAT_GUY", occupiedBoatCapacity = 2)
+        val rules = object : GameRules by ClassicGameRules {
+            override val validRiverCrosserTypes =
+                ClassicGameRules.validRiverCrosserTypes + fatGuy
+        }
+
+        val actualMoveSet =
+            newGameSituationTeller(
+                GamePlayPositions(
+                    crossers = listOf(
+                        newClassicCrosser(position = RiverCrosserPosition.ORIGINAL_RIVERSIDE),
+                        RiverCrosser(fatGuy, RiverCrosserPosition.ORIGINAL_RIVERSIDE),
+                    ),
+                    boatPosition = BoatPosition.ORIGINAL_RIVERSIDE,
+                ),
+                rules = rules
+            )
+                .getCurrentValidMoves()
+
+        val expectedMoveSet = setOf(
+            Move(setOf(0), MoveType.TRANSIT),
+            Move(setOf(1), MoveType.TRANSIT),
+        )
+        assertEquals(expectedMoveSet, actualMoveSet)
+    }
+
+    @Test
     fun `getCurrentValidMoves when one crosser on boat and two other crossers on riverside`() {
         val actualMoveSet =
             newGameSituationTeller(
@@ -128,6 +156,34 @@ internal class GameSituationTellerTest {
             Move(setOf(2), MoveType.TRANSIT), // move to riverside
         )
         assertEquals(expectedMoveSet, actualMoveSet)
+    }
+
+    @Test
+    fun `getCurrentValidMoves when one crosser on boat and one riverside crosser occupied 2 boat capacity on riverside`() {
+        val fatGuy = RiverCrosserType("FAT_GUY", occupiedBoatCapacity = 2)
+        val rules = object : GameRules by ClassicGameRules {
+            override val validRiverCrosserTypes =
+                ClassicGameRules.validRiverCrosserTypes + fatGuy
+        }
+
+        val actualMoveSet =
+            newGameSituationTeller(
+                GamePlayPositions(
+                    crossers = listOf(
+                        RiverCrosser(fatGuy, RiverCrosserPosition.TARGET_RIVERSIDE),
+                        newClassicCrosser(position = RiverCrosserPosition.BOAT, canDriveBoat = false),
+                    ),
+                    boatPosition = BoatPosition.TARGET_RIVERSIDE,
+                ),
+                rules = rules
+            )
+                .getCurrentValidMoves()
+
+        val expectedMoveSet = setOf(
+            Move(setOf(1), MoveType.TRANSIT),
+        )
+        assertEquals(expectedMoveSet, actualMoveSet)
+
     }
 
     @Test
