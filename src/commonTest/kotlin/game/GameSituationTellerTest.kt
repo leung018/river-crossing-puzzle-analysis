@@ -54,6 +54,26 @@ internal class GameSituationTellerTest {
     }
 
     @Test
+    fun `constructor when crossers list with equal crossers than boat capacity but total capacity of crosser exceed it`() {
+        val fatGuy = RiverCrosserType("FAT_GUY", occupiedBoatCapacity = 2)
+        val rules = object : GameRules by ClassicGameRules {
+            override val validRiverCrosserTypes =
+                ClassicGameRules.validRiverCrosserTypes + fatGuy
+        }
+        assertFailsWith<IllegalArgumentException> {
+            newGameSituationTeller(
+                GamePlayPositions(
+                    crossers = listOf(
+                        newClassicCrosser(RiverCrosserPosition.BOAT),
+                        RiverCrosser(fatGuy, RiverCrosserPosition.BOAT)
+                    )
+                ),
+                rules = rules
+            )
+        }
+    }
+
+    @Test
     fun `getCurrentValidMoves when two crossers on riverside and boat on that side too`() {
         data class TestCase(
             val boatPosition: BoatPosition,

@@ -28,9 +28,10 @@ class GameSituationTeller(private val gamePlayPositions: GamePlayPositions, priv
     }
 
     private fun validateCrosserPositions() {
-        val inBoatCount = gamePlayPositions.crossers.count { it.position == RiverCrosserPosition.BOAT }
-        if (inBoatCount > rules.boatCapacity) {
-            throw IllegalArgumentException("More crossers are in the boat than its capacity")
+        val totalOccupiedCapacity = gamePlayPositions.crossers.filter { it.position == RiverCrosserPosition.BOAT }
+            .sumOf { it.type.occupiedBoatCapacity }
+        if (totalOccupiedCapacity > rules.boatCapacity) {
+            throw IllegalArgumentException("Boat capacity is not enough for crossers on boat")
         }
     }
 
