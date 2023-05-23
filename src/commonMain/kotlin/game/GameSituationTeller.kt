@@ -106,15 +106,17 @@ class GameSituationTeller(private val gamePlayPositions: GamePlayPositions, priv
     }
 
     fun isGameOver(): Boolean {
-        val places: List<Set<RiverCrosserPosition>> = when (rules.samePlaceMode) {
-            GameSituationRules.SamePlaceMode.BOAT_AND_NEARBY_RIVERSIDE_IN_SAME_PLACE ->
-                listOf(
-                    setOf(gamePlayPositions.boatPosition.nearbyRiversideForCrosser(), RiverCrosserPosition.BOAT),
-                    setOf(gamePlayPositions.boatPosition.opposite().nearbyRiversideForCrosser())
-                )
+        val places: List<Set<RiverCrosserPosition>> by lazy {
+            when (rules.samePlaceMode) {
+                GameSituationRules.SamePlaceMode.BOAT_AND_NEARBY_RIVERSIDE_IN_SAME_PLACE ->
+                    listOf(
+                        setOf(gamePlayPositions.boatPosition.nearbyRiversideForCrosser(), RiverCrosserPosition.BOAT),
+                        setOf(gamePlayPositions.boatPosition.opposite().nearbyRiversideForCrosser())
+                    )
 
-            GameSituationRules.SamePlaceMode.BOAT_AND_RIVERSIDE_IN_DIFFERENT_PLACE ->
-                RiverCrosserPosition.values().map { setOf(it) }
+                GameSituationRules.SamePlaceMode.BOAT_AND_RIVERSIDE_IN_DIFFERENT_PLACE ->
+                    RiverCrosserPosition.values().map { setOf(it) }
+            }
         }
 
         for (place in places) {
