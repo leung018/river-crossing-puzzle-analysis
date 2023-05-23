@@ -23,6 +23,10 @@ data class GamePlayPositions(
         crossers = initialCrosserTypes.map { RiverCrosser(it) }
     )
 
+    /**
+     * @throws IllegalArgumentException if any of the target indices not exist in the crossers list or the move is
+     * not valid in current game play positions.
+     */
     fun newPositionsAppliedMove(move: Move): GamePlayPositions {
         val newCrossers = crossers.toMutableList()
 
@@ -91,8 +95,7 @@ data class GamePlayState(
 ) {
 
     /**
-     * @throws IllegalArgumentException if any of the target indices not exist in the crossers list or the move is
-     * not valid in current game play positions.
+     * @throws IllegalArgumentException see [GamePlayPositions.newPositionsAppliedMove]
      */
     fun newStateAppliedMove(
         move: Move,
