@@ -1,10 +1,7 @@
 package game
 
 import game.rules.*
-import game.rules.classic.ClassicGameRules
-import game.rules.classic.DAUGHTER
-import game.rules.classic.FATHER
-import game.rules.classic.MASTER
+import game.rules.classic.*
 import testutil.newClassicCrosserType
 import kotlin.test.*
 
@@ -74,7 +71,7 @@ internal class GameSituationTellerTest {
     }
 
     @Test
-    fun `getCurrentValidMoves when two crossers on riverside and boat on that side too`() {
+    fun `getCurrentPossibleMoves when two crossers on riverside and boat on that side too`() {
         data class TestCase(
             val boatPosition: BoatPosition,
             val crosserPosition: RiverCrosserPosition,
@@ -97,7 +94,7 @@ internal class GameSituationTellerTest {
                     ),
                     rules = ClassicGameRules
                 )
-                    .getCurrentValidMoves()
+                    .getCurrentPossibleMoves()
             val expectedMoveSet = setOf(
                 Move(setOf(0), MoveType.TRANSIT),
                 Move(setOf(1), MoveType.TRANSIT),
@@ -108,7 +105,7 @@ internal class GameSituationTellerTest {
     }
 
     @Test
-    fun `getCurrentValidMoves when two crossers on riverside but one of them occupied 2 boat capacity`() {
+    fun `getCurrentPossibleMoves when two crossers on riverside but one of them occupied 2 boat capacity`() {
         val fatGuy = RiverCrosserType("FAT_GUY", occupiedBoatCapacity = 2)
         val rules = object : GameRules by ClassicGameRules {
             override val validRiverCrosserTypes =
@@ -126,7 +123,7 @@ internal class GameSituationTellerTest {
                 ),
                 rules = rules
             )
-                .getCurrentValidMoves()
+                .getCurrentPossibleMoves()
 
         val expectedMoveSet = setOf(
             Move(setOf(0), MoveType.TRANSIT),
@@ -136,7 +133,7 @@ internal class GameSituationTellerTest {
     }
 
     @Test
-    fun `getCurrentValidMoves when one crosser on boat and two other crossers on riverside`() {
+    fun `getCurrentPossibleMoves when one crosser on boat and two other crossers on riverside`() {
         val actualMoveSet =
             newGameSituationTeller(
                 GamePlayPositions(
@@ -149,7 +146,7 @@ internal class GameSituationTellerTest {
                 ),
                 rules = ClassicGameRules
             )
-                .getCurrentValidMoves()
+                .getCurrentPossibleMoves()
         val expectedMoveSet = setOf(
             Move(setOf(0), MoveType.TRANSIT), // move to boat
             Move(setOf(1), MoveType.TRANSIT), // move to boat
@@ -159,7 +156,7 @@ internal class GameSituationTellerTest {
     }
 
     @Test
-    fun `getCurrentValidMoves when one crosser on boat and one riverside crosser occupied 2 boat capacity on riverside`() {
+    fun `getCurrentPossibleMoves when one crosser on boat and one riverside crosser occupied 2 boat capacity on riverside`() {
         val fatGuy = RiverCrosserType("FAT_GUY", occupiedBoatCapacity = 2)
         val rules = object : GameRules by ClassicGameRules {
             override val validRiverCrosserTypes =
@@ -177,7 +174,7 @@ internal class GameSituationTellerTest {
                 ),
                 rules = rules
             )
-                .getCurrentValidMoves()
+                .getCurrentPossibleMoves()
 
         val expectedMoveSet = setOf(
             Move(setOf(1), MoveType.TRANSIT),
@@ -187,7 +184,7 @@ internal class GameSituationTellerTest {
     }
 
     @Test
-    fun `getCurrentValidMoves when two boat crossers in boat and one of them can drive boat on original river side and one crosser on target river side`() {
+    fun `getCurrentPossibleMoves when two boat crossers in boat and one of them can drive boat on original river side and one crosser on target river side`() {
         val actualMoveSet =
             newGameSituationTeller(
                 GamePlayPositions(
@@ -200,7 +197,7 @@ internal class GameSituationTellerTest {
                 ),
                 rules = ClassicGameRules
             )
-                .getCurrentValidMoves()
+                .getCurrentPossibleMoves()
         val expectedMoveSet = setOf(
             Move(setOf(0), MoveType.TRANSIT),
             Move(setOf(1), MoveType.TRANSIT),
@@ -211,7 +208,7 @@ internal class GameSituationTellerTest {
     }
 
     @Test
-    fun `getCurrentValidMoves when one crosser on original riverside and boat is not on that side`() {
+    fun `getCurrentPossibleMoves when one crosser on original riverside and boat is not on that side`() {
         val actualMoveSet =
             newGameSituationTeller(
                 GamePlayPositions(
@@ -224,12 +221,12 @@ internal class GameSituationTellerTest {
                 ),
                 rules = ClassicGameRules
             )
-                .getCurrentValidMoves()
+                .getCurrentPossibleMoves()
         assertEquals(emptySet(), actualMoveSet)
     }
 
     @Test
-    fun `getCurrentValidMoves when crossers on boat can not drive`() {
+    fun `getCurrentPossibleMoves when crossers on boat can not drive`() {
         val actualMoveSet =
             newGameSituationTeller(
                 GamePlayPositions(
@@ -242,7 +239,7 @@ internal class GameSituationTellerTest {
                 ),
                 rules = ClassicGameRules
             )
-                .getCurrentValidMoves()
+                .getCurrentPossibleMoves()
         val expectedMoveSet = setOf(
             Move(setOf(0), MoveType.TRANSIT),
         )
@@ -250,7 +247,7 @@ internal class GameSituationTellerTest {
     }
 
     @Test
-    fun `getCurrentValidMoves when number of crossers on riverside is more than the capacity of boat`() {
+    fun `getCurrentPossibleMoves when number of crossers on riverside is more than the capacity of boat`() {
         val actualMoveSet =
             newGameSituationTeller(
                 GamePlayPositions(
@@ -269,7 +266,7 @@ internal class GameSituationTellerTest {
                 ),
                 rules = ClassicGameRules
             )
-                .getCurrentValidMoves()
+                .getCurrentPossibleMoves()
         val expectedMoveSet = setOf(
             Move(setOf(0), MoveType.TRANSIT),
             Move(setOf(1), MoveType.TRANSIT),
@@ -380,6 +377,82 @@ internal class GameSituationTellerTest {
             .let {
                 assertFalse(it)
             }
+    }
+
+    @Test
+    fun `isGameOver when BOAT_AND_NEARBY_RIVERSIDE_IN_SAME_PLACE and prohibited combination on boat but someone prevent conflict on riverside`() {
+        newGameSituationTeller(
+            GamePlayPositions(
+                crossers = listOf(
+                    RiverCrosser(type = FATHER, position = RiverCrosserPosition.BOAT),
+                    RiverCrosser(type = DOG, position = RiverCrosserPosition.BOAT),
+                    RiverCrosser(type = MASTER, position = RiverCrosserPosition.ORIGINAL_RIVERSIDE),
+                ),
+                boatPosition = BoatPosition.ORIGINAL_RIVERSIDE,
+            ),
+            rules = object : GameRules by ClassicGameRules {
+                override val samePlaceMode: GameSituationRules.SamePlaceMode =
+                    GameSituationRules.SamePlaceMode.BOAT_AND_NEARBY_RIVERSIDE_IN_SAME_PLACE
+            }
+        ).isGameOver(lastMoveType = MoveType.TRANSIT)
+            .let {
+                assertFalse(it)
+            }
+    }
+
+    @Test
+    fun `isGameOver when BOAT_AND_NEARBY_RIVERSIDE_IN_SAME_PLACE and prohibited combination on boat and last move is drive_boat`() {
+        newGameSituationTeller(
+            GamePlayPositions(
+                crossers = listOf(
+                    RiverCrosser(type = FATHER, position = RiverCrosserPosition.BOAT),
+                    RiverCrosser(type = DOG, position = RiverCrosserPosition.BOAT),
+                    RiverCrosser(type = MASTER, position = RiverCrosserPosition.ORIGINAL_RIVERSIDE),
+                ),
+                boatPosition = BoatPosition.ORIGINAL_RIVERSIDE,
+            ),
+            rules = object : GameRules by ClassicGameRules {
+                override val samePlaceMode: GameSituationRules.SamePlaceMode =
+                    GameSituationRules.SamePlaceMode.BOAT_AND_NEARBY_RIVERSIDE_IN_SAME_PLACE
+            }
+        ).isGameOver(lastMoveType = MoveType.DRIVE_BOAT)
+            .let {
+                assertTrue(it)
+            }
+    }
+
+    @Test
+    fun `getCurrentValidMoves when getCurrentPossibleMoves with no move that can cause game over in nextState`() {
+        val teller = newGameSituationTeller(
+            GamePlayPositions(
+                crossers = listOf(
+                    newClassicCrosser(RiverCrosserPosition.ORIGINAL_RIVERSIDE),
+                    newClassicCrosser(RiverCrosserPosition.ORIGINAL_RIVERSIDE),
+                    newClassicCrosser(RiverCrosserPosition.ORIGINAL_RIVERSIDE),
+                ),
+                boatPosition = BoatPosition.ORIGINAL_RIVERSIDE,
+            ),
+            rules = ClassicGameRules
+        )
+        assertEquals(teller.getCurrentPossibleMoves(), teller.getCurrentValidMoves())
+    }
+
+    @Test
+    fun `getCurrentValidMoves when getCurrentPossibleMoves with move that can cause game over in nextState`() {
+        val teller = newGameSituationTeller(
+            GamePlayPositions(
+                crossers = listOf(
+                    RiverCrosser(type = DOG, position = RiverCrosserPosition.ORIGINAL_RIVERSIDE),
+                    RiverCrosser(type = FATHER, position = RiverCrosserPosition.BOAT),
+                ),
+                boatPosition = BoatPosition.ORIGINAL_RIVERSIDE,
+            ),
+            rules = ClassicGameRules
+        )
+        assertEquals(
+            setOf(Move(setOf(1), MoveType.DRIVE_BOAT)),
+            teller.getCurrentValidMoves()
+        )
     }
 
     @Test

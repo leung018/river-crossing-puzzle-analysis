@@ -22,6 +22,66 @@ data class GamePlayPositions(
     constructor(initialCrosserTypes: List<RiverCrosserType>) : this(
         crossers = initialCrosserTypes.map { RiverCrosser(it) }
     )
+
+    fun newPositionsAppliedMove(move: Move): GamePlayPositions {
+        val newCrossers = crossers.toMutableList()
+
+        for (i in move.crosserIndices) {
+            try {
+                validateCanMoveBeApplied(i, move.type)
+                newCrossers[i] =
+                    newCrossers[i].copy(position = crossers[i].position.newCrosserPosition(move.type))
+            } catch (e: IndexOutOfBoundsException) {
+                throw IllegalArgumentException("Target indices for the move don't exist in the original list")
+            }
+        }
+
+        if (!isCrosserIndicesAtSamePosition(move.crosserIndices)) {
+            throw IllegalArgumentException("Crossers at target indices must have the same position")
+        }
+
+        return GamePlayPositions(crossers = newCrossers, boatPosition = newBoatPosition(move.type))
+    }
+
+    private fun isCrosserIndicesAtSamePosition(crosserIndices: Set<Int>): Boolean {
+        return crosserIndices.map { crossers[it].position }.distinct().let {
+            it.size == 1
+        }
+    }
+
+    private fun validateCanMoveBeApplied(crosserIndex: Int, moveType: MoveType) {
+        val oldCrosserPosition = crossers[crosserIndex].position
+
+        if (oldCrosserPosition != RiverCrosserPosition.BOAT && moveType == MoveType.DRIVE_BOAT) {
+            throw IllegalArgumentException("Crosser at index $crosserIndex is not at boat")
+        }
+
+        if (moveType == MoveType.TRANSIT) {
+            if (oldCrosserPosition == RiverCrosserPosition.ORIGINAL_RIVERSIDE && boatPosition == BoatPosition.TARGET_RIVERSIDE) {
+                throw IllegalArgumentException("Crosser at index $crosserIndex is at original riverside and boat is at target riverside")
+            }
+            if (oldCrosserPosition == RiverCrosserPosition.TARGET_RIVERSIDE && boatPosition == BoatPosition.ORIGINAL_RIVERSIDE) {
+                throw IllegalArgumentException("Crosser at index $crosserIndex is at target riverside and boat is at original riverside")
+            }
+        }
+    }
+
+    private fun newBoatPosition(moveType: MoveType): BoatPosition {
+        return when (moveType) {
+            MoveType.DRIVE_BOAT -> boatPosition.opposite()
+            else -> boatPosition
+        }
+    }
+
+    private fun RiverCrosserPosition.newCrosserPosition(moveType: MoveType): RiverCrosserPosition {
+        return when (moveType) {
+            MoveType.DRIVE_BOAT -> RiverCrosserPosition.BOAT
+            MoveType.TRANSIT -> when (this) {
+                RiverCrosserPosition.ORIGINAL_RIVERSIDE, RiverCrosserPosition.TARGET_RIVERSIDE -> RiverCrosserPosition.BOAT
+                RiverCrosserPosition.BOAT -> boatPosition.nearbyRiversideForCrosser()
+            }
+        }
+    }
 }
 
 data class GamePlayState(
@@ -38,66 +98,12 @@ data class GamePlayState(
         move: Move,
         moveTypeCostRules: MoveTypeCostRules = ClassicGameRules
     ): GamePlayState {
-        val newCrossers = gamePlayPositions.crossers.toMutableList()
-
-        for (i in move.crosserIndices) {
-            try {
-                validateCanMoveBeApplied(i, move.type)
-                newCrossers[i] =
-                    newCrossers[i].copy(position = gamePlayPositions.crossers[i].position.newCrosserPosition(move.type))
-            } catch (e: IndexOutOfBoundsException) {
-                throw IllegalArgumentException("Target indices for the move don't exist in the original list")
-            }
-        }
-
-        if (!isCrosserIndicesAtSamePosition(move.crosserIndices)) {
-            throw IllegalArgumentException("Crossers at target indices must have the same position")
-        }
+        val newPositions = gamePlayPositions.newPositionsAppliedMove(move)
 
         return this.copy(
-            gamePlayPositions = GamePlayPositions(crossers = newCrossers, boatPosition = newBoatPosition(move.type)),
+            gamePlayPositions = newPositions,
             pastMoves = pastMoves + listOf(move),
             totalCost = totalCost + moveTypeCostRules.getMoveCost(move.type)
         )
-    }
-
-    private fun isCrosserIndicesAtSamePosition(crosserIndices: Set<Int>): Boolean {
-        return crosserIndices.map { gamePlayPositions.crossers[it].position }.distinct().let {
-            it.size == 1
-        }
-    }
-
-    private fun validateCanMoveBeApplied(crosserIndex: Int, moveType: MoveType) {
-        val oldCrosserPosition = gamePlayPositions.crossers[crosserIndex].position
-
-        if (oldCrosserPosition != RiverCrosserPosition.BOAT && moveType == MoveType.DRIVE_BOAT) {
-            throw IllegalArgumentException("Crosser at index $crosserIndex is not at boat")
-        }
-
-        if (moveType == MoveType.TRANSIT) {
-            if (oldCrosserPosition == RiverCrosserPosition.ORIGINAL_RIVERSIDE && gamePlayPositions.boatPosition == BoatPosition.TARGET_RIVERSIDE) {
-                throw IllegalArgumentException("Crosser at index $crosserIndex is at original riverside and boat is at target riverside")
-            }
-            if (oldCrosserPosition == RiverCrosserPosition.TARGET_RIVERSIDE && gamePlayPositions.boatPosition == BoatPosition.ORIGINAL_RIVERSIDE) {
-                throw IllegalArgumentException("Crosser at index $crosserIndex is at target riverside and boat is at original riverside")
-            }
-        }
-    }
-
-    private fun newBoatPosition(moveType: MoveType): BoatPosition {
-        return when (moveType) {
-            MoveType.DRIVE_BOAT -> gamePlayPositions.boatPosition.opposite()
-            else -> gamePlayPositions.boatPosition
-        }
-    }
-
-    private fun RiverCrosserPosition.newCrosserPosition(moveType: MoveType): RiverCrosserPosition {
-        return when (moveType) {
-            MoveType.DRIVE_BOAT -> RiverCrosserPosition.BOAT
-            MoveType.TRANSIT -> when (this) {
-                RiverCrosserPosition.ORIGINAL_RIVERSIDE, RiverCrosserPosition.TARGET_RIVERSIDE -> RiverCrosserPosition.BOAT
-                RiverCrosserPosition.BOAT -> gamePlayPositions.boatPosition.nearbyRiversideForCrosser()
-            }
-        }
     }
 }
