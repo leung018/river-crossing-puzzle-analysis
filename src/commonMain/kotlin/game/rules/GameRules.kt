@@ -18,7 +18,7 @@ interface GameSituationRules {
      * and C is not there. If A and B are on the boat and C is on the nearby riverside, different modes will have different result.
      *
      * - BOAT_AND_RIVERSIDE_IN_DIFFERENT_PLACE: A and B will fight together and cause game over.
-     * - BOAT_AND_NEARBY_RIVERSIDE_IN_SAME_PLACE: A and B will not fight together and game can continue.
+     * - BOAT_AND_NEARBY_RIVERSIDE_IN_SAME_PLACE: A and B will not fight together and game can continue. But If next move of A and B is drive_boat, will cause game over after this move.
      */
     enum class SamePlaceMode {
         BOAT_AND_RIVERSIDE_IN_DIFFERENT_PLACE,
