@@ -64,7 +64,12 @@ class GameSituationTeller(private val gamePlayPositions: GamePlayPositions, priv
                 }
 
                 // moves that transit to riverside
-                getCombinations(it, it.size).forEach { possibleIndices ->
+                val maxCrossersOfTransitToRiverside = if (rules.transitOneCrosserOnly) {
+                    1
+                } else {
+                    it.size
+                }
+                getCombinations(it, maxCrossersOfTransitToRiverside).forEach { possibleIndices ->
                     newMoves.add(
                         Move(possibleIndices, MoveType.TRANSIT)
                     )
@@ -73,11 +78,16 @@ class GameSituationTeller(private val gamePlayPositions: GamePlayPositions, priv
         }
 
         // moves of crossers on riverside
+        val maxCrossersOfTransitToBoat = if (rules.transitOneCrosserOnly) {
+            1
+        } else {
+            rules.boatCapacity - crosserIndicesOnBoat.size
+        }
         getCrossersIndicesOfPosition(gamePlayPositions.boatPosition.nearbyRiversideForCrosser()).let {
             if (it.isNotEmpty()) {
                 getCombinations(
                     it,
-                    rules.boatCapacity - crosserIndicesOnBoat.size
+                    maxCrossersOfTransitToBoat
                 ).forEach { possibleTransitIndices ->
                     if (sumOfOccupiedBoatCapacity(possibleTransitIndices + crosserIndicesOnBoat) <= rules.boatCapacity) {
                         newMoves.add(
