@@ -10,6 +10,21 @@ data class RiverCrosserType(
 interface GameRules : GameSituationRules, MoveTypeCostRules
 
 interface GameSituationRules {
+
+    /**
+     * Define which set of crossers are considered as same place.
+     *
+     * e.g. Given that there are three crossers A, B and C. A and B will fight together and cause game over if they are in the same place
+     * and C is not there. If A and B are on the boat and C is on the nearby riverside, different modes will have different result.
+     *
+     * - BOAT_AND_RIVERSIDE_IN_DIFFERENT_PLACE: A and B will fight together and cause game over.
+     * - BOAT_AND_NEARBY_RIVERSIDE_IN_SAME_PLACE: A and B will not fight together and game can continue.
+     */
+    enum class SamePlaceMode {
+        BOAT_AND_RIVERSIDE_IN_DIFFERENT_PLACE,
+        BOAT_AND_NEARBY_RIVERSIDE_IN_SAME_PLACE,
+    }
+
     val validRiverCrosserTypes: Set<RiverCrosserType>
 
     /**
@@ -24,13 +39,7 @@ interface GameSituationRules {
      */
     fun canGameContinue(crosserTypesInSamePlace: List<RiverCrosserType>): Boolean
 
-    /**
-     * If it is true, it means that the boat and the nearby riverside are in the same place.
-     *
-     * e.g. Given that crosser A on the boat and crosser B on the nearby riverside.
-     * A and B are considered in the same place if and only if `areBoatAndNearByRiversideInSamePlace` is true.
-     */
-    val areBoatAndNearByRiversideInSamePlace: Boolean
+    val samePlaceMode: SamePlaceMode
 
     val boatCapacity: Int
         get() = 2

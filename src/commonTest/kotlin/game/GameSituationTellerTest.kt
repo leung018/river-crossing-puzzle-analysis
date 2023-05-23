@@ -352,7 +352,8 @@ internal class GameSituationTellerTest {
                     boatPosition = case.boatPosition,
                 ),
                 rules = object : GameRules by ClassicGameRules {
-                    override val areBoatAndNearByRiversideInSamePlace: Boolean = true
+                    override val samePlaceMode: GameSituationRules.SamePlaceMode =
+                        GameSituationRules.SamePlaceMode.BOAT_AND_NEARBY_RIVERSIDE_IN_SAME_PLACE
                 }
             ).isGameOver()
                 .let {
@@ -372,7 +373,8 @@ internal class GameSituationTellerTest {
                 boatPosition = BoatPosition.ORIGINAL_RIVERSIDE,
             ),
             rules = object : GameRules by ClassicGameRules {
-                override val areBoatAndNearByRiversideInSamePlace: Boolean = true
+                override val samePlaceMode: GameSituationRules.SamePlaceMode =
+                    GameSituationRules.SamePlaceMode.BOAT_AND_NEARBY_RIVERSIDE_IN_SAME_PLACE
             }
         ).isGameOver()
             .let {
