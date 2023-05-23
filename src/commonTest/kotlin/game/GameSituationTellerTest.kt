@@ -338,6 +338,40 @@ internal class GameSituationTellerTest {
     }
 
     @Test
+    fun `getCurrentPossibleMoves when transitOneCrosserOnly flag is true and boat is full and one crosser on nearby riverside`() {
+        val rules = object : GameRules by ClassicGameRules {
+            override val transitOneCrosserOnly = true
+        }
+
+        val actualMoveSet =
+            newGameSituationTeller(
+                GamePlayPositions(
+                    crossers = listOf(
+                        newClassicCrosser(
+                            position = RiverCrosserPosition.BOAT,
+                            canDriveBoat = false
+                        ),
+                        newClassicCrosser(
+                            position = RiverCrosserPosition.BOAT,
+                            canDriveBoat = false
+                        ),
+                        newClassicCrosser(
+                            position = RiverCrosserPosition.ORIGINAL_RIVERSIDE,
+                        ),
+                    ),
+                    boatPosition = BoatPosition.ORIGINAL_RIVERSIDE,
+                ),
+                rules = rules
+            )
+                .getCurrentPossibleMoves()
+        val expectedMoveSet = setOf(
+            Move(setOf(0), MoveType.TRANSIT),
+            Move(setOf(1), MoveType.TRANSIT),
+        )
+        assertEquals(expectedMoveSet, actualMoveSet)
+    }
+
+    @Test
     fun `isGameOver when prohibited combination of crossers in the same position`() {
         val testCasePositions = RiverCrosserPosition.values()
 
