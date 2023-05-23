@@ -130,7 +130,7 @@ class GameSituationTeller(private val gamePlayPositions: GamePlayPositions, priv
      * In some rules, if last move type is DRIVE_BOAT, may affect whether it is game over or not.
      */
     fun isGameOver(lastMoveType: MoveType = MoveType.TRANSIT): Boolean {
-        val places: List<Set<RiverCrosserPosition>> by lazy {
+        val places: List<Set<RiverCrosserPosition>> =
             when (rules.samePlaceMode) {
                 GameSituationRules.SamePlaceMode.BOAT_AND_NEARBY_RIVERSIDE_IN_SAME_PLACE ->
                     listOf(
@@ -141,7 +141,6 @@ class GameSituationTeller(private val gamePlayPositions: GamePlayPositions, priv
                 GameSituationRules.SamePlaceMode.BOAT_AND_RIVERSIDE_IN_DIFFERENT_PLACE ->
                     RiverCrosserPosition.values().map { setOf(it) }
             }
-        }
 
         for (place in places) {
             val crossers = filterCrossersAt(place)
