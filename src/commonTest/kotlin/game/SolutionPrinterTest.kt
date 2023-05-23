@@ -51,7 +51,7 @@ class SolutionPrinterTest {
                         )
                     ), BoatPosition.TARGET_RIVERSIDE
                 ),
-                GamePlayBoard.getMinCostGameSolvingMoves(initialCrosserTypes, ClassicGameRules)!!,
+                SolutionFinder.computeMinCostGameSolvingMoves(initialCrosserTypes, ClassicGameRules)!!,
                 1 // In ClassicGameRules, the cost is total number of DRIVE_BOAT moves.
             )
         )

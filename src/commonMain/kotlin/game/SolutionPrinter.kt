@@ -15,7 +15,7 @@ class SolutionPrinter(private val printer: Printer = ConsolePrinter()) {
         initialCrosserTypes: List<RiverCrosserType>,
         rules: GameRules
     ) {
-        val solvingMoves = GamePlayBoard.getMinCostGameSolvingMoves(
+        val solvingMoves = SolutionFinder.computeMinCostGameSolvingMoves(
             initialCrosserTypes,
             rules
         )
