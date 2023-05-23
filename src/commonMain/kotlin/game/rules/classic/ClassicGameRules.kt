@@ -1,6 +1,7 @@
 package game.rules.classic
 
 import game.rules.GameRules
+import game.rules.GameSituationRules
 import game.rules.MoveType
 import game.rules.RiverCrosserType
 
@@ -33,5 +34,6 @@ object ClassicGameRules : GameRules {
         }
     }
 
-    override val areBoatAndNearByRiversideInSamePlace: Boolean = false
+    override val samePlaceMode: GameSituationRules.SamePlaceMode =
+        GameSituationRules.SamePlaceMode.BOAT_AND_RIVERSIDE_IN_DIFFERENT_PLACE
 }

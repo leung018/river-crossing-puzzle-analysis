@@ -38,11 +38,11 @@ class GamePlayBoard private constructor(gamePlayPositions: GamePlayPositions, pr
         while (activeStateQueue.isNotEmpty()) {
             val currentState = activeStateQueue.removeFirst()
             val nextStates = mutableListOf<GamePlayState>()
-            val possibleMoves =
+            val validMoves =
                 newGameSituationTeller(currentState.gamePlayPositions).getCurrentValidMoves()
 
             // Exploring neighbour states from currentState.
-            for (move in possibleMoves) {
+            for (move in validMoves) {
                 val newState = currentState.newStateAppliedMove(move, rules)
                 val newPositions = newState.gamePlayPositions
                 if (newGameSituationTeller(newPositions).isWon() && newState.totalCost < getMinWinningCost()) {
@@ -50,10 +50,6 @@ class GamePlayBoard private constructor(gamePlayPositions: GamePlayPositions, pr
                     continue
                 }
                 if (newState.totalCost >= getMinWinningCost()) {
-                    continue
-                }
-
-                if (newGameSituationTeller(newPositions).isGameOver()) {
                     continue
                 }
 

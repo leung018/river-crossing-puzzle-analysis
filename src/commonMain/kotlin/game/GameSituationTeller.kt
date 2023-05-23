@@ -36,10 +36,20 @@ class GameSituationTeller(private val gamePlayPositions: GamePlayPositions, priv
     }
 
     /**
+     * @return set of moves that can be applied to a valid game state that will not game over.
+     */
+    fun getCurrentValidMoves(): Set<Move> {
+        return getCurrentPossibleMoves().filter {
+            GameSituationTeller(gamePlayPositions.newPositionsAppliedMove(it), rules)
+                .isGameOver().not()
+        }.toSet()
+    }
+
+    /**
      * @return set of moves that can be applied to a valid game state.
      * But it doesn't mean that the game state after applying the move will not game over.
      */
-    fun getCurrentValidMoves(): Set<Move> {
+    fun getCurrentPossibleMoves(): Set<Move> {
         val newMoves = mutableSetOf<Move>()
 
         // moves of crossers on boat
@@ -105,14 +115,22 @@ class GameSituationTeller(private val gamePlayPositions: GamePlayPositions, priv
         return gamePlayPositions.crossers.all { it.position == RiverCrosserPosition.TARGET_RIVERSIDE }
     }
 
-    fun isGameOver(): Boolean {
-        val places: List<Set<RiverCrosserPosition>> = if (rules.areBoatAndNearByRiversideInSamePlace) {
-            listOf(
-                setOf(gamePlayPositions.boatPosition.nearbyRiversideForCrosser(), RiverCrosserPosition.BOAT),
-                setOf(gamePlayPositions.boatPosition.opposite().nearbyRiversideForCrosser())
-            )
-        } else {
-            RiverCrosserPosition.values().map { setOf(it) }
+    /**
+     * @param lastMoveType the last move type that was applied to the game state.
+     * In some rules, if last move type is DRIVE_BOAT, may affect whether it is game over or not.
+     */
+    fun isGameOver(lastMoveType: MoveType = MoveType.TRANSIT): Boolean {
+        val places: List<Set<RiverCrosserPosition>> by lazy {
+            when (rules.samePlaceMode) {
+                GameSituationRules.SamePlaceMode.BOAT_AND_NEARBY_RIVERSIDE_IN_SAME_PLACE ->
+                    listOf(
+                        setOf(gamePlayPositions.boatPosition.nearbyRiversideForCrosser(), RiverCrosserPosition.BOAT),
+                        setOf(gamePlayPositions.boatPosition.opposite().nearbyRiversideForCrosser())
+                    )
+
+                GameSituationRules.SamePlaceMode.BOAT_AND_RIVERSIDE_IN_DIFFERENT_PLACE ->
+                    RiverCrosserPosition.values().map { setOf(it) }
+            }
         }
 
         for (place in places) {
@@ -121,6 +139,13 @@ class GameSituationTeller(private val gamePlayPositions: GamePlayPositions, priv
                 return true
             }
         }
+
+        if (lastMoveType == MoveType.DRIVE_BOAT && rules.samePlaceMode == GameSituationRules.SamePlaceMode.BOAT_AND_NEARBY_RIVERSIDE_IN_SAME_PLACE) {
+            if (!canGameContinue(filterCrossersAt(setOf(RiverCrosserPosition.BOAT)))) {
+                return true
+            }
+        }
+
         return false
     }
 
