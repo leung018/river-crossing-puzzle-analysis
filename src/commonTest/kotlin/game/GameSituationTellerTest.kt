@@ -279,6 +279,65 @@ internal class GameSituationTellerTest {
     }
 
     @Test
+    fun `getCurrentPossibleMoves when transitOneCrosserOnly flag is true and two crossers on riverside`() {
+        val rules = object : GameRules by ClassicGameRules {
+            override val transitOneCrosserOnly = true
+        }
+
+        val actualMoveSet =
+            newGameSituationTeller(
+                GamePlayPositions(
+                    crossers = listOf(
+                        newClassicCrosser(
+                            position = RiverCrosserPosition.ORIGINAL_RIVERSIDE,
+                        ),
+                        newClassicCrosser(
+                            position = RiverCrosserPosition.ORIGINAL_RIVERSIDE,
+                        ),
+                    ),
+                    boatPosition = BoatPosition.ORIGINAL_RIVERSIDE,
+                ),
+                rules = rules
+            )
+                .getCurrentPossibleMoves()
+        val expectedMoveSet = setOf(
+            Move(setOf(0), MoveType.TRANSIT),
+            Move(setOf(1), MoveType.TRANSIT),
+        )
+        assertEquals(expectedMoveSet, actualMoveSet)
+    }
+
+    @Test
+    fun `getCurrentPossibleMoves when transitOneCrosserOnly flag is true and two crossers on boat`() {
+        val rules = object : GameRules by ClassicGameRules {
+            override val transitOneCrosserOnly = true
+        }
+
+        val actualMoveSet =
+            newGameSituationTeller(
+                GamePlayPositions(
+                    crossers = listOf(
+                        newClassicCrosser(
+                            position = RiverCrosserPosition.BOAT,
+                            canDriveBoat = false
+                        ),
+                        newClassicCrosser(
+                            position = RiverCrosserPosition.BOAT,
+                            canDriveBoat = false
+                        ),
+                    ),
+                ),
+                rules = rules
+            )
+                .getCurrentPossibleMoves()
+        val expectedMoveSet = setOf(
+            Move(setOf(0), MoveType.TRANSIT),
+            Move(setOf(1), MoveType.TRANSIT),
+        )
+        assertEquals(expectedMoveSet, actualMoveSet)
+    }
+
+    @Test
     fun `isGameOver when prohibited combination of crossers in the same position`() {
         val testCasePositions = RiverCrosserPosition.values()
 

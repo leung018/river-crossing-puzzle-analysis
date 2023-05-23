@@ -43,6 +43,12 @@ interface GameSituationRules {
 
     val boatCapacity: Int
         get() = 2
+
+    /**
+     * If it is true, TRANSIT move can only move one crosser.
+     */
+    val transitOneCrosserOnly: Boolean
+        get() = false
 }
 
 interface MoveTypeCostRules {
