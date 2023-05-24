@@ -3,21 +3,18 @@ package game
 import game.rules.GameRules
 import game.rules.RiverCrosserType
 
-/**
- * Will compute the optimal solution when its instance is created.
- */
-class GamePlayBoard private constructor(gamePlayPositions: GamePlayPositions, private val rules: GameRules) {
+class SolutionFinder private constructor(gamePlayPositions: GamePlayPositions, private val rules: GameRules) {
 
     companion object {
         /**
-         * @return the optimal solution for the game. Null if no solution exists.
+         * compute and return the optimal solution for the river crossing puzzles. Null if no solution exists.
          * Optimal solution is the one with minimum cost and minimum number of moves.
          */
-        fun getMinCostGameSolvingMoves(
+        fun computeMinCostGameSolvingMoves(
             initialCrosserTypes: List<RiverCrosserType>,
             rules: GameRules
         ): List<Move>? {
-            return GamePlayBoard(
+            return SolutionFinder(
                 GamePlayPositions(initialCrosserTypes),
                 rules
             ).optimalWinningState?.pastMoves

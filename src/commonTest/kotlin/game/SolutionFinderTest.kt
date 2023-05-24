@@ -7,10 +7,10 @@ import testutil.assertIsWonAfterMoves
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class GamePlayBoardTest {
+class SolutionFinderTest {
 
     @Test
-    fun `test getMinCostGameSolvingMoves when crossers can reach target riverside`() {
+    fun `test computeMinCostGameSolvingMoves when crossers can reach target riverside`() {
         data class TestCase(
             val crosserTypes: List<RiverCrosserType>,
             val expectedTotalCost: Int,
@@ -83,7 +83,7 @@ class GamePlayBoardTest {
         )
 
         testCases.forEach { testCase ->
-            val actualMoves = GamePlayBoard.getMinCostGameSolvingMoves(
+            val actualMoves = SolutionFinder.computeMinCostGameSolvingMoves(
                 testCase.crosserTypes, ClassicGameRules
             )!!
             assertEquals(
@@ -103,8 +103,8 @@ class GamePlayBoardTest {
     }
 
     @Test
-    fun `test getMinCostGameSolvingMoves when one crosser who cannot drive boat on original riverside`() {
-        val actualMoves = GamePlayBoard.getMinCostGameSolvingMoves(
+    fun `test computeMinCostGameSolvingMoves when one crosser who cannot drive boat on original riverside`() {
+        val actualMoves = SolutionFinder.computeMinCostGameSolvingMoves(
             listOf(
                 SON
             ), ClassicGameRules
