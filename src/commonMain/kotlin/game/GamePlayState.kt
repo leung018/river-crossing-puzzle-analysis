@@ -54,18 +54,15 @@ data class GamePlayPositions(
     }
 
     private fun validateCanMoveBeApplied(crosserIndex: Int, moveType: MoveType) {
-        val oldCrosserPosition = crossers[crosserIndex].position
+        val crosserPosition = crossers[crosserIndex].position
 
-        if (oldCrosserPosition != RiverCrosserPosition.BOAT && moveType == MoveType.DRIVE_BOAT) {
+        if (crosserPosition != RiverCrosserPosition.BOAT && moveType == MoveType.DRIVE_BOAT) {
             throw IllegalArgumentException("Crosser at index $crosserIndex is not at boat")
         }
 
         if (moveType == MoveType.TRANSIT) {
-            if (oldCrosserPosition == RiverCrosserPosition.ORIGINAL_RIVERSIDE && boatPosition == BoatPosition.TARGET_RIVERSIDE) {
-                throw IllegalArgumentException("Crosser at index $crosserIndex is at original riverside and boat is at target riverside")
-            }
-            if (oldCrosserPosition == RiverCrosserPosition.TARGET_RIVERSIDE && boatPosition == BoatPosition.ORIGINAL_RIVERSIDE) {
-                throw IllegalArgumentException("Crosser at index $crosserIndex is at target riverside and boat is at original riverside")
+            if (crosserPosition != RiverCrosserPosition.BOAT && crosserPosition != boatPosition.nearbyRiversideForCrosser()) {
+                throw IllegalArgumentException("Crosser at index $crosserIndex is not at nearby riverside for boat")
             }
         }
     }
