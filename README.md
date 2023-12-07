@@ -18,6 +18,8 @@ To compute the solution based on pre-configured rules and characters and print i
 
 To ensure the quality of the codebase, all modules are thoroughly covered by unit tests.
 
-## Future Directions
+## Modularity and Future Directions
 
-In future iterations, the project plans to allow users to customize the rules and characters involved in the puzzle. This enhancement will enable users to find solutions for their specific scenarios.
+The project is designed with a separation of concerns between the solution finding module and the rules module. This modular structure allows for easier maintenance and future enhancements. Specifically, it enables the possibility of allowing users to customize the rules and characters in future iterations without significant modifications to the core solution finding algorithm.
+
+In future iterations, the project plans to incorporate user customization for the rules and characters involved in the puzzle. This enhancement will provide users with greater flexibility to solve river crossing puzzles according to their specific scenarios and constraints.
